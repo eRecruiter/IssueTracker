@@ -151,9 +151,7 @@
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="js\mylibs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Models\Site.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -189,10 +187,6 @@
     </Content>
     <Content Include="js\libs\modernizr-1.6.min.js" />
     <Content Include="js\plugins.js" />
-    <Content Include="js\profiling\charts.swf" />
-    <Content Include="js\profiling\config.js" />
-    <Content Include="js\profiling\yahoo-profiling.css" />
-    <Content Include="js\profiling\yahoo-profiling.min.js" />
     <Content Include="js\script.js" />
     <Content Include="robots.txt" />
     <Content Include="Service.asmx" />
