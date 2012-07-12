@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="IssueTracker" Class="SiteDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=dc88f092-7236-4536-b577-9fd3007b78cb.sqlserver.sequelizer.com;Initial Catalog=dbdc88f09272364536b5779fd3007b78cb;User ID=fpnrthmsyuvvfygi" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="SQLSERVER_CONNECTION_STRING" Provider="System.Data.SqlClient" />
+  <Table Name="[User]" Member="Users">
+    <Type Name="User">
+      <Column Name="Username" Storage="_OpenId" Type="System.String" DbType="nvarchar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="nvarchar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="Comment" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IssueId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="DateOfCreation" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="AttachmentFileName" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="AttachmentNiceName" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="DuplicateIssueId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="OldStatus" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="NewStatus" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="OldAssignedTo" Type="System.String" DbType="nvarchar(50)" CanBeNull="true" />
+      <Column Name="NewAssignedTo" Type="System.String" DbType="nvarchar(50)" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Issue_Comment" Member="Issue" ThisKey="IssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="Issue" Member="Issues">
+    <Type Name="Issue">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="DateOfCreation" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="StackTrace" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+      <Column Name="ServerVariables" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+      <Column Name="ParentIssueId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AssignedTo" Type="System.String" DbType="nvarchar(50)" CanBeNull="true" />
+      <Association Name="Issue_Comment" Member="Comments" ThisKey="Id" OtherKey="IssueId" Type="Comment" />
+      <Association Name="Issue_Issue" Member="ChildIssues" Storage="_Issues" ThisKey="Id" OtherKey="ParentIssueId" Type="Issue" />
+      <Association Name="Issue_Issue" Member="ParentIssue" Storage="_Issue1" ThisKey="ParentIssueId" OtherKey="Id" Type="Issue" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Status">
+    <Type Name="Status">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="Reactivate" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="IssueView" Member="IssueViews">
+    <Type Name="IssueView">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="DateOfCreation" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="ParentIssueId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StackTrace" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+      <Column Name="ServerVariables" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+      <Column Name="NumberOfChildIssues" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NumberOfAttachments" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NumberOfComments" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateOfUpdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AssignedTo" Type="System.String" DbType="nvarchar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="DiscardRules">
+    <Type Name="DiscardRule">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="Creator" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="ServerVariables" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+      <Column Name="StackTrace" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
