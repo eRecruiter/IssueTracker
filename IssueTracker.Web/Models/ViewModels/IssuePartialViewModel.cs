@@ -9,7 +9,7 @@ namespace IssueTracker.ViewModels {
     public abstract class IssuePartialViewModel {
 
 
-        public IssuePartialViewModel(IssueView issue, ViewDataDictionary viewData) {
+        public IssuePartialViewModel(IssueTracker.Models.Issue issue, ViewDataDictionary viewData) {
             Id = issue.Id;
             Creator = issue.Creator;
 

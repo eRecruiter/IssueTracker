@@ -29,8 +29,8 @@ namespace IssueTracker.Controllers {
             feed.LastUpdatedTime = DateTime.Now;
             feed.Title = new TextSyndicationContent("Issues" + filterText);
 
-            var context = new SiteDataContext();
-            var issues = from x in context.IssueViews
+            var context = new Db();
+            var issues = from x in context.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
 
@@ -53,7 +53,7 @@ namespace IssueTracker.Controllers {
                 item.Content = SyndicationContent.CreateHtmlContent("<pre>" + issue.StackTrace.Replace("\r", "").Replace("\n", "<br />") + "</pre><hr /><pre>" + issue.ServerVariables.Replace("\r", "").Replace("\n", "<br />") + "</pre>");
                 item.Id = issue.Id.ToString();
                 item.AddPermalink(new Uri(baseUrl + "/Issue/Details/" + issue.Id));
-                item.LastUpdatedTime = issue.DateOfUpdate.Value;
+                item.LastUpdatedTime = issue.DateOfUpdate;
                 item.PublishDate = issue.DateOfCreation;
                 item.Authors.Add(new SyndicationPerson(issue.Creator));
 

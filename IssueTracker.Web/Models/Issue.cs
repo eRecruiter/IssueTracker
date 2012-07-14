@@ -8,7 +8,7 @@ namespace IssueTracker.Models {
     public partial class Issue {
 
         public static Issue Create(string creator, string text, string stackTrace, string serverVariables) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
 
                 //log the clients IP and Host
                 //this is especially useful when we don't have any serverVariables and therefore can't identify the caller
@@ -59,8 +59,8 @@ namespace IssueTracker.Models {
                     Status = Util.MaxLength(Settings.StatusForNewIssues, 4000),
                     AssignedTo = null
                 };
-                context.Issues.InsertOnSubmit(newIssue);
-                context.SubmitChanges();
+                context.Issues.Add(newIssue);
+                context.SaveChanges();
 
                 if (parentIssue != null) {
                     newIssue.ParentIssueId = parentIssue.Id;
@@ -72,7 +72,7 @@ namespace IssueTracker.Models {
                         IssueId = parentIssue.Id,
                         Text = ""
                     };
-                    context.Comments.InsertOnSubmit(comment);
+                    context.Comments.Add(comment);
 
                     var status = context.Status.FirstOrDefault(x => x.Name.ToLower() == parentIssue.Status);
                     if (status != null && status.Reactivate)
@@ -81,7 +81,7 @@ namespace IssueTracker.Models {
                         newIssue.Status = parentIssue.Status;
                 }
 
-                context.SubmitChanges();
+                context.SaveChanges();
                 return newIssue;
             }
         }
@@ -91,15 +91,15 @@ namespace IssueTracker.Models {
             if (string.IsNullOrEmpty(text))
                 return; //we don't accept empty comments
 
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var comment = new Comment();
                 comment.Creator = creator;
                 comment.DateOfCreation = DateTime.Now;
                 comment.Text = text;
                 comment.IssueId = Id;
 
-                context.Comments.InsertOnSubmit(comment);
-                context.SubmitChanges();
+                context.Comments.Add(comment);
+                context.SaveChanges();
             }
         }
 
@@ -110,7 +110,7 @@ namespace IssueTracker.Models {
             var bytes = Convert.FromBase64String(base64);
             File.WriteAllBytes(path, bytes);
 
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var comment = new Comment();
                 comment.Creator = creator;
                 comment.DateOfCreation = DateTime.Now;
@@ -118,8 +118,8 @@ namespace IssueTracker.Models {
                 comment.Text = "";
                 comment.AttachmentFileName = Path.GetFileName(path);
                 comment.AttachmentNiceName = niceName;
-                context.Comments.InsertOnSubmit(comment);
-                context.SubmitChanges();
+                context.Comments.Add(comment);
+                context.SaveChanges();
             }
         }
 

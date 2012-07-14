@@ -16,7 +16,7 @@ namespace IssueTracker {
 
         [WebMethod]
         public void AddComment(int issueId, string creator, string text) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var issue = context.Issues.FirstOrDefault(x => x.Id == issueId);
                 if (issue != null)
                     issue.AddComment(creator, text);
@@ -25,7 +25,7 @@ namespace IssueTracker {
 
         [WebMethod]
         public void AddAttachment(int issueId, string creator, string attachmentFileName, string attachmentBase64) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var issue = context.Issues.FirstOrDefault(x => x.Id == issueId);
                 if (issue != null)
                     issue.AddAttachment(creator, attachmentFileName, attachmentBase64, Server);

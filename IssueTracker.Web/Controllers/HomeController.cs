@@ -22,7 +22,7 @@ namespace IssueTracker.Controllers {
 
             Issue parentIssue = null;
             if (parentId.HasValue)
-                using (var context = new SiteDataContext())
+                using (var context = new Db())
                     parentIssue = context.Issues.FirstOrDefault(x => x.Id == parentId.Value);
 
             if (parentIssue != null) {
@@ -52,7 +52,7 @@ namespace IssueTracker.Controllers {
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult LogOn(string username, string password) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var user = context.Users.FirstOrDefault(x => x.Username.ToLower() == username.ToLower() && x.Password == password.Hash());
                 if (user != null) {
                     FormsAuthentication.SetAuthCookie(user.Username, true);

@@ -7,14 +7,14 @@ using IssueTracker.Models;
 namespace IssueTracker.ViewModels.Issue {
     public class DetailsIssuePartialViewModel : IssueTracker.ViewModels.IssuePartialViewModel {
 
-        public DetailsIssuePartialViewModel(IssueView issue, ViewDataDictionary viewData)
+        public DetailsIssuePartialViewModel(IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
             : base(issue, viewData) {
 
             DateOfCreation = issue.DateOfCreation;
             ParentIssueId = issue.ParentIssueId;
             StackTrace = issue.StackTrace;
             ServerVariables = issue.ServerVariables;
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 Comments = (from x in context.Comments
                             where x.IssueId == issue.Id
                             orderby x.DateOfCreation

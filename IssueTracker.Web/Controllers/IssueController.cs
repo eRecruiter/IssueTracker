@@ -16,8 +16,8 @@ namespace IssueTracker.Controllers {
 
             page = page.HasValue ? page.Value - 1 : 0;
 
-            var context = new SiteDataContext();
-            var issues = from x in context.IssueViews
+            var context = new Db();
+            var issues = from x in context.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
 
@@ -92,8 +92,8 @@ namespace IssueTracker.Controllers {
 
         #region Details
         public ActionResult Details(int id) {
-            var context = new SiteDataContext();
-            var issue = context.IssueViews.SingleOrDefault(x => x.Id == id);
+            var context = new Db();
+            var issue = context.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null || (!issue.IsPublic && this.GetCurrentUser() == null))
                 return RedirectToAction("Index", "Issue");
             return View(new DetailsIssuePartialViewModel(issue, ViewData));
@@ -102,7 +102,7 @@ namespace IssueTracker.Controllers {
 
         #region Attachment
         public ActionResult Attachment(int id) {
-            var context = new SiteDataContext();
+            var context = new Db();
             var comment = context.Comments.SingleOrDefault(x => x.Id == id);
             if (comment == null || (!comment.Issue.IsPublic && !User.Identity.IsAuthenticated))
                 return null;
@@ -113,7 +113,7 @@ namespace IssueTracker.Controllers {
         #region Add Comment
         [Authorize]
         public ActionResult AddComment(int id) {
-            var context = new SiteDataContext();
+            var context = new Db();
             var issue = context.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
@@ -124,7 +124,7 @@ namespace IssueTracker.Controllers {
         [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult AddComment(int id, string comment, string email, bool @public, string status) {
-            var context = new SiteDataContext();
+            var context = new Db();
             var issue = context.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
@@ -146,7 +146,7 @@ namespace IssueTracker.Controllers {
                     issue.Status = status;
                 }
 
-                context.Comments.InsertOnSubmit(newComment);
+                context.Comments.Add(newComment);
             }
 
             if (!string.IsNullOrEmpty(email)) {
@@ -156,7 +156,7 @@ namespace IssueTracker.Controllers {
             }
 
             issue.IsPublic = @public;
-            context.SubmitChanges();
+            context.SaveChanges();
 
             return RedirectToAction("Details", "Issue", new {
                 id = id
@@ -187,7 +187,7 @@ namespace IssueTracker.Controllers {
         }
 
         private void Update(int id, string status, string assignedTo, string text) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var issue = context.Issues.SingleOrDefault(x => x.Id == id);
                 if (issue != null) {
                     var user = Utils.GetAllUsers(ViewData).FirstOrDefault(x => x.Name.Is(assignedTo));
@@ -231,32 +231,34 @@ namespace IssueTracker.Controllers {
 
                     if (hasChanged) {
                         comment.Text = text ?? "";
-                        context.Comments.InsertOnSubmit(comment);
+                        context.Comments.Add(comment);
                     }
 
-                    context.SubmitChanges();
+                    context.SaveChanges();
                 }
             }
         }
 
         [Authorize]
         public ActionResult Delete(int id) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 var issue = context.Issues.SingleOrDefault(x => x.Id == id);
                 if (issue != null) {
                     foreach (var i in context.Issues.Where(x => x.ParentIssueId == issue.Id))
                         Delete(i.Id);
-                    context.Comments.DeleteAllOnSubmit(context.Comments.Where(x => x.IssueId == issue.Id));
-                    context.SubmitChanges();
-                    context.Issues.DeleteAllOnSubmit(context.Issues.Where(x => x.Id == issue.Id));
-                    context.SubmitChanges();
+
+                    foreach (var c in context.Comments.Where(x => x.IssueId == issue.Id))
+                        context.Comments.Remove(c);
+
+                    context.Issues.Remove(context.Issues.Single(x => x.Id == issue.Id));
+                    context.SaveChanges();
                 }
             }
             return RedirectToAction("Index", "Issue");
         }
 
         private IEnumerable<int> GetSelectedIssues(FormCollection form) {
-            using (var context = new SiteDataContext()) {
+            using (var context = new Db()) {
                 return from x in context.Issues.Select(x => x.Id).ToList()
                        where form["issue" + x].HasValue() && !form["issue" + x].Is("false")
                        select x;
