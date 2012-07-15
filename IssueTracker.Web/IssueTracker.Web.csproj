@@ -140,19 +140,15 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\RssController.cs" />
-    <Compile Include="Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\Issue-2.cs" />
+    <Compile Include="Models\Issue.cs" />
     <Compile Include="Models\DiscardRule.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Db.cs" />
-    <Compile Include="Models\Issue.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Util.cs" />
@@ -188,7 +184,6 @@
     <Content Include="crossdomain.xml" />
     <Content Include="css\handheld.css" />
     <Content Include="css\style.css" />
-    <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="images\Filter.png" />
     <Content Include="images\Header.png" />

@@ -6,8 +6,8 @@ using IssueTracker.Models;
 namespace IssueTracker.ViewModels.Issue {
     public class DetailsCommentPartialViewModel {
 
-        public DetailsCommentPartialViewModel(Comment comment, ViewDataDictionary viewData) {
-            var creatorUser = Utils.GetAllUsers(viewData).FirstOrDefault(x => x.Username.Is(comment.Creator));
+        public DetailsCommentPartialViewModel(Db db, Comment comment, ViewDataDictionary viewData) {
+            var creatorUser = Utils.GetAllUsers(db, viewData).FirstOrDefault(x => x.Username.Is(comment.Creator));
             Creator = creatorUser == null ? comment.Creator : creatorUser.Name;
             DateOfCreation = comment.DateOfCreation;
             Text = comment.Text;
@@ -23,8 +23,8 @@ namespace IssueTracker.ViewModels.Issue {
             else if (comment.OldStatus.HasValue())
                 StatusText += "<div>Removed status <i>" + comment.OldStatus + "</i>.</div>";
 
-            var oldUser = Utils.GetAllUsers(viewData).FirstOrDefault(x => x.Username.Is(comment.OldAssignedTo));
-            var newUser = Utils.GetAllUsers(viewData).FirstOrDefault(x => x.Username.Is(comment.NewAssignedTo));
+            var oldUser = Utils.GetAllUsers(db, viewData).FirstOrDefault(x => x.Username.Is(comment.OldAssignedTo));
+            var newUser = Utils.GetAllUsers(db, viewData).FirstOrDefault(x => x.Username.Is(comment.NewAssignedTo));
 
             if (comment.NewAssignedTo.HasValue() && comment.OldAssignedTo.HasValue())
                 StatusText += "<div>Assigned from <i>" + (oldUser != null ? oldUser.Name : comment.OldAssignedTo) + "</i> to <i>" + (newUser != null ? newUser.Name : comment.NewAssignedTo) + "</i>.</div>";

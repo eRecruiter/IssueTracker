@@ -7,8 +7,10 @@ using System.Linq;
 namespace IssueTracker.ViewModels.Issue {
     public class IndexIssuePartialViewModel : IssueTracker.ViewModels.IssuePartialViewModel {
 
-        public IndexIssuePartialViewModel(IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
+        public IndexIssuePartialViewModel(User currentUser, IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
             : base(issue, viewData) {
+
+                CurrentUser = currentUser;
 
             Comments = issue.NumberOfComments;
 
@@ -26,6 +28,8 @@ namespace IssueTracker.ViewModels.Issue {
 
         public string Time { get; set; }
         public int Comments { get; set; }
+
+        public User CurrentUser { get; set; }
 
     }
 }

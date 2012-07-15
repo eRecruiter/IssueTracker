@@ -10,7 +10,7 @@
     <%: Model.Status %>
 </td>
 <td>
-    <div class="assignedTo<%= this.GetCurrentUser() != null && (Model.AssignedTo.Is(this.GetCurrentUser().Name) || Model.AssignedTo.Is(this.GetCurrentUser().Username)) ? " own" : "" %>">
+    <div class="assignedTo<%= Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? " own" : "" %>">
         <%: Model.AssignedTo %></div>
 </td>
 <td>
@@ -19,7 +19,7 @@
 <td>
     <pre onclick="window.location = '<%= Url.Action("Details", "Issue", new { id = Model.Id }) %>';"><%: (string.IsNullOrWhiteSpace(Model.Text) ? "< no text >" : Model.Text)%></pre>
 </td>
-<% if (this.GetCurrentUser() != null) { %>
+<% if (Model.CurrentUser != null) { %>
 <td style="text-align:right;">
     <%= Html.CheckBox("issue" + Model.Id) %>
 </td>

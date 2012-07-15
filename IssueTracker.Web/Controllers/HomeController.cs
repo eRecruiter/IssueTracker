@@ -53,7 +53,9 @@ namespace IssueTracker.Controllers {
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult LogOn(string username, string password) {
             using (var context = new Db()) {
-                var user = context.Users.FirstOrDefault(x => x.Username.ToLower() == username.ToLower() && x.Password == password.Hash());
+                var passwordHash = password.Hash();
+
+                var user = context.Users.FirstOrDefault(x => x.Username.ToLower() == username.ToLower() && x.Password == passwordHash);
                 if (user != null) {
                     FormsAuthentication.SetAuthCookie(user.Username, true);
                     return RedirectToAction("Index", "Issue");

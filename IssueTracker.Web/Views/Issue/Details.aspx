@@ -2,7 +2,7 @@
 
 <asp:Content ContentPlaceHolderID="content" runat="server">
     <div style="text-align: right; margin: 3px 3px 0 0;">
-        <% if (this.GetCurrentUser() != null) { %>
+        <% if (Model.CurrentUser != null) { %>
         <input type="button" value="Add a comment" onclick="location='<%= Url.Action("AddComment", "Issue", new { id = Model.Id }) %>';" />
         <input type="button" value="Delete" onclick="location='<%= Url.Action("Delete", "Issue", new { id = Model.Id }) %>';" />
         <div style="margin-top: 3px;">

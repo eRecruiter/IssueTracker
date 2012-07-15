@@ -27,7 +27,7 @@
     </div>
     <% using (Html.BeginForm("Update", "Issue"))
        { %>
-    <% if (this.GetCurrentUser() != null)
+    <% if (Model.CurrentUser != null)
        { %>
     <div style="text-align: right; margin: 3px 3px 3px 0;">
         <%= Html.DropDownList("status", Model.AvailableStati) %>

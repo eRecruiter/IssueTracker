@@ -7,23 +7,23 @@ using IssueTracker.Models;
 namespace IssueTracker.ViewModels.Issue {
     public class DetailsIssuePartialViewModel : IssueTracker.ViewModels.IssuePartialViewModel {
 
-        public DetailsIssuePartialViewModel(IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
+        public DetailsIssuePartialViewModel(Db db, User currentUser, IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
             : base(issue, viewData) {
+
+            CurrentUser = currentUser;
 
             DateOfCreation = issue.DateOfCreation;
             ParentIssueId = issue.ParentIssueId;
             StackTrace = issue.StackTrace;
             ServerVariables = issue.ServerVariables;
-            using (var context = new Db()) {
-                Comments = (from x in context.Comments
-                            where x.IssueId == issue.Id
-                            orderby x.DateOfCreation
-                            select new DetailsCommentPartialViewModel(x, viewData)).ToList();
-            }
+            Comments = (from x in db.Comments
+                        where x.IssueId == issue.Id
+                        orderby x.DateOfCreation
+                        select x).ToList().Select(x => new DetailsCommentPartialViewModel(db, x, viewData));
 
             var stati = new List<SelectListItem>();
             stati.AddRange(
-                    from x in Utils.GetAllStati(viewData)
+                    from x in Utils.GetAllStati(db, viewData)
                     select new SelectListItem {
                         Text = x.Name,
                         Value = x.Name,
@@ -39,7 +39,7 @@ namespace IssueTracker.ViewModels.Issue {
                 Selected = AssignedTo.IsNoE()
             });
             users.AddRange(
-                    from x in Utils.GetAllUsers(viewData)
+                    from x in Utils.GetAllUsers(db, viewData)
                     select new SelectListItem {
                         Text = x.Name,
                         Value = x.Name,
@@ -58,6 +58,7 @@ namespace IssueTracker.ViewModels.Issue {
 
         public IEnumerable<SelectListItem> AvailableStati { get; private set; }
         public IEnumerable<SelectListItem> AvailableUsers { get; private set; }
+        public User CurrentUser { get; set; }
 
     }
 }

@@ -5,8 +5,8 @@ using IssueTracker.Models;
 namespace IssueTracker {
     public static class ControllerExtensionMethods {
 
-        public static User GetCurrentUser(this Controller controller) {
-            return Utils.GetCurrentUser(controller.ViewData, controller.HttpContext.User);
+        public static User GetCurrentUser(this Controller controller, Db db) {
+            return Utils.GetCurrentUser(db, controller.ViewData, controller.HttpContext.User);
         }
 
     }

@@ -1,7 +1,7 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<dynamic>" %>
-<% if (this.GetCurrentUser() != null) { %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IssueTracker.Models.User>" %>
+<% if (Model != null) { %>
 Welcome, 
-<%= this.GetCurrentUser().Name %>
+<%= Model.Name %>
 |
 <%= Html.ActionLink("Log off", "LogOff", "Home") %>
 |

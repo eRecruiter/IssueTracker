@@ -1,34 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Linq.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using IssueTracker.Models;
 using IssueTracker.ViewModels.Issue;
-using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace IssueTracker.Controllers {
     public class IssueController : Controller {
 
+        private Db _db = new Db();
+
         #region Index
         public ActionResult Index(int? page) {
-            var viewModel = new IndexViewModel(ViewData);
+            var viewModel = new IndexViewModel(_db, this.GetCurrentUser(_db),  ViewData);
 
             page = page.HasValue ? page.Value - 1 : 0;
 
-            var context = new Db();
-            var issues = from x in context.Issues
+            var issues = from x in _db.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
 
-            if (this.GetCurrentUser() == null)
+            if (this.GetCurrentUser(_db) == null)
                 issues = issues.Where(x => x.IsPublic);
 
             viewModel.StatusFilter = Request.Cookies["status"] != null ? Request.Cookies["status"].Value : "";
             if (viewModel.StatusFilter.HasValue())
                 issues = issues.Where(x => x.Status.ToLower() == viewModel.StatusFilter.ToLower());
 
-            viewModel.TimeFilter =Request.Cookies["time"] != null ? Convert.ToInt32(Request.Cookies["time"].Value) : 0;
+            viewModel.TimeFilter = Request.Cookies["time"] != null ? Convert.ToInt32(Request.Cookies["time"].Value) : 0;
             if (viewModel.TimeFilter > 0)
                 issues = issues.Where(x => x.DateOfUpdate >= DateTime.Now.AddDays(-viewModel.TimeFilter));
 
@@ -48,13 +50,13 @@ namespace IssueTracker.Controllers {
             if (duplicateId.HasValue)
                 issues = issues.Where(x => x.Id != duplicateId.Value);
 
-            var sortedIssues = issues.OrderByDescending(x => x.DateOfUpdate);
+            var sortedIssues = issues.OrderByDescending(x => x.Comments.Count <= 0 ? x.DateOfCreation : x.Comments.Max(y => y.DateOfCreation));
             if (viewModel.Order.Is("status"))
                 sortedIssues = issues.OrderBy(x => x.Status);
             else if (viewModel.Order.Is("comments"))
-                sortedIssues = issues.OrderByDescending(x => x.NumberOfComments);
+                sortedIssues = issues.OrderByDescending(x => x.Comments.Count);
 
-            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Select(x => new IndexIssuePartialViewModel(x, ViewData)).ToList();
+            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x, ViewData));
 
             viewModel.Total = sortedIssues.Count();
             viewModel.Start = page.Value * Settings.IssuesPerPage;
@@ -92,18 +94,16 @@ namespace IssueTracker.Controllers {
 
         #region Details
         public ActionResult Details(int id) {
-            var context = new Db();
-            var issue = context.Issues.SingleOrDefault(x => x.Id == id);
-            if (issue == null || (!issue.IsPublic && this.GetCurrentUser() == null))
+            var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
+            if (issue == null || (!issue.IsPublic && this.GetCurrentUser(_db) == null))
                 return RedirectToAction("Index", "Issue");
-            return View(new DetailsIssuePartialViewModel(issue, ViewData));
+            return View(new DetailsIssuePartialViewModel(_db, this.GetCurrentUser(_db), issue, ViewData));
         }
         #endregion
 
         #region Attachment
         public ActionResult Attachment(int id) {
-            var context = new Db();
-            var comment = context.Comments.SingleOrDefault(x => x.Id == id);
+            var comment = _db.Comments.SingleOrDefault(x => x.Id == id);
             if (comment == null || (!comment.Issue.IsPublic && !User.Identity.IsAuthenticated))
                 return null;
             return File(Path.Combine(Server.MapPath(Settings.AttachmentsPath), comment.AttachmentFileName), Util.GetContentType(comment.AttachmentFileName), comment.AttachmentNiceName);
@@ -113,8 +113,7 @@ namespace IssueTracker.Controllers {
         #region Add Comment
         [Authorize]
         public ActionResult AddComment(int id) {
-            var context = new Db();
-            var issue = context.Issues.SingleOrDefault(x => x.Id == id);
+            var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
             ViewData.Model = issue;
@@ -124,8 +123,7 @@ namespace IssueTracker.Controllers {
         [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult AddComment(int id, string comment, string email, bool @public, string status) {
-            var context = new Db();
-            var issue = context.Issues.SingleOrDefault(x => x.Id == id);
+            var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
             status = status ?? issue.Status; //to make sure it's not null.
@@ -140,23 +138,23 @@ namespace IssueTracker.Controllers {
                 newComment.Text = comment;
                 if (!string.IsNullOrEmpty(email))
                     newComment.Email = email;
-                if (!status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase) && context.Status.Any(x => x.Name == status)) {
+                if (!status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase) && _db.Status.Any(x => x.Name == status)) {
                     newComment.OldStatus = issue.Status;
                     newComment.NewStatus = status;
                     issue.Status = status;
                 }
 
-                context.Comments.Add(newComment);
+                _db.Comments.Add(newComment);
             }
 
             if (!string.IsNullOrEmpty(email)) {
-                var currentUser = this.GetCurrentUser();
+                var currentUser = this.GetCurrentUser(_db);
                 var body = currentUser.Name + " wants to let you know about changes on issue #" + issue.Id + (string.IsNullOrEmpty(comment) ? ". " : ": <br /><br /><i>" + Server.HtmlEncode(comment).Replace("\r", "").Replace("\n", "<br />") + "</i><br /><br />") + "Please visit " + Request.Url.ToString().Replace("AddComment", "Details") + " for all the details.</div><br /><br />Have a nice day! Yours,<br />~ the IssueTracker E-Mail-Monkey";
                 Util.SendMail(currentUser.Name, currentUser.Email, email, email, "Info from " + currentUser.Name + " about issue #" + issue.Id, body);
             }
 
             issue.IsPublic = @public;
-            context.SaveChanges();
+            _db.SaveChanges();
 
             return RedirectToAction("Details", "Issue", new {
                 id = id
@@ -179,90 +177,87 @@ namespace IssueTracker.Controllers {
             else {
                 foreach (var issueId in GetSelectedIssues(form))
                     if (form["Delete"] != null)
-                        Delete(issueId);
+                        Delete(_db, issueId);
                     else
                         Update(issueId, status, assignedTo, text);
+
                 return RedirectToAction("Index", "Issue");
             }
         }
 
         private void Update(int id, string status, string assignedTo, string text) {
-            using (var context = new Db()) {
-                var issue = context.Issues.SingleOrDefault(x => x.Id == id);
-                if (issue != null) {
-                    var user = Utils.GetAllUsers(ViewData).FirstOrDefault(x => x.Name.Is(assignedTo));
-                    var hasChanged = false;
+            var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
+            if (issue != null) {
+                var user = Utils.GetAllUsers(_db, ViewData).FirstOrDefault(x => x.Name.Is(assignedTo));
+                var hasChanged = false;
 
-                    var comment = new Comment();
-                    comment.IssueId = issue.Id;
-                    comment.DateOfCreation = DateTime.Now;
-                    comment.Creator = this.GetCurrentUser().Username;
+                var comment = new Comment();
+                comment.IssueId = issue.Id;
+                comment.DateOfCreation = DateTime.Now;
+                comment.Creator = this.GetCurrentUser(_db).Username;
 
-                    if (status.HasValue() && Utils.GetAllStati(ViewData).Any(x => x.Name.Is(status))) {
-                        if (!issue.Status.Is(status)) {
-                            comment.OldStatus = issue.Status;
-                            comment.NewStatus = status;
-                            issue.Status = status;
+                if (status.HasValue() && Utils.GetAllStati(_db, ViewData).Any(x => x.Name.Is(status))) {
+                    if (!issue.Status.Is(status)) {
+                        comment.OldStatus = issue.Status;
+                        comment.NewStatus = status;
+                        issue.Status = status;
+                        hasChanged = true;
+                    }
+                }
+
+                if (assignedTo.HasValue()) {
+                    if (assignedTo != null && user != null) {
+                        if (!issue.AssignedTo.Is(user.Username)) {
+                            comment.OldAssignedTo = issue.AssignedTo;
+                            comment.NewAssignedTo = user.Username;
+                            issue.AssignedTo = user.Username;
                             hasChanged = true;
                         }
                     }
-
-                    if (assignedTo.HasValue()) {
-                        if (assignedTo != null && user != null) {
-                            if (!issue.AssignedTo.Is(user.Username)) {
-                                comment.OldAssignedTo = issue.AssignedTo;
-                                comment.NewAssignedTo = user.Username;
-                                issue.AssignedTo = user.Username;
-                                hasChanged = true;
-                            }
-                        }
-                        else {
-                            if (issue.AssignedTo != null) {
-                                comment.OldAssignedTo = issue.AssignedTo;
-                                comment.NewAssignedTo = null;
-                                issue.AssignedTo = null;
-                                hasChanged = true;
-                            }
+                    else {
+                        if (issue.AssignedTo != null) {
+                            comment.OldAssignedTo = issue.AssignedTo;
+                            comment.NewAssignedTo = null;
+                            issue.AssignedTo = null;
+                            hasChanged = true;
                         }
                     }
-
-                    if (text.HasValue())
-                        hasChanged = true;
-
-                    if (hasChanged) {
-                        comment.Text = text ?? "";
-                        context.Comments.Add(comment);
-                    }
-
-                    context.SaveChanges();
                 }
+
+                if (text.HasValue())
+                    hasChanged = true;
+
+                if (hasChanged) {
+                    comment.Text = text ?? "";
+                    _db.Comments.Add(comment);
+                }
+
+                _db.SaveChanges();
             }
         }
 
         [Authorize]
         public ActionResult Delete(int id) {
-            using (var context = new Db()) {
-                var issue = context.Issues.SingleOrDefault(x => x.Id == id);
-                if (issue != null) {
-                    foreach (var i in context.Issues.Where(x => x.ParentIssueId == issue.Id))
-                        Delete(i.Id);
-
-                    foreach (var c in context.Comments.Where(x => x.IssueId == issue.Id))
-                        context.Comments.Remove(c);
-
-                    context.Issues.Remove(context.Issues.Single(x => x.Id == issue.Id));
-                    context.SaveChanges();
-                }
-            }
+            Delete(_db, id);
             return RedirectToAction("Index", "Issue");
         }
 
-        private IEnumerable<int> GetSelectedIssues(FormCollection form) {
-            using (var context = new Db()) {
-                return from x in context.Issues.Select(x => x.Id).ToList()
-                       where form["issue" + x].HasValue() && !form["issue" + x].Is("false")
-                       select x;
+        private void Delete(Db db, int issueId) {
+            var issue = db.Issues.SingleOrDefault(x => x.Id == issueId);
+
+            if (issue != null) {
+                foreach (var childIssueId in db.Issues.Where(x => x.ParentIssueId == issue.Id).Select(x => x.Id).ToList())
+                    Delete(db, childIssueId);
+
+                _db.Issues.Remove(issue);
+                _db.SaveChanges();
             }
+        }
+
+        private IEnumerable<int> GetSelectedIssues(FormCollection form) {
+            return from x in _db.Issues.Select(x => x.Id).ToList()
+                   where form["issue" + x].HasValue() && !form["issue" + x].Is("false")
+                   select x;
         }
         #endregion
 

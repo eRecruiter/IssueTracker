@@ -5,7 +5,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 namespace IssueTracker.Models {
     public class Db : DbContext {
 
-        public Db() : base("cloudpass") { }
+        public Db() : base("Db") { }
 
         public IDbSet<User> Users { get; set; }
         public IDbSet<Status> Status { get; set; }
@@ -15,7 +15,7 @@ namespace IssueTracker.Models {
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
+          
             modelBuilder.Entity<Comment>()
                 .HasRequired(x => x.Issue)
                 .WithMany(x => x.Comments)
@@ -26,7 +26,7 @@ namespace IssueTracker.Models {
                 .HasOptional(x => x.ParentIssue)
                 .WithMany(x => x.ChildIssues)
                 .HasForeignKey(x => x.ParentIssueId)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete(false);
         }
     }
 }
