@@ -1,8 +1,6 @@
-
 DELETE FROM IssueTracker.dbo.[User]
 INSERT INTO IssueTracker.dbo.[User] ([Username], [Password], [Email], [Name])
 SELECT * FROM IssueTracker_Old.dbo.[User]
-
 
 DELETE FROM IssueTracker.dbo.[Status]
 INSERT INTO IssueTracker.dbo.[Status] ([Name], [Reactivate])
