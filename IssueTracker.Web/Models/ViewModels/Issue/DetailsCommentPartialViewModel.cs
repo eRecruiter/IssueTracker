@@ -14,30 +14,30 @@ namespace IssueTracker.ViewModels.Issue {
 
             StatusText = "";
             if (comment.DuplicateIssueId.HasValue)
-                StatusText += "<div>Added a <a href=\"" + comment.DuplicateIssueId.Value + "\">duplicate</a>.</div>";
+                StatusText += "Added a <a href=\"" + comment.DuplicateIssueId.Value + "\">duplicate</a>.";
 
             if (comment.NewStatus.HasValue() && comment.OldStatus.HasValue())
-                StatusText += "<div>Changed status from <i>" + comment.OldStatus + "</i> to <i>" + comment.NewStatus + "</i>.</div>";
+                StatusText += "Changed status from <i>" + comment.OldStatus + "</i> to <i>" + comment.NewStatus + "</i>.";
             else if (comment.NewStatus.HasValue())
-                StatusText += "<div>Changed status to <i>" + comment.NewStatus + "</i>.</div>";
+                StatusText += "Changed status to <i>" + comment.NewStatus + "</i>.";
             else if (comment.OldStatus.HasValue())
-                StatusText += "<div>Removed status <i>" + comment.OldStatus + "</i>.</div>";
+                StatusText += "Removed status <i>" + comment.OldStatus + "</i>.";
 
             var oldUser = Utils.GetAllUsers(db, viewData).FirstOrDefault(x => x.Username.Is(comment.OldAssignedTo));
             var newUser = Utils.GetAllUsers(db, viewData).FirstOrDefault(x => x.Username.Is(comment.NewAssignedTo));
 
             if (comment.NewAssignedTo.HasValue() && comment.OldAssignedTo.HasValue())
-                StatusText += "<div>Assigned from <i>" + (oldUser != null ? oldUser.Name : comment.OldAssignedTo) + "</i> to <i>" + (newUser != null ? newUser.Name : comment.NewAssignedTo) + "</i>.</div>";
+                StatusText += "Assigned from <i>" + (oldUser != null ? oldUser.Name : comment.OldAssignedTo) + "</i> to <i>" + (newUser != null ? newUser.Name : comment.NewAssignedTo) + "</i>.";
             else if (comment.NewAssignedTo.HasValue())
-                StatusText += "<div>Assigned to <i>" + (newUser != null ? newUser.Name : comment.NewAssignedTo) + "</i>.</div>";
+                StatusText += "Assigned to <i>" + (newUser != null ? newUser.Name : comment.NewAssignedTo) + "</i>.";
             else if (comment.OldAssignedTo.HasValue())
-                StatusText += "<div>Removed assignment from <i>" + (oldUser != null ? oldUser.Name : comment.OldAssignedTo) + "</i>.</div>";
+                StatusText += "Removed assignment from <i>" + (oldUser != null ? oldUser.Name : comment.OldAssignedTo) + "</i>.";
 
             if (comment.Email.HasValue())
-                StatusText += "<div>Send an e-mail to <i>" + comment.Email + "</i>.</div>";
+                StatusText += "Send an e-mail to <i>" + comment.Email + "</i>.";
 
             if (comment.AttachmentFileName.HasValue())
-                StatusText += "<div>Added the attachment <a href=\"../Attachment/" + comment.Id + "\">" + comment.AttachmentNiceName + "</a>.</div>";
+                StatusText += "Added the attachment <a href=\"../Attachment/" + comment.Id + "\">" + comment.AttachmentNiceName + "</a>.";
         }
 
 
