@@ -211,8 +211,6 @@
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />
     <Content Include="crossdomain.xml" />
-    <Content Include="__css\handheld.css" />
-    <Content Include="__css\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="images\Filter.png" />
     <Content Include="images\Header.png" />
