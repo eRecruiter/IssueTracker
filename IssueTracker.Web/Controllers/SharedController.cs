@@ -15,7 +15,7 @@ namespace IssueTracker.Web.Controllers
         [ChildActionOnly]
         public ActionResult Header()
         {
-            return View(this.GetCurrentUser(_db));
+            return PartialView(this.GetCurrentUser(_db));
         }
 
     }

@@ -1,0 +1,15 @@
+﻿@model IssueTracker.ViewModels.Issue.IndexViewModel
+
+        @using (Html.BeginForm("Index", "Issue", FormMethod.Post, new { @class="well form-inline" })) {
+            <text>
+            @if (!Model.DuplicateId.HasValue) {
+                <text>       
+                @Html.DropDownList("order", Model.AvailableOrders) 
+                @Html.DropDownList("statusFilter", Model.AvailableStati) 
+                @Html.DropDownList("assignedToFilter", Model.AvailableUsers) 
+                @Html.DropDownList("timeFilter", Model.AvailableTimes) 
+                </text>
+            }
+            <button type="submit" class="btn btn-primary">Filter</button>
+            </text>
+        }

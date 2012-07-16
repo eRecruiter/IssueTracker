@@ -1,0 +1,72 @@
+﻿@model IssueTracker.ViewModels.Issue.DetailsIssuePartialViewModel
+@section Content {
+    <div style="text-align: right; margin: 3px 3px 0 0;">
+        @if (Model.CurrentUser != null) {
+            <text>
+            <input type="button" value="Add a comment" onclick="location='@Url.Action("AddComment", "Issue", new { id = Model.Id })';" />
+            <input type="button" value="Delete" onclick="location='@Url.Action("Delete", "Issue", new { id = Model.Id })';" />
+            <div style="margin-top: 3px;">
+                @using (Html.BeginForm("Update", "Issue", new { id = Model.Id })) {
+                    <text>
+                    @Html.DropDownList("status", Model.AvailableStati)
+                    @Html.DropDownList("assignedTo", Model.AvailableUsers)
+                    </text>
+                }
+            </div>
+            </text>    
+        }
+        <script>
+            $("select").change(function () {
+                $("form").submit();
+            });
+        </script>
+    </div>
+    <div style="float: right; width: 30%; margin-left: 5px;">
+        <fieldset>
+            <legend>Details</legend>
+            <p>
+                Issue created on <i>
+                    @Model.DateOfCreation.ToString()</i> by <i>
+                        @Model.Creator</i>
+            </p>
+            @if (Model.IsPublic) {
+                <p>
+                    This issue is public.
+                </p>
+            }
+            @if (Model.ParentIssueId.HasValue) {
+                <p>
+                    This issue has a
+                @Html.ActionLink("parent", "Details", new { id = Model.ParentIssueId.Value }).
+                </p>
+            }
+        </fieldset>
+        <fieldset>
+            <legend>Comments</legend>
+            @{var count = 0;}
+            @foreach (var comment in Model.Comments) {
+                <div class="@("comment" + (count++ % 2 == 0 ? "" : " alternating"))">
+                    @Html.Partial("Comment", comment)
+                </div>
+            }
+        </fieldset>
+    </div>
+    <fieldset>
+        <legend>Text</legend>
+        <pre>
+            @Model.Text
+            </pre>
+    </fieldset>
+    <fieldset>
+        <legend>Stack trace</legend>
+        <pre>
+                @Model.StackTrace
+            </pre>
+    </fieldset>
+    <fieldset>
+        <legend>Server variables</legend>
+        <pre>
+                @Model.ServerVariables
+            </pre>
+    </fieldset>
+}

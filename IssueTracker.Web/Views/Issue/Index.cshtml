@@ -1,0 +1,39 @@
+﻿@model IssueTracker.ViewModels.Issue.IndexViewModel
+@section Content {
+
+    @Html.Partial("Filter")
+
+    @if (Model.Total > 0) { 
+        <text>
+        <div class="counter">@(Model.Start.ToString("N0") + " - " + Model.End.ToString("N0") + " of " + Model.Total.ToString("N0"))</div>
+        @using (Html.BeginForm("Update", "Issue", FormMethod.Post, new { @class="form-inline" })) {
+            <text>
+            @if (Model.CurrentUser != null) {
+                <div style="text-align: right; margin: 3px 3px 3px 0;">
+                    @Html.DropDownList("status", Model.AvailableStati)
+                    @Html.DropDownList("assignedTo", Model.AvailableUsers)
+                    <button type="submit" name="Save" value="Save" class="btn btn-success">Save</button>
+                    <button type="submit" name="Delete" value="Delete" class="btn btn-danger">Delete</button>
+                    <input type="checkbox" id="checkAll" />
+                </div>
+            }
+            <table style="width: 100%;" class="table table-striped table-condensed">
+                @foreach (var issue in Model.Issues) { 
+                    <tr id="@("issue" + issue.Id)" class="issue">
+                        @Html.Partial("Issue", issue)
+                    </tr>
+                }
+            </table>
+            </text>
+        }
+        <div class="pager">
+            @for (var i = 1; i < Model.MaxPage; i++) {
+                @Html.Raw("&nbsp;&nbsp;&nbsp;" + (i == Model.Page ? i.ToString() : Html.ActionLink(i.ToString(), null, null, new { page = i }, null).ToString()))
+            }
+        </div>
+        </text>
+    }
+    else {
+        <div class="counter">No matching issues found.</div>
+    }
+}
