@@ -17,8 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -151,6 +151,14 @@
     <Compile Include="Migrations\201207150732019_InitialCreate.cs" />
     <Compile Include="Migrations\201207150732019_InitialCreate.Designer.cs">
       <DependentUpon>201207150732019_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201207291838005_MoveUsersToWindowsAuth.cs" />
+    <Compile Include="Migrations\201207291838005_MoveUsersToWindowsAuth.Designer.cs">
+      <DependentUpon>201207291838005_MoveUsersToWindowsAuth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201207291845282_RemovePublicFlag.cs" />
+    <Compile Include="Migrations\201207291845282_RemovePublicFlag.Designer.cs">
+      <DependentUpon>201207291845282_RemovePublicFlag.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />

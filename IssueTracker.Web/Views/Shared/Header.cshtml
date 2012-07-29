@@ -1,22 +1,11 @@
-﻿@model IssueTracker.Models.User
-
-<div class="navbar">
+﻿<div class="navbar">
     <div class="navbar-inner">
         <div class="container">
             <a class="brand" href="@Url.Action("Index", "Issue")">IssueTracker</a>
             <div class="nav-collapse">
-                @if (Model != null) {
-                    <text>
-                    <ul class="nav">
-                        <li><a href="@Url.Action("LogOff", "Home")">Welcome, @Model.Name</a></li>
-                    </ul>
-                    </text>  
-                }
-                else {
-                    <ul class="nav">
-                        <li><a href="@Url.Action("LogOn", "Home")">Log on</a></li>
-                    </ul>
-                }
+                 <p class="navbar-text">
+                    Hi there, @User.Identity.Name
+                </p>
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
     </span>
 </td>
 <td style="white-space: nowrap;">
-    <span class="@(Model.IsPublic ? "badge badge-important" : "badge badge-inverse")">
+    <span class="badge badge-inverse">
         @Model.Comments.ToString("N0")
     </span>
 </td>
@@ -15,9 +15,11 @@
     </span>
 </td>
 <td style="white-space: nowrap;">
-    <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-important" : "label label-success")">
-        @Model.AssignedTo
-    </span>
+    @if(!string.IsNullOrWhiteSpace(Model.AssignedTo)) {
+        <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-important" : "label label-success")">
+            @Model.AssignedTo
+        </span>
+    }
 </td>
 <td style="white-space: nowrap;">
     <span class="label label-info">

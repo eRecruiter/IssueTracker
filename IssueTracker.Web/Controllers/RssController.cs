@@ -7,6 +7,8 @@ using System.ServiceModel.Syndication;
 using IssueTracker.Models;
 
 namespace IssueTracker.Controllers {
+
+    [Authorize]
     public class RssController : Controller {
 
         public ActionResult Index(string status, string assignedTo) {

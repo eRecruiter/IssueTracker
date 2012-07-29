@@ -10,7 +10,7 @@ namespace IssueTracker.ViewModels.Issue {
         public IndexIssuePartialViewModel(User currentUser, IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
             : base(issue, viewData) {
 
-                CurrentUser = currentUser;
+            CurrentUser = currentUser;
 
             Comments = issue.NumberOfComments;
 

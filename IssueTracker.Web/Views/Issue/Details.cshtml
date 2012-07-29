@@ -19,10 +19,6 @@
                     @Model.DateOfCreation.ToString() by 
                         @Model.Creator
             </span>
-            @if (Model.IsPublic) {
-                <span class="label label-warning">This issue is public.
-                </span>
-            }
             @if (Model.ParentIssueId.HasValue) {
                 <span class="label label-warning">This issue has a
                 @Html.ActionLink("parent", "Details", new { id = Model.ParentIssueId.Value }).

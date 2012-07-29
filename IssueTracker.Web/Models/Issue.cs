@@ -16,7 +16,6 @@ namespace IssueTracker.Models {
         public string StackTrace { get; set; }
         public string ServerVariables { get; set; }
         public int? ParentIssueId { get; set; }
-        public bool IsPublic { get; set; }
         public string AssignedTo { get; set; }
 
         public ICollection<Comment> Comments { get; set; }

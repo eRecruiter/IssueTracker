@@ -13,7 +13,6 @@ namespace IssueTracker.ViewModels {
             Id = issue.Id;
             Creator = issue.Creator;
 
-            IsPublic = issue.IsPublic;
             Status = issue.Status;
             AssignedTo = issue.AssignedTo;
             Text = issue.Text;
@@ -21,7 +20,6 @@ namespace IssueTracker.ViewModels {
 
         public int Id { get; set; }
         public string Creator { get; set; }
-        public bool IsPublic { get; set; }
         public string Status { get; set; }
         public string AssignedTo { get; set; }
         public string Text { get; set; }

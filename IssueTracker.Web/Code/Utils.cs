@@ -8,8 +8,23 @@ namespace IssueTracker {
     public static class Utils {
 
         public static User GetCurrentUser(Db db, ViewDataDictionary viewData, IPrincipal user) {
-            if (viewData["user"] == null && user.Identity.IsAuthenticated)
-                viewData["user"] = db.Users.FirstOrDefault(x => x.Username.ToLower() == user.Identity.Name.ToLower());
+            if (viewData["user"] == null && user.Identity.IsAuthenticated) {
+                var userinDatabase = db.Users.FirstOrDefault(x => x.Username.ToLower() == user.Identity.Name.ToLower());
+
+                if (userinDatabase == null) {
+                    userinDatabase = new User {
+                        Email = "",
+                        Name = user.Identity.Name,
+                        Username = user.Identity.Name
+                    };
+
+                    db.Users.Add(userinDatabase);
+                    db.SaveChanges();
+                }
+
+                viewData["user"] = userinDatabase;
+            }
+
             return viewData["user"] as User;
         }
 

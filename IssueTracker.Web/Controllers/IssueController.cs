@@ -9,6 +9,7 @@ using IssueTracker.ViewModels.Issue;
 using System.Data.Entity;
 
 namespace IssueTracker.Controllers {
+    [Authorize]
     public class IssueController : Controller {
 
         private Db _db = new Db();
@@ -22,9 +23,6 @@ namespace IssueTracker.Controllers {
             var issues = from x in _db.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
-
-            if (this.GetCurrentUser(_db) == null)
-                issues = issues.Where(x => x.IsPublic);
 
             viewModel.StatusFilter = Request.Cookies["status"] != null ? Request.Cookies["status"].Value : "";
             if (viewModel.StatusFilter.HasValue())
@@ -56,7 +54,7 @@ namespace IssueTracker.Controllers {
             else if (viewModel.Order.Is("comments"))
                 sortedIssues = issues.OrderByDescending(x => x.Comments.Count);
 
-            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x, ViewData));
+            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x, ViewData)).ToList();
 
             viewModel.Total = sortedIssues.Count();
             viewModel.Start = page.Value * Settings.IssuesPerPage;
@@ -68,6 +66,7 @@ namespace IssueTracker.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
+        [AllowAnonymous]
         public ActionResult Index(string order, int? timeFilter, string assignedToFilter, string statusFilter, string textFilter) {
             Response.Cookies.Remove("time");
             Response.Cookies.Remove("status");
@@ -95,7 +94,7 @@ namespace IssueTracker.Controllers {
         #region Details
         public ActionResult Details(int id) {
             var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
-            if (issue == null || (!issue.IsPublic && this.GetCurrentUser(_db) == null))
+            if (issue == null)
                 return RedirectToAction("Index", "Issue");
             return View(new DetailsIssuePartialViewModel(_db, this.GetCurrentUser(_db), issue, ViewData));
         }
@@ -104,7 +103,7 @@ namespace IssueTracker.Controllers {
         #region Attachment
         public ActionResult Attachment(int id) {
             var comment = _db.Comments.SingleOrDefault(x => x.Id == id);
-            if (comment == null || (!comment.Issue.IsPublic && !User.Identity.IsAuthenticated))
+            if (comment == null)
                 return null;
             return File(Path.Combine(Server.MapPath(Settings.AttachmentsPath), comment.AttachmentFileName), Util.GetContentType(comment.AttachmentFileName), comment.AttachmentNiceName);
         }
@@ -153,7 +152,6 @@ namespace IssueTracker.Controllers {
                 Util.SendMail(currentUser.Name, currentUser.Email, email, email, "Info from " + currentUser.Name + " about issue #" + issue.Id, body);
             }
 
-            issue.IsPublic = @public;
             _db.SaveChanges();
 
             return RedirectToAction("Details", "Issue", new {
