@@ -34,8 +34,9 @@ namespace IssueTracker.Controllers {
                 };
             }
 
-            return new JsonResult {
-                Data = Issue.Create(source, text, stackTrace, serverVariables).Id
+            var issue = Issue.Create(source, text, stackTrace, serverVariables);
+            return new JsonResult {            
+                Data = issue == null ? 0 : issue.Id
             };
         }
 
