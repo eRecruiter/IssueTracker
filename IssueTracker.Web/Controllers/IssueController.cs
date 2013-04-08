@@ -8,15 +8,18 @@ using IssueTracker.Models;
 using IssueTracker.ViewModels.Issue;
 using System.Data.Entity;
 
-namespace IssueTracker.Controllers {
+namespace IssueTracker.Controllers
+{
     [Authorize]
-    public class IssueController : Controller {
+    public class IssueController : Controller
+    {
 
         private Db _db = new Db();
 
         #region Index
-        public ActionResult Index(int? page) {
-            var viewModel = new IndexViewModel(_db, this.GetCurrentUser(_db),  ViewData);
+        public ActionResult Index(int? page)
+        {
+            var viewModel = new IndexViewModel(_db, this.GetCurrentUser(_db), ViewData);
 
             page = page.HasValue ? page.Value - 1 : 0;
 
@@ -67,7 +70,8 @@ namespace IssueTracker.Controllers {
 
         [AcceptVerbs(HttpVerbs.Post)]
         [AllowAnonymous]
-        public ActionResult Index(string order, int? timeFilter, string assignedToFilter, string statusFilter, string textFilter) {
+        public ActionResult Index(string order, int? timeFilter, string assignedToFilter, string statusFilter, string textFilter)
+        {
             Response.Cookies.Remove("time");
             Response.Cookies.Remove("status");
             Response.Cookies.Remove("order");
@@ -92,7 +96,8 @@ namespace IssueTracker.Controllers {
         #endregion
 
         #region Details
-        public ActionResult Details(int id) {
+        public ActionResult Details(int id)
+        {
             var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
@@ -101,7 +106,8 @@ namespace IssueTracker.Controllers {
         #endregion
 
         #region Attachment
-        public ActionResult Attachment(int id) {
+        public ActionResult Attachment(int id)
+        {
             var comment = _db.Comments.SingleOrDefault(x => x.Id == id);
             if (comment == null)
                 return null;
@@ -111,7 +117,8 @@ namespace IssueTracker.Controllers {
 
         #region Add Comment
         [Authorize]
-        public ActionResult AddComment(int id) {
+        public ActionResult AddComment(int id)
+        {
             var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
@@ -121,14 +128,16 @@ namespace IssueTracker.Controllers {
 
         [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult AddComment(int id, string comment, string email, bool @public, string status) {
+        public ActionResult AddComment(int id, string comment, string email, string status)
+        {
             var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issue");
             status = status ?? issue.Status; //to make sure it's not null.
             comment = comment ?? ""; //to make sure it's not null.
 
-            if (!string.IsNullOrEmpty(comment) || !string.IsNullOrEmpty(email) || !status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase)) {
+            if (!string.IsNullOrEmpty(comment) || !string.IsNullOrEmpty(email) || !status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase))
+            {
                 var newComment = new Comment();
                 newComment.DateOfCreation = DateTime.Now;
                 newComment.Creator = User.Identity.Name;
@@ -137,7 +146,8 @@ namespace IssueTracker.Controllers {
                 newComment.Text = comment;
                 if (!string.IsNullOrEmpty(email))
                     newComment.Email = email;
-                if (!status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase) && _db.Status.Any(x => x.Name == status)) {
+                if (!status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase) && _db.Status.Any(x => x.Name == status))
+                {
                     newComment.OldStatus = issue.Status;
                     newComment.NewStatus = status;
                     issue.Status = status;
@@ -146,15 +156,24 @@ namespace IssueTracker.Controllers {
                 _db.Comments.Add(newComment);
             }
 
-            if (!string.IsNullOrEmpty(email)) {
+            if (!string.IsNullOrEmpty(email))
+            {
                 var currentUser = this.GetCurrentUser(_db);
-                var body = currentUser.Name + " wants to let you know about changes on issue #" + issue.Id + (string.IsNullOrEmpty(comment) ? ". " : ": <br /><br /><i>" + Server.HtmlEncode(comment).Replace("\r", "").Replace("\n", "<br />") + "</i><br /><br />") + "Please visit " + Request.Url.ToString().Replace("AddComment", "Details") + " for all the details.</div><br /><br />Have a nice day! Yours,<br />~ the IssueTracker E-Mail-Monkey";
-                Util.SendMail(currentUser.Name, currentUser.Email, email, email, "Info from " + currentUser.Name + " about issue #" + issue.Id, body);
+                var body = currentUser.Name + " wants to let you know about changes on issue #" + issue.Id +
+                           (string.IsNullOrEmpty(comment) ? ". " : ": <br /><br /><i>" + Server.HtmlEncode(comment).Replace("\r", "").Replace("\n", "<br />") + "</i><br /><br />") + "Please visit " +
+                           Request.Url.ToString().Replace("AddComment", "Details") + " for all the details.</div><br /><br />Have a nice day! Yours,<br />~ the IssueTracker E-Mail-Monkey";
+
+                var fromEmail = currentUser.Email;
+                if (string.IsNullOrEmpty(fromEmail))
+                    fromEmail = "somebody@somewhere.com";
+
+                Util.SendMail(currentUser.Name, fromEmail, email, email, "Info from " + currentUser.Name + " about issue #" + issue.Id, body);
             }
 
             _db.SaveChanges();
 
-            return RedirectToAction("Details", "Issue", new {
+            return RedirectToAction("Details", "Issue", new
+            {
                 id = id
             });
         }
@@ -163,8 +182,10 @@ namespace IssueTracker.Controllers {
         #region Update / Delete
         [Authorize]
         [HttpPost]
-        public ActionResult Update(FormCollection form, int? id, string status, string assignedTo, string text) {
-            if (id.HasValue) {
+        public ActionResult Update(FormCollection form, int? id, string status, string assignedTo, string text)
+        {
+            if (id.HasValue)
+            {
                 if (form["Delete"] != null)
                     return Delete(id.Value);
                 else
@@ -172,7 +193,8 @@ namespace IssueTracker.Controllers {
 
                 return RedirectToAction("Details", "Issue", new { id = id });
             }
-            else {
+            else
+            {
                 foreach (var issueId in GetSelectedIssues(form))
                     if (form["Delete"] != null)
                         Delete(_db, issueId);
@@ -183,9 +205,11 @@ namespace IssueTracker.Controllers {
             }
         }
 
-        private void Update(int id, string status, string assignedTo, string text) {
+        private void Update(int id, string status, string assignedTo, string text)
+        {
             var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
-            if (issue != null) {
+            if (issue != null)
+            {
                 var user = Utils.GetAllUsers(_db, ViewData).FirstOrDefault(x => x.Name.Is(assignedTo));
                 var hasChanged = false;
 
@@ -194,8 +218,10 @@ namespace IssueTracker.Controllers {
                 comment.DateOfCreation = DateTime.Now;
                 comment.Creator = this.GetCurrentUser(_db).Username;
 
-                if (status.HasValue() && Utils.GetAllStati(_db, ViewData).Any(x => x.Name.Is(status))) {
-                    if (!issue.Status.Is(status)) {
+                if (status.HasValue() && Utils.GetAllStati(_db, ViewData).Any(x => x.Name.Is(status)))
+                {
+                    if (!issue.Status.Is(status))
+                    {
                         comment.OldStatus = issue.Status;
                         comment.NewStatus = status;
                         issue.Status = status;
@@ -203,17 +229,22 @@ namespace IssueTracker.Controllers {
                     }
                 }
 
-                if (assignedTo.HasValue()) {
-                    if (assignedTo != null && user != null) {
-                        if (!issue.AssignedTo.Is(user.Username)) {
+                if (assignedTo.HasValue())
+                {
+                    if (assignedTo != null && user != null)
+                    {
+                        if (!issue.AssignedTo.Is(user.Username))
+                        {
                             comment.OldAssignedTo = issue.AssignedTo;
                             comment.NewAssignedTo = user.Username;
                             issue.AssignedTo = user.Username;
                             hasChanged = true;
                         }
                     }
-                    else {
-                        if (issue.AssignedTo != null) {
+                    else
+                    {
+                        if (issue.AssignedTo != null)
+                        {
                             comment.OldAssignedTo = issue.AssignedTo;
                             comment.NewAssignedTo = null;
                             issue.AssignedTo = null;
@@ -225,7 +256,8 @@ namespace IssueTracker.Controllers {
                 if (text.HasValue())
                     hasChanged = true;
 
-                if (hasChanged) {
+                if (hasChanged)
+                {
                     comment.Text = text ?? "";
                     _db.Comments.Add(comment);
                 }
@@ -235,15 +267,18 @@ namespace IssueTracker.Controllers {
         }
 
         [Authorize]
-        public ActionResult Delete(int id) {
+        public ActionResult Delete(int id)
+        {
             Delete(_db, id);
             return RedirectToAction("Index", "Issue");
         }
 
-        private void Delete(Db db, int issueId) {
+        private void Delete(Db db, int issueId)
+        {
             var issue = db.Issues.SingleOrDefault(x => x.Id == issueId);
 
-            if (issue != null) {
+            if (issue != null)
+            {
                 foreach (var childIssueId in db.Issues.Where(x => x.ParentIssueId == issue.Id).Select(x => x.Id).ToList())
                     Delete(db, childIssueId);
 
@@ -252,7 +287,8 @@ namespace IssueTracker.Controllers {
             }
         }
 
-        private IEnumerable<int> GetSelectedIssues(FormCollection form) {
+        private IEnumerable<int> GetSelectedIssues(FormCollection form)
+        {
             return from x in _db.Issues.Select(x => x.Id).ToList()
                    where form["issue" + x].HasValue() && !form["issue" + x].Is("false")
                    select x;
