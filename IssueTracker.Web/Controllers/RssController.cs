@@ -1,14 +1,11 @@
-﻿using System;
+﻿using IssueTracker.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.ServiceModel.Syndication;
-using IssueTracker.Models;
+using System.Web.Mvc;
 
 namespace IssueTracker.Controllers {
-
-    [Authorize]
     public class RssController : Controller {
 
         public ActionResult Index(string status, string assignedTo) {
@@ -46,7 +43,7 @@ namespace IssueTracker.Controllers {
                     issues = issues.Where(x => x.AssignedTo == assignedTo);
 
             var baseUrl = Request.Url.ToString();
-            baseUrl = baseUrl.Substring(0, baseUrl.IndexOf("/Rss"));
+            baseUrl = baseUrl.Substring(0, baseUrl.ToLower().IndexOf("/rss"));
 
             var items = new List<SyndicationItem>();
             foreach (var issue in issues) {

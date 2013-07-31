@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace IssueTracker.Models {
-    public partial class Issue {
+namespace IssueTracker.Models
+{
+    public partial class Issue
+    {
         public int Id { get; set; }
         public string Creator { get; set; }
         public DateTime DateOfCreation { get; set; }
@@ -22,14 +24,18 @@ namespace IssueTracker.Models {
         public Issue ParentIssue { get; set; }
         public ICollection<Issue> ChildIssues { get; set; }
 
-        public int NumberOfComments {
-            get {
-                return Comments.Count;
+        public int NumberOfComments
+        {
+            get
+            {
+                return Comments == null ? 0 : Comments.Count;
             }
         }
 
-        public DateTime DateOfUpdate {
-            get {
+        public DateTime DateOfUpdate
+        {
+            get
+            {
                 if (NumberOfComments <= 0)
                     return DateOfCreation;
                 return Comments.Max(x => x.DateOfCreation);
@@ -37,8 +43,10 @@ namespace IssueTracker.Models {
         }
 
 
-        public static Issue Create(string creator, string text, string stackTrace, string serverVariables) {
-            using (var context = new Db()) {
+        public static Issue Create(string creator, string text, string stackTrace, string serverVariables)
+        {
+            using (var context = new Db())
+            {
 
                 //log the clients IP and Host
                 //this is especially useful when we don't have any serverVariables and therefore can't identify the caller
@@ -49,7 +57,8 @@ namespace IssueTracker.Models {
                 if (HttpContext.Current != null && HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] != null)
                     serverVariables = "IssueTracker Client Remote Host: " + HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] + Environment.NewLine + (serverVariables ?? "");
 
-                foreach (var discardRule in context.DiscardRules) {
+                foreach (var discardRule in context.DiscardRules)
+                {
                     var discard =
                         !(string.IsNullOrEmpty(discardRule.Creator) && string.IsNullOrEmpty(discardRule.Text) && string.IsNullOrEmpty(discardRule.StackTrace) &&
                           string.IsNullOrEmpty(discardRule.ServerVariables));
@@ -69,8 +78,10 @@ namespace IssueTracker.Models {
                     "Exception of type 'System.Web.HttpUnhandledException' was thrown.",
                     "Error executing child request for handler 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerWrapper'."
                 };
-                if (string.IsNullOrWhiteSpace(text) || uglyTexts.Any(x => x.Equals(text, StringComparison.InvariantCultureIgnoreCase))) {
-                    if (!string.IsNullOrWhiteSpace(stackTrace)) {
+                if (string.IsNullOrWhiteSpace(text) || uglyTexts.Any(x => x.Equals(text, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    if (!string.IsNullOrWhiteSpace(stackTrace))
+                    {
                         text = stackTrace.Split('\n')[0].Trim();
 
                         if (text.Contains("---> "))
@@ -80,7 +91,8 @@ namespace IssueTracker.Models {
 
 
                 var parentIssue = context.Issues.FirstOrDefault(x => x.Text == text && x.StackTrace == stackTrace); //find an identical issue
-                var newIssue = new Issue {
+                var newIssue = new Issue
+                {
                     DateOfCreation = DateTime.Now,
                     Creator = Util.MaxLength(creator, 4000),
                     Text = Util.MaxLength(text, 4000),
@@ -92,10 +104,12 @@ namespace IssueTracker.Models {
                 context.Issues.Add(newIssue);
                 context.SaveChanges();
 
-                if (parentIssue != null) {
+                if (parentIssue != null)
+                {
                     newIssue.ParentIssueId = parentIssue.Id;
 
-                    var comment = new Comment {
+                    var comment = new Comment
+                    {
                         Creator = Util.MaxLength(creator, 4000),
                         DateOfCreation = DateTime.Now,
                         DuplicateIssueId = newIssue.Id,
@@ -117,11 +131,13 @@ namespace IssueTracker.Models {
         }
 
 
-        public void AddComment(string creator, string text) {
+        public void AddComment(string creator, string text)
+        {
             if (string.IsNullOrEmpty(text))
                 return; //we don't accept empty comments
 
-            using (var context = new Db()) {
+            using (var context = new Db())
+            {
                 var comment = new Comment();
                 comment.Creator = creator;
                 comment.DateOfCreation = DateTime.Now;
@@ -133,14 +149,16 @@ namespace IssueTracker.Models {
             }
         }
 
-        public void AddAttachment(string creator, string niceName, string base64, HttpServerUtility server) {
+        public void AddAttachment(string creator, string niceName, string base64, HttpServerUtility server)
+        {
             var extension = Path.GetExtension(niceName);
             var path = Path.Combine(server.MapPath(Settings.AttachmentsPath), Guid.NewGuid().ToString() + extension);
 
             var bytes = Convert.FromBase64String(base64);
             File.WriteAllBytes(path, bytes);
 
-            using (var context = new Db()) {
+            using (var context = new Db())
+            {
                 var comment = new Comment();
                 comment.Creator = creator;
                 comment.DateOfCreation = DateTime.Now;
@@ -152,6 +170,6 @@ namespace IssueTracker.Models {
                 context.SaveChanges();
             }
         }
-            
+
     }
 }
