@@ -3,7 +3,6 @@ using IssueTracker.Web.Code;
 using IssueTracker.Web.Models;
 
 namespace IssueTracker.Web.Controllers {
-    [Authorize]
     public class SharedController : Controller {
 
         private readonly Db _db = new Db();

@@ -1,8 +1,11 @@
 ﻿using System.Web.Optimization;
 
-namespace IssueTracker.Web.App_Start {
-    public class BundleConfig {
-        public static void RegisterBundles(BundleCollection bundles) {
+namespace IssueTracker.Web.App_Start
+{
+    public class BundleConfig
+    {
+        public static void RegisterBundles(BundleCollection bundles)
+        {
             bundles.Add(new ScriptBundle("~/js").Include(
                 "~/Scripts/jquery-{version}.js", "~/Scripts/bootstrap.js"));
 

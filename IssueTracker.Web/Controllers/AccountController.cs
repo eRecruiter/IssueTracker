@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using IssueTracker.Web.Models;
+﻿using IssueTracker.Web.Models;
 using IssueTracker.Web.Models.ViewModels.Account;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -41,6 +41,5 @@ namespace IssueTracker.Web.Controllers
             FormsAuthentication.SignOut();
             return Redirect("~/");
         }
-
     }
 }

@@ -12,7 +12,6 @@ namespace IssueTracker.Web.Controllers
 {
     public class RssController : Controller
     {
-
         public ActionResult Index(string status, string assignedTo)
         {
             var filterText = "";
@@ -26,8 +25,6 @@ namespace IssueTracker.Web.Controllers
             }
             if (filterText.HasValue())
                 filterText = " (filtered by " + filterText + ")";
-
-
 
             var feed = new SyndicationFeed
             {

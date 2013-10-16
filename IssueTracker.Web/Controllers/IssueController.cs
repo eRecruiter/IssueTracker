@@ -13,7 +13,6 @@ using System.Web;
 using System.Web.Mvc;
 using Settings = IssueTracker.Web.Models.Settings;
 
-
 namespace IssueTracker.Web.Controllers
 {
     [Authorize]
@@ -305,6 +304,5 @@ namespace IssueTracker.Web.Controllers
                    select x;
         }
         #endregion
-
     }
 }

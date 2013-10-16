@@ -1,10 +1,10 @@
-﻿using System.Data.Entity;
+﻿using IssueTracker.Web.App_Start;
+using IssueTracker.Web.Migrations;
+using IssueTracker.Web.Models;
+using System.Data.Entity;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using IssueTracker.Web.App_Start;
-using IssueTracker.Web.Migrations;
-using IssueTracker.Web.Models;
 
 namespace IssueTracker.Web {
     public class MvcApplication : System.Web.HttpApplication {
@@ -19,6 +19,5 @@ namespace IssueTracker.Web {
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
-
     }
 }
