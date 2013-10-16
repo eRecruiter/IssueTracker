@@ -1,22 +1,30 @@
 ﻿@model IssueTracker.Models.Issue
 @section Content {
-    <form method="post" action="@Url.Action("AddComment", "Issue", new { id = Model.Id })" class="well">
-    <label>Status:</label>
-    <select name="status">
-        @foreach (string status in (ViewData["availableStati"] as IEnumerable<string>)) {
-            <option value="@status" @(status.Equals(Model.Status, StringComparison.InvariantCultureIgnoreCase) ? " selected=\"selected\"" : "")>
-                @status</option>
-        }
-    </select>
+    <form method="post" action="@Url.Action("AddComment", "Issue", new { id = Model.Id })">
+        <div class="form-group">
+            <label>Status:</label>
+            <select name="status" class="form-control">
+                @foreach (var status in (ViewData["availableStati"] as IEnumerable<string>))
+                {
+                    <option value="@status" @(status.Equals(Model.Status, StringComparison.InvariantCultureIgnoreCase) ? " selected=\"selected\"" : "")>
+                        @status</option>
+                }
+            </select>
+        </div>
 
-    <label>Comment:</label>
-    @Html.TextArea("comment")
+        <div class="form-group">
+            <label>Comment:</label>
+            @Html.TextArea("comment", new { @class = "form-control" })
+        </div>
 
-    <label>Notification to:</label>
-    @Html.TextBox("email")
+        <div class="form-group">
+            <label>Notification to:</label>
+            @Html.TextBox("email", null, new { @class = "form-control" })
+        </div>
 
-    <button type="submit" value="Save" class="btn btn-primary">Save</button>
-
+        <div class="form-group">
+            <button type="submit" value="Save" class="btn btn-primary">Save</button>
+        </div>
     </form>
 }
 @section Script {

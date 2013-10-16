@@ -2,7 +2,7 @@
 @section Content {
     @if (Model.CurrentUser != null) {
         <text>
-        @using (Html.BeginForm("Update", "Issue", new { id = Model.Id }, FormMethod.Post, new { @class = "well form-inline" })) {
+        @using (Html.BeginForm("Update", "Issue", new { id = Model.Id }, FormMethod.Post, new { @class = "well" })) {
             <text>
             @Html.DropDownList("status", Model.AvailableStati)
             @Html.DropDownList("assignedTo", Model.AvailableUsers)

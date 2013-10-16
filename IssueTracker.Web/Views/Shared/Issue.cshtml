@@ -1,22 +1,22 @@
 ﻿@model IssueTracker.ViewModels.Issue.IndexIssuePartialViewModel
 <td style="white-space: nowrap;">
-    <span class="label">
+    <span class="label label-primary">
         @Model.Time
     </span>
 </td>
 <td style="white-space: nowrap;">
-    <span class="badge badge-inverse">
+    <span class="label label-warning">
         @Model.Comments.ToString("N0")
     </span>
 </td>
 <td style="white-space: nowrap;">
-    <span class="label">
+    <span class="label label-default">
         @Model.Status
     </span>
 </td>
 <td style="white-space: nowrap;">
     @if(!string.IsNullOrWhiteSpace(Model.AssignedTo)) {
-        <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-important" : "label label-success")">
+        <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-default" : "label label-success")">
             @Model.AssignedTo
         </span>
     }
