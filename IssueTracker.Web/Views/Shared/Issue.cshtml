@@ -1,4 +1,4 @@
-﻿@using IssueTracker.Web.Code
+﻿@using ePunkt.Utilities
 @model IssueTracker.Web.Models.ViewModels.Issue.IndexIssuePartialViewModel
 <td style="white-space: nowrap;">
     <span class="label label-primary">
@@ -17,7 +17,7 @@
 </td>
 <td style="white-space: nowrap;">
     @if(!string.IsNullOrWhiteSpace(Model.AssignedTo)) {
-        <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-default" : "label label-success")">
+        <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-success" : "label label-default")">
             @Model.AssignedTo
         </span>
     }

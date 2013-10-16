@@ -1,4 +1,8 @@
-﻿using System;
+﻿using ePunkt.Utilities;
+using IssueTracker.Web.Code;
+using IssueTracker.Web.Models;
+using IssueTracker.Web.Models.ViewModels.Issue;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Linq.SqlClient;
@@ -7,16 +11,14 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
-using IssueTracker.Web.Models.ViewModels.Issue;
+using Settings = IssueTracker.Web.Models.Settings;
+
 
 namespace IssueTracker.Web.Controllers
 {
     [Authorize]
     public class IssueController : Controller
     {
-
         private readonly Db _db = new Db();
 
         #region Index

@@ -9,9 +9,10 @@
             <a class="navbar-brand" href="~/">IssueTracker</a>
         </div>
         <div class="collapse navbar-collapse">
-            <p class="navbar-text">
-                Hi there, @User.Identity.Name
-            </p>
+            @if (User.Identity.IsAuthenticated)
+            { 
+                <p class="navbar-text">Hi there, @User.Identity.Name</p>
+            }
         </div>
     </div>
 </div>

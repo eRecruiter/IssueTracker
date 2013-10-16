@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace IssueTracker.Web.Code {
@@ -15,22 +14,5 @@ namespace IssueTracker.Web.Code {
                 sb.Append(t.ToString("x2"));
             return sb.ToString();
         }
-
-        public static bool IsNoE(this string s) {
-            return string.IsNullOrEmpty(s);
-        }
-
-        public static bool HasValue(this string s) {
-            return !s.IsNoE();
-        }
-
-        public static bool Is(this string s, string compareTo) {
-            if (s == null && compareTo == null)
-                return true;
-            if (s == null || compareTo == null)
-                return false;
-            return s.Equals(compareTo, StringComparison.InvariantCultureIgnoreCase);
-        }
-
     }
 }

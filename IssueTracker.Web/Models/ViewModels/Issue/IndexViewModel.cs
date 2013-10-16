@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using ePunkt.Utilities;
+using IssueTracker.Web.Code;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using IssueTracker.Web.Code;
 
 namespace IssueTracker.Web.Models.ViewModels.Issue {
     public class IndexViewModel {
 
         public IndexViewModel(Db db, User currentUser, ViewDataDictionary viewData) {
-            ViewDataDictionary viewData1 = viewData;
-
             CurrentUser = currentUser;
 
             var usedStati = new List<SelectListItem>
@@ -21,7 +20,7 @@ namespace IssueTracker.Web.Models.ViewModels.Issue {
                 }
             };
             usedStati.AddRange(
-                    from x in Utils.GetAllStati(db, viewData1)
+                    from x in Utils.GetAllStati(db, viewData)
                     select new SelectListItem {
                         Text = x.Name,
                         Value = x.Name,
@@ -47,7 +46,7 @@ namespace IssueTracker.Web.Models.ViewModels.Issue {
                 }
             };
             usedUsers.AddRange(
-                    from x in Utils.GetAllUsers(db, viewData1)
+                    from x in Utils.GetAllUsers(db, viewData)
                     select new SelectListItem {
                         Text = x.Name,
                         Value = x.Name,
