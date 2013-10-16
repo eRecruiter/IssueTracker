@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using IssueTracker.Models;
+﻿using System.Web.Mvc;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker {
+namespace IssueTracker.Web.Code {
     public static class ControllerExtensionMethods {
 
         public static User GetCurrentUser(this Controller controller, Db db) {

@@ -2,12 +2,11 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using CloudPass.Web;
-using IssueTracker.Models;
+using IssueTracker.Web.App_Start;
 using IssueTracker.Web.Migrations;
+using IssueTracker.Web.Models;
 
-
-namespace ComicSyndicate.Web {
+namespace IssueTracker.Web {
     public class MvcApplication : System.Web.HttpApplication {
 
         protected void Application_Start() {

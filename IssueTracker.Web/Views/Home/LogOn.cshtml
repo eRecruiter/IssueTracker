@@ -1,8 +1,8 @@
-﻿@model IssueTracker.ViewModels.Home.LogOnViewModel
+﻿@model IssueTracker.Web.Models.ViewModels.Home.LogOnViewModel
 
 @section Content {
     @if (!string.IsNullOrEmpty(Model.Message)) {
-    <div class="message">
+    <div class="alert-danger">
         @Model.Message
     </div>
     }

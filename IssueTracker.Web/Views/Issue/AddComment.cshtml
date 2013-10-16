@@ -1,13 +1,19 @@
-﻿@model IssueTracker.Models.Issue
+﻿@model IssueTracker.Web.Models.Issue
 @section Content {
     <form method="post" action="@Url.Action("AddComment", "Issue", new { id = Model.Id })">
         <div class="form-group">
             <label>Status:</label>
-            <select name="status" class="form-control">
-                @foreach (var status in (ViewData["availableStati"] as IEnumerable<string>))
+            <select name="status" class="form-control">         
+                @{
+                    var stati = ViewData["availableStati"] as IEnumerable<string>;
+                }
+                @if (stati != null)
                 {
-                    <option value="@status" @(status.Equals(Model.Status, StringComparison.InvariantCultureIgnoreCase) ? " selected=\"selected\"" : "")>
-                        @status</option>
+                    foreach (var status in stati)
+                    {
+                        <option value="@status" @(status.Equals(Model.Status, StringComparison.InvariantCultureIgnoreCase) ? " selected=\"selected\"" : "")>
+                            @status</option>
+                    }
                 }
             </select>
         </div>
@@ -28,10 +34,12 @@
     </form>
 }
 @section Script {
+@* ReSharper disable Html.IdNotResolved *@
     <script type="text/javascript">
         $("#email").keyup(function () {
             $("#public").attr("checked", $("#email").val() == "" ? "" : "checked");
         });
     </script>
+@* ReSharper restore Html.IdNotResolved *@
 
 }

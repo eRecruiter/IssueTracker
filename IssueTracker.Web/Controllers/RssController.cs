@@ -1,18 +1,24 @@
-﻿using IssueTracker.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Web.Mvc;
+using IssueTracker.Web.Code;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker.Controllers {
-    public class RssController : Controller {
+namespace IssueTracker.Web.Controllers
+{
+    public class RssController : Controller
+    {
 
-        public ActionResult Index(string status, string assignedTo) {
+        public ActionResult Index(string status, string assignedTo)
+        {
             var filterText = "";
             if (status.HasValue())
                 filterText += "status '" + status + "'";
-            if (assignedTo.HasValue()) {
+            if (assignedTo.HasValue())
+            {
                 if (filterText.HasValue())
                     filterText += " and ";
                 filterText += "assigned to '" + assignedTo + "'";
@@ -22,11 +28,13 @@ namespace IssueTracker.Controllers {
 
 
 
-            var feed = new SyndicationFeed();
-            feed.BaseUri = new Uri("http://issuetracker.epunkt.net");
-            feed.Generator = "IssueTracker";
-            feed.LastUpdatedTime = DateTime.Now;
-            feed.Title = new TextSyndicationContent("Issues" + filterText);
+            var feed = new SyndicationFeed
+            {
+                BaseUri = new Uri("http://issuetracker.epunkt.net"),
+                Generator = "IssueTracker",
+                LastUpdatedTime = DateTime.Now,
+                Title = new TextSyndicationContent("Issues" + filterText)
+            };
 
             var context = new Db();
             var issues = from x in context.Issues
@@ -37,20 +45,25 @@ namespace IssueTracker.Controllers {
                 issues = issues.Where(x => x.Status == status);
 
             if (assignedTo.HasValue())
-                if (assignedTo.Is("-"))
-                    issues = issues.Where(x => x.AssignedTo == null);
-                else
-                    issues = issues.Where(x => x.AssignedTo == assignedTo);
+                issues = assignedTo.Is("-") ? issues.Where(x => x.AssignedTo == null) : issues.Where(x => x.AssignedTo == assignedTo);
 
-            var baseUrl = Request.Url.ToString();
-            baseUrl = baseUrl.Substring(0, baseUrl.ToLower().IndexOf("/rss"));
+            var url = Request.Url;
+            if (url == null)
+                throw new ApplicationException("No 'Request.Url' available.");
+            var baseUrl = url.ToString();
+            baseUrl = baseUrl.Substring(0, baseUrl.ToLower().IndexOf("/rss", StringComparison.InvariantCultureIgnoreCase));
 
             var items = new List<SyndicationItem>();
-            foreach (var issue in issues) {
-                var item = new SyndicationItem();
-                item.Title = SyndicationContent.CreatePlaintextContent(issue.Text);
-                item.Content = SyndicationContent.CreateHtmlContent("<pre>" + issue.StackTrace.Replace("\r", "").Replace("\n", "<br />") + "</pre><hr /><pre>" + issue.ServerVariables.Replace("\r", "").Replace("\n", "<br />") + "</pre>");
-                item.Id = issue.Id.ToString();
+            foreach (var issue in issues)
+            {
+                var item = new SyndicationItem
+                {
+                    Title = SyndicationContent.CreatePlaintextContent(issue.Text),
+                    Content =
+                        SyndicationContent.CreateHtmlContent("<pre>" + issue.StackTrace.Replace("\r", "").Replace("\n", "<br />") + "</pre><hr /><pre>" +
+                                                             issue.ServerVariables.Replace("\r", "").Replace("\n", "<br />") + "</pre>"),
+                    Id = issue.Id.ToString(CultureInfo.CurrentCulture)
+                };
                 item.AddPermalink(new Uri(baseUrl + "/Issue/Details/" + issue.Id));
                 item.LastUpdatedTime = issue.DateOfUpdate;
                 item.PublishDate = issue.DateOfCreation;
@@ -60,10 +73,10 @@ namespace IssueTracker.Controllers {
             }
             feed.Items = items;
 
-            return new RssActionResult() {
+            return new RssActionResult
+            {
                 Feed = feed
             };
         }
-
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using System.Text;
-using System;
 
-namespace IssueTracker {
+namespace IssueTracker.Web.Code {
     public static class StringExtensionMethods {
 
         public static string Hash(this string s) {
@@ -11,8 +11,8 @@ namespace IssueTracker {
 
             var bytes = MD5.Create().ComputeHash(Encoding.Default.GetBytes(s));
             var sb = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-                sb.Append(bytes[i].ToString("x2"));
+            foreach (var t in bytes)
+                sb.Append(t.ToString("x2"));
             return sb.ToString();
         }
 

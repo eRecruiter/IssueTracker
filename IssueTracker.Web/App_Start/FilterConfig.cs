@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace CloudPass.Web
+namespace IssueTracker.Web.App_Start
 {
     public class FilterConfig
     {

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using IssueTracker.Models;
-
-namespace IssueTracker.ViewModels {
+﻿
+namespace IssueTracker.Web.Models.ViewModels {
     public abstract class IssuePartialViewModel {
 
-
-        public IssuePartialViewModel(IssueTracker.Models.Issue issue, ViewDataDictionary viewData) {
+        protected IssuePartialViewModel(Models.Issue issue) {
             Id = issue.Id;
             Creator = issue.Creator;
 

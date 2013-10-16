@@ -1,14 +1,10 @@
 ﻿using System;
-using IssueTracker.Models;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Linq;
 
-namespace IssueTracker.ViewModels.Issue {
-    public class IndexIssuePartialViewModel : IssueTracker.ViewModels.IssuePartialViewModel {
+namespace IssueTracker.Web.Models.ViewModels.Issue {
+    public class IndexIssuePartialViewModel : IssuePartialViewModel {
 
-        public IndexIssuePartialViewModel(User currentUser, IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
-            : base(issue, viewData) {
+        public IndexIssuePartialViewModel(User currentUser, Models.Issue issue)
+            : base(issue) {
 
             CurrentUser = currentUser;
 
@@ -18,11 +14,11 @@ namespace IssueTracker.ViewModels.Issue {
             if (issue.DateOfUpdate < DateTime.Now.AddMonths(-1))
                 Time = issue.DateOfUpdate.ToString("dd.MM.yyyy");
             else if (issue.DateOfUpdate < DateTime.Now.AddDays(-1))
-                Time = (int)Math.Ceiling(((TimeSpan)(DateTime.Now - issue.DateOfUpdate)).TotalDays) + " days ago";
+                Time = (int)Math.Ceiling(((DateTime.Now - issue.DateOfUpdate)).TotalDays) + " days ago";
             else if (issue.DateOfUpdate < DateTime.Now.AddHours(-1))
-                Time = (int)Math.Ceiling(((TimeSpan)(DateTime.Now - issue.DateOfUpdate)).TotalHours) + " hours ago";
+                Time = (int)Math.Ceiling(((DateTime.Now - issue.DateOfUpdate)).TotalHours) + " hours ago";
             else if (issue.DateOfUpdate < DateTime.Now.AddMinutes(-10))
-                Time = (int)Math.Ceiling(((TimeSpan)(DateTime.Now - issue.DateOfUpdate)).TotalMinutes) + " min. ago";
+                Time = (int)Math.Ceiling((DateTime.Now - issue.DateOfUpdate).TotalMinutes) + " min. ago";
         }
 
 

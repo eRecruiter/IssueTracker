@@ -1,9 +1,11 @@
-﻿@model IssueTracker.ViewModels.Issue.DetailsCommentPartialViewModel
+﻿@using System.Globalization
+@model IssueTracker.Web.Models.ViewModels.Issue.DetailsCommentPartialViewModel
 <div style="float: right;">
-    <span class="label label-info">@Model.Creator</span> <span class="label">@Model.DateOfCreation.ToString()</span></div>
-<span class="label label-success" style="white-space:normal;">
+    <span class="label label-info">@Model.Creator</span> <span class="label">@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</span>
+</div>
+<span class="label label-success" style="white-space: normal;">
     @Html.Raw(Model.StatusText)
 </span>
-<span class="label label-inverse" style="white-space:normal;">
+<span class="label label-default" style="white-space: normal;">
     @Model.Text
 </span>

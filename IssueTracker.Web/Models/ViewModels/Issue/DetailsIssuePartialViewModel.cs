@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using IssueTracker.Models;
+using IssueTracker.Web.Code;
 
-namespace IssueTracker.ViewModels.Issue {
-    public class DetailsIssuePartialViewModel : IssueTracker.ViewModels.IssuePartialViewModel {
+namespace IssueTracker.Web.Models.ViewModels.Issue {
+    public class DetailsIssuePartialViewModel : IssuePartialViewModel {
 
-        public DetailsIssuePartialViewModel(Db db, User currentUser, IssueTracker.Models.Issue issue, ViewDataDictionary viewData)
-            : base(issue, viewData) {
+        public DetailsIssuePartialViewModel(Db db, User currentUser, Models.Issue issue, ViewDataDictionary viewData)
+            : base(issue) {
 
             CurrentUser = currentUser;
 
@@ -32,12 +32,15 @@ namespace IssueTracker.ViewModels.Issue {
                 );
             AvailableStati = stati;
 
-            var users = new List<SelectListItem>();
-            users.Add(new SelectListItem {
-                Text = "< none >",
-                Value = "",
-                Selected = AssignedTo.IsNoE()
-            });
+            var users = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "< none >",
+                    Value = "",
+                    Selected = AssignedTo.IsNoE()
+                }
+            };
             users.AddRange(
                     from x in Utils.GetAllUsers(db, viewData)
                     select new SelectListItem {

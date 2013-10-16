@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using IssueTracker.Models;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker.Controllers {
+namespace IssueTracker.Web.Controllers {
     public class Controller : System.Web.Mvc.Controller {
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) {

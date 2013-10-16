@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace IssueTracker.Models
+namespace IssueTracker.Web.Models
 {
-    public partial class Issue
+    public class Issue
     {
         public int Id { get; set; }
         public string Creator { get; set; }
@@ -85,7 +84,7 @@ namespace IssueTracker.Models
                         text = stackTrace.Split('\n')[0].Trim();
 
                         if (text.Contains("---> "))
-                            text = text.Substring(text.LastIndexOf("---> ") + 5);
+                            text = text.Substring(text.LastIndexOf("---> ", StringComparison.InvariantCultureIgnoreCase) + 5);
                     }
                 }
 
@@ -138,11 +137,7 @@ namespace IssueTracker.Models
 
             using (var context = new Db())
             {
-                var comment = new Comment();
-                comment.Creator = creator;
-                comment.DateOfCreation = DateTime.Now;
-                comment.Text = text;
-                comment.IssueId = Id;
+                var comment = new Comment {Creator = creator, DateOfCreation = DateTime.Now, Text = text, IssueId = Id};
 
                 context.Comments.Add(comment);
                 context.SaveChanges();
@@ -159,13 +154,7 @@ namespace IssueTracker.Models
 
             using (var context = new Db())
             {
-                var comment = new Comment();
-                comment.Creator = creator;
-                comment.DateOfCreation = DateTime.Now;
-                comment.IssueId = Id;
-                comment.Text = "";
-                comment.AttachmentFileName = Path.GetFileName(path);
-                comment.AttachmentNiceName = niceName;
+                var comment = new Comment {Creator = creator, DateOfCreation = DateTime.Now, IssueId = Id, Text = "", AttachmentFileName = Path.GetFileName(path), AttachmentNiceName = niceName};
                 context.Comments.Add(comment);
                 context.SaveChanges();
             }

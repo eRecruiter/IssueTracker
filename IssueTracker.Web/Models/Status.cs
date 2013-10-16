@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IssueTracker.Models {
+namespace IssueTracker.Web.Models {
     public class Status {
 
         [Required, Key, DatabaseGenerated(DatabaseGeneratedOption.None)]

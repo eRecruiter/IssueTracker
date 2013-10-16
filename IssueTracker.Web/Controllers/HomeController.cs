@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
-using IssueTracker.Models;
-using IssueTracker.ViewModels.Home;
+using IssueTracker.Web.Models;
 
-
-namespace IssueTracker.Controllers {
+namespace IssueTracker.Web.Controllers {
 
     [Authorize]
     public class HomeController : Controller {

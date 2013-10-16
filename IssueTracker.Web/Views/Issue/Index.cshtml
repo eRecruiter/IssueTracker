@@ -1,4 +1,5 @@
-﻿@model IssueTracker.ViewModels.Issue.IndexViewModel
+﻿@using System.Globalization
+@model IssueTracker.Web.Models.ViewModels.Issue.IndexViewModel
 @section Content {
 
     @Html.Partial("Filter")
@@ -48,7 +49,7 @@
         <ul class="pagination">
             @for (var i = 1; i < Model.MaxPage; i++)
             {          
-                <li class="@( (Model.Page == i ? "active" : ""))">@Html.ActionLink(i.ToString(), "Index", "Issue", new { page = i }, null)</li>
+                <li class="@( (Model.Page == i ? "active" : ""))">@Html.ActionLink(i.ToString(CultureInfo.CurrentCulture), "Index", "Issue", new { page = i }, null)</li>
             }
         </ul>
         </text>

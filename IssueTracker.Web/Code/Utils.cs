@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
-using IssueTracker.Models;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker {
+namespace IssueTracker.Web.Code {
     public static class Utils {
 
         public static User GetCurrentUser(Db db, ViewDataDictionary viewData, IPrincipal user) {

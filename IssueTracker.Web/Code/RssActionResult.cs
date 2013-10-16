@@ -1,8 +1,8 @@
 ﻿using System.ServiceModel.Syndication;
-using System.Xml;
 using System.Web.Mvc;
+using System.Xml;
 
-namespace IssueTracker {
+namespace IssueTracker.Web.Code {
     public class RssActionResult : ActionResult {
 
         public SyndicationFeed Feed {

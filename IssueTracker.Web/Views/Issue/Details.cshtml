@@ -1,4 +1,5 @@
-﻿@model IssueTracker.ViewModels.Issue.DetailsIssuePartialViewModel
+﻿@using System.Globalization
+@model IssueTracker.Web.Models.ViewModels.Issue.DetailsIssuePartialViewModel
 @section Content {
     @if (Model.CurrentUser != null) {
         <text>
@@ -6,8 +7,8 @@
             <text>
             @Html.DropDownList("status", Model.AvailableStati)
             @Html.DropDownList("assignedTo", Model.AvailableUsers)
-            <button class="btn btn-success" type="button"  onclick="location='@Url.Action("AddComment", "Issue", new { id = Model.Id })';">Add a comment</button>
-            <button class="btn btn-danger" type="button"  onclick="location='@Url.Action("Delete", "Issue", new { id = Model.Id })';">Delete</button>
+            <button class="btn btn-success" type="button"  onclick=" location = '@Url.Action("AddComment", "Issue", new { id = Model.Id })';">Add a comment</button>
+            <button class="btn btn-danger" type="button"  onclick=" location = '@Url.Action("Delete", "Issue", new { id = Model.Id })';">Delete</button>
             </text>
         }
         </text>    
@@ -16,7 +17,7 @@
     <div style="float: right; width: 30%; margin-left: 30px;">
         <div>
             <span class="label label-warning">Issue created on 
-                    @Model.DateOfCreation.ToString() by 
+                    @Model.DateOfCreation.ToString(CultureInfo.CurrentCulture) by 
                         @Model.Creator
             </span>
             @if (Model.ParentIssueId.HasValue) {

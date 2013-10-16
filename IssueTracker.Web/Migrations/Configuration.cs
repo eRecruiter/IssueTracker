@@ -1,18 +1,17 @@
+using IssueTracker.Web.Models;
+
 namespace IssueTracker.Web.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<IssueTracker.Models.Db>
+    internal sealed class Configuration : DbMigrationsConfiguration<Db>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(IssueTracker.Models.Db context)
+        protected override void Seed(Db context)
         {
             //  This method will be called after migrating to the latest version.
 

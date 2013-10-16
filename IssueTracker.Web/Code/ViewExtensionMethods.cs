@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
-using IssueTracker.Models;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker {
+namespace IssueTracker.Web.Code {
     public static class ViewExtensionMethods {
 
         public static User GetCurrentUser(this ViewUserControl view, Db db) {

@@ -1,27 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using IssueTracker.Models;
+using IssueTracker.Web.Code;
 
-namespace IssueTracker.ViewModels.Issue {
+namespace IssueTracker.Web.Models.ViewModels.Issue {
     public class IndexViewModel {
 
-        private ViewDataDictionary _viewData;
         public IndexViewModel(Db db, User currentUser, ViewDataDictionary viewData) {
-            _viewData = viewData;
+            ViewDataDictionary viewData1 = viewData;
 
             CurrentUser = currentUser;
 
-            var usedStati = new List<SelectListItem>();
-            usedStati.Add(new SelectListItem {
-                Text = "< all >",
-                Value = "",
-                Selected = StatusFilter.Is("")
-            });
+            var usedStati = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "< all >",
+                    Value = "",
+                    Selected = StatusFilter.Is("")
+                }
+            };
             usedStati.AddRange(
-                    from x in Utils.GetAllStati(db, _viewData)
+                    from x in Utils.GetAllStati(db, viewData1)
                     select new SelectListItem {
                         Text = x.Name,
                         Value = x.Name,
@@ -31,19 +31,23 @@ namespace IssueTracker.ViewModels.Issue {
             AvailableStati = usedStati;
 
 
-            var usedUsers = new List<SelectListItem>();
-            usedUsers.Add(new SelectListItem {
-                Text = "< all >",
-                Value = "",
-                Selected = StatusFilter.Is("")
-            });
-            usedUsers.Add(new SelectListItem {
-                Text = "< none >",
-                Value = "-",
-                Selected = StatusFilter.Is("")
-            });
+            var usedUsers = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "< all >",
+                    Value = "",
+                    Selected = StatusFilter.Is("")
+                },
+                new SelectListItem
+                {
+                    Text = "< none >",
+                    Value = "-",
+                    Selected = StatusFilter.Is("")
+                }
+            };
             usedUsers.AddRange(
-                    from x in Utils.GetAllUsers(db, _viewData)
+                    from x in Utils.GetAllUsers(db, viewData1)
                     select new SelectListItem {
                         Text = x.Name,
                         Value = x.Name,
@@ -74,22 +78,27 @@ namespace IssueTracker.ViewModels.Issue {
 
         public IEnumerable<SelectListItem> AvailableOrders {
             get {
-                var orders = new List<SelectListItem>();
-                orders.Add(new SelectListItem {
-                    Text = "Comments",
-                    Value = "comments",
-                    Selected = Order == "comments"
-                });
-                orders.Add(new SelectListItem {
-                    Text = "Date",
-                    Value = "date",
-                    Selected = Order == "date"
-                });
-                orders.Add(new SelectListItem {
-                    Text = "Status",
-                    Value = "status",
-                    Selected = Order == "status"
-                });
+                var orders = new List<SelectListItem>
+                {
+                    new SelectListItem
+                    {
+                        Text = "Comments",
+                        Value = "comments",
+                        Selected = Order == "comments"
+                    },
+                    new SelectListItem
+                    {
+                        Text = "Date",
+                        Value = "date",
+                        Selected = Order == "date"
+                    },
+                    new SelectListItem
+                    {
+                        Text = "Status",
+                        Value = "status",
+                        Selected = Order == "status"
+                    }
+                };
                 return orders;
             }
         }
@@ -97,32 +106,39 @@ namespace IssueTracker.ViewModels.Issue {
 
         public IEnumerable<SelectListItem> AvailableTimes {
             get {
-                var times = new List<SelectListItem>();
-                times.Add(new SelectListItem {
-                    Text = "< all >",
-                    Value = "0",
-                    Selected = TimeFilter == 0
-                });
-                times.Add(new SelectListItem {
-                    Text = "last week",
-                    Value = "7",
-                    Selected = TimeFilter == 7
-                });
-                times.Add(new SelectListItem {
-                    Text = "last month",
-                    Value = "30",
-                    Selected = TimeFilter == 30
-                });
-                times.Add(new SelectListItem {
-                    Text = "last quarter",
-                    Value = "90",
-                    Selected = TimeFilter == 90
-                });
-                times.Add(new SelectListItem {
-                    Text = "last year",
-                    Value = "365",
-                    Selected = TimeFilter == 365
-                });
+                var times = new List<SelectListItem>
+                {
+                    new SelectListItem
+                    {
+                        Text = "< all >",
+                        Value = "0",
+                        Selected = TimeFilter == 0
+                    },
+                    new SelectListItem
+                    {
+                        Text = "last week",
+                        Value = "7",
+                        Selected = TimeFilter == 7
+                    },
+                    new SelectListItem
+                    {
+                        Text = "last month",
+                        Value = "30",
+                        Selected = TimeFilter == 30
+                    },
+                    new SelectListItem
+                    {
+                        Text = "last quarter",
+                        Value = "90",
+                        Selected = TimeFilter == 90
+                    },
+                    new SelectListItem
+                    {
+                        Text = "last year",
+                        Value = "365",
+                        Selected = TimeFilter == 365
+                    }
+                };
 
                 return times;
             }

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Services;
-using IssueTracker.Models;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker {
+namespace IssueTracker.Web {
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]

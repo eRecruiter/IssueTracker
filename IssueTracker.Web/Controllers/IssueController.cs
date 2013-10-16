@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Linq.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
-using IssueTracker.Models;
-using IssueTracker.ViewModels.Issue;
-using System.Data.Entity;
+using IssueTracker.Web.Code;
+using IssueTracker.Web.Models;
+using IssueTracker.Web.Models.ViewModels.Issue;
 
-namespace IssueTracker.Controllers
+namespace IssueTracker.Web.Controllers
 {
     [Authorize]
     public class IssueController : Controller
     {
 
-        private Db _db = new Db();
+        private readonly Db _db = new Db();
 
         #region Index
         public ActionResult Index(int? page)
@@ -57,13 +60,14 @@ namespace IssueTracker.Controllers
             else if (viewModel.Order.Is("comments"))
                 sortedIssues = issues.OrderByDescending(x => x.Comments.Count);
 
-            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x, ViewData)).ToList();
+            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x)).ToList();
 
             viewModel.Total = sortedIssues.Count();
             viewModel.Start = page.Value * Settings.IssuesPerPage;
             viewModel.End = viewModel.Start + viewModel.Issues.Count();
             viewModel.Page = page.Value + 1;
-            viewModel.MaxPage = (int)Math.Ceiling((double)viewModel.Total / (double)Settings.IssuesPerPage) + 1;
+            // ReSharper disable once PossibleLossOfFraction
+            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / Settings.IssuesPerPage)) + 1;
 
             return View(viewModel);
         }
@@ -75,21 +79,34 @@ namespace IssueTracker.Controllers
             Response.Cookies.Remove("time");
             Response.Cookies.Remove("status");
             Response.Cookies.Remove("order");
+            Response.Cookies.Remove("assignedTo");
+            Response.Cookies.Remove("search");
 
-            Response.Cookies["time"].Value = (timeFilter ?? 0).ToString();
-            Response.Cookies["time"].Expires = DateTime.MaxValue;
-
-            Response.Cookies["status"].Value = statusFilter ?? "";
-            Response.Cookies["status"].Expires = DateTime.MaxValue;
-
-            Response.Cookies["order"].Value = order ?? "";
-            Response.Cookies["order"].Expires = DateTime.MaxValue;
-
-            Response.Cookies["assignedTo"].Value = assignedToFilter ?? "";
-            Response.Cookies["assignedTo"].Expires = DateTime.MaxValue;
-
-            Response.Cookies["search"].Value = textFilter ?? "";
-            Response.Cookies["search"].Expires = DateTime.MaxValue;
+            Response.Cookies.Add(new HttpCookie("time")
+            {
+                Value = (timeFilter ?? 0).ToString(CultureInfo.CurrentCulture),
+                Expires = DateTime.MaxValue
+            });
+            Response.Cookies.Add(new HttpCookie("status")
+            {
+                Value = statusFilter ?? "",
+                Expires = DateTime.MaxValue
+            });
+            Response.Cookies.Add(new HttpCookie("order")
+            {
+                Value = order ?? "",
+                Expires = DateTime.MaxValue
+            });
+            Response.Cookies.Add(new HttpCookie("assignedTo")
+            {
+                Value = assignedToFilter ?? "",
+                Expires = DateTime.MaxValue
+            });
+            Response.Cookies.Add(new HttpCookie("search")
+            {
+                Value = textFilter ?? "",
+                Expires = DateTime.MaxValue
+            });
 
             return RedirectToAction("Index", "Issue");
         }
@@ -138,12 +155,8 @@ namespace IssueTracker.Controllers
 
             if (!string.IsNullOrEmpty(comment) || !string.IsNullOrEmpty(email) || !status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase))
             {
-                var newComment = new Comment();
-                newComment.DateOfCreation = DateTime.Now;
-                newComment.Creator = User.Identity.Name;
-                newComment.IssueId = issue.Id;
+                var newComment = new Comment { DateOfCreation = DateTime.Now, Creator = User.Identity.Name, IssueId = issue.Id, Text = comment };
 
-                newComment.Text = comment;
                 if (!string.IsNullOrEmpty(email))
                     newComment.Email = email;
                 if (!status.Equals(issue.Status, StringComparison.InvariantCultureIgnoreCase) && _db.Status.Any(x => x.Name == status))
@@ -158,10 +171,12 @@ namespace IssueTracker.Controllers
 
             if (!string.IsNullOrEmpty(email))
             {
+                var requestUrl = Request.Url;
+
                 var currentUser = this.GetCurrentUser(_db);
                 var body = currentUser.Name + " wants to let you know about changes on issue #" + issue.Id +
                            (string.IsNullOrEmpty(comment) ? ". " : ": <br /><br /><i>" + Server.HtmlEncode(comment).Replace("\r", "").Replace("\n", "<br />") + "</i><br /><br />") + "Please visit " +
-                           Request.Url.ToString().Replace("AddComment", "Details") + " for all the details.</div><br /><br />Have a nice day! Yours,<br />~ the IssueTracker E-Mail-Monkey";
+                           (requestUrl == null ? "" : requestUrl.ToString().Replace("AddComment", "Details")) + " for all the details.</div><br /><br />Have a nice day! Yours,<br />~ the IssueTracker E-Mail-Monkey";
 
                 var fromEmail = currentUser.Email;
                 if (string.IsNullOrEmpty(fromEmail))
@@ -174,7 +189,7 @@ namespace IssueTracker.Controllers
 
             return RedirectToAction("Details", "Issue", new
             {
-                id = id
+                id
             });
         }
         #endregion
@@ -188,21 +203,18 @@ namespace IssueTracker.Controllers
             {
                 if (form["Delete"] != null)
                     return Delete(id.Value);
+                Update(id.Value, status, assignedTo, text);
+
+                return RedirectToAction("Details", "Issue", new { id });
+            }
+
+            foreach (var issueId in GetSelectedIssues(form))
+                if (form["Delete"] != null)
+                    Delete(_db, issueId);
                 else
-                    Update(id.Value, status, assignedTo, text);
+                    Update(issueId, status, assignedTo, text);
 
-                return RedirectToAction("Details", "Issue", new { id = id });
-            }
-            else
-            {
-                foreach (var issueId in GetSelectedIssues(form))
-                    if (form["Delete"] != null)
-                        Delete(_db, issueId);
-                    else
-                        Update(issueId, status, assignedTo, text);
-
-                return RedirectToAction("Index", "Issue");
-            }
+            return RedirectToAction("Index", "Issue");
         }
 
         private void Update(int id, string status, string assignedTo, string text)
@@ -213,10 +225,7 @@ namespace IssueTracker.Controllers
                 var user = Utils.GetAllUsers(_db, ViewData).FirstOrDefault(x => x.Name.Is(assignedTo));
                 var hasChanged = false;
 
-                var comment = new Comment();
-                comment.IssueId = issue.Id;
-                comment.DateOfCreation = DateTime.Now;
-                comment.Creator = this.GetCurrentUser(_db).Username;
+                var comment = new Comment { IssueId = issue.Id, DateOfCreation = DateTime.Now, Creator = this.GetCurrentUser(_db).Username };
 
                 if (status.HasValue() && Utils.GetAllStati(_db, ViewData).Any(x => x.Name.Is(status)))
                 {
