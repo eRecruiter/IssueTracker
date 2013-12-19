@@ -1,8 +1,9 @@
-﻿using System.Security.Principal;
+﻿using System.Globalization;
 using IssueTracker.Web.Code;
 using IssueTracker.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web.Mvc;
 
 namespace IssueTracker.Web.ViewModels.Shared
@@ -18,8 +19,7 @@ namespace IssueTracker.Web.ViewModels.Shared
             _db = db;
         }
 
-
-        public HeaderViewModel Fill(IPrincipal user)
+        public HeaderViewModel Fill(IPrincipal user, UserOptions userOptions)
         {
             CurrentUser = Utils.GetCurrentUser(_db, _viewData, user);
 
@@ -64,12 +64,22 @@ namespace IssueTracker.Web.ViewModels.Shared
                 );
             AvailableUsers = usedUsers;
 
+
+            CurrentSorting = userOptions.Sorting ?? "";
+            CurrentDateFilter = userOptions.DateFilter.HasValue ? userOptions.DateFilter.Value.ToString(CultureInfo.InvariantCulture) : "";
+            CurrentUserFilter = userOptions.UserFilter ?? "";
+            CurrentStatusFilter = userOptions.StatusFilter ?? "";
+
             return this;
         }
-
 
         public IEnumerable<SelectListItem> AvailableStati { get; set; }
         public IEnumerable<SelectListItem> AvailableUsers { get; set; }
         public User CurrentUser { get; set; }
+
+        public string CurrentSorting { get; set; }
+        public string CurrentStatusFilter { get; set; }
+        public string CurrentUserFilter { get; set; }
+        public string CurrentDateFilter { get; set; }
     }
 }
