@@ -1,7 +1,7 @@
 ﻿using System;
 using IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.ViewModels.Issue {
+namespace IssueTracker.Web.ViewModels.Issues {
     public class IndexIssuePartialViewModel : IssuePartialViewModel {
 
         public IndexIssuePartialViewModel(User currentUser, Models.Issue issue)

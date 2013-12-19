@@ -60,8 +60,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="ePunkt.Utilities">
-      <HintPath>..\packages\ePunkt.Utilities.1.0.0\lib\net40-Client\ePunkt.Utilities.dll</HintPath>
+    <Reference Include="ePunkt.Utilities, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ePunkt.Utilities.1.0.1\lib\net40-Client\ePunkt.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -149,15 +150,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Code\ControllerExtensionMethods.cs" />
+    <Compile Include="Code\UpdateIssueService.cs" />
+    <Compile Include="Code\DeleteIssueService.cs" />
     <Compile Include="Code\QueryableExtensionMethods.cs" />
     <Compile Include="Code\RssActionResult.cs" />
-    <Compile Include="Code\StringExtensionMethods.cs" />
     <Compile Include="Code\UserOptions.cs" />
     <Compile Include="Code\Utils.cs" />
-    <Compile Include="Code\ViewExtensionMethods.cs" />
-    <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
     <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\RssController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
@@ -192,9 +193,9 @@
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
     <Compile Include="ViewModels\IssuePartialViewModel.cs" />
     <Compile Include="ViewModels\Issue\DetailsCommentPartialViewModel.cs" />
-    <Compile Include="ViewModels\Issue\DetailsIssuePartialViewModel.cs" />
-    <Compile Include="ViewModels\Issue\IndexIssuePartialViewModel.cs" />
     <Compile Include="ViewModels\Issue\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Issues\IndexIssuePartialViewModel.cs" />
+    <Compile Include="ViewModels\Issues\IndexViewModel.cs" />
     <Compile Include="ViewModels\Shared\HeaderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.asmx.cs">
@@ -240,16 +241,14 @@
     </Content>
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\Header.cshtml" />
-    <Content Include="Views\Shared\Comment.cshtml" />
-    <Content Include="Views\Shared\Issue.cshtml" />
+    <Content Include="Views\Issue\_Comment.cshtml" />
+    <Content Include="Views\Issues\_Issue.cshtml" />
+    <Content Include="Views\Issues\Index.cshtml" />
     <Content Include="Views\Issue\Index.cshtml" />
-    <Content Include="Views\Issue\Details.cshtml" />
-    <Content Include="Views\Issue\AddComment.cshtml" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />
-    <Content Include="crossdomain.xml" />
     <Content Include="favicon.ico" />
     <Content Include="robots.txt" />
     <Content Include="Service.asmx" />
@@ -264,6 +263,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

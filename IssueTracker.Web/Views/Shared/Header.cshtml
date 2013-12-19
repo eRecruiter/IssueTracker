@@ -17,9 +17,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sort <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Options", "Issue", new { order = "comments" })">Comments</a></li>
-                            <li><a href="@Url.Action("Options", "Issue", new { order = "-" })">Date</a></li>
-                            <li><a href="@Url.Action("Options", "Issue", new { order = "status" })">Status</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { order = "comments" })">Comments</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { order = "-" })">Date</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { order = "status" })">Status</a></li>
                         </ul>
                     </li>
 
@@ -28,7 +28,7 @@
                         <ul class="dropdown-menu">
                             @foreach (var status in Model.AvailableStati)
                             {
-                                <li><a href="@Url.Action("Options", "Issue", new { status = status.Value })">@status.Text</a></li>
+                                <li><a href="@Url.Action("Options", "Issues", new { status = status.Value })">@status.Text</a></li>
                             }
                         </ul>
                     </li>
@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu">
                             @foreach (var user in Model.AvailableUsers)
                             {
-                                <li><a href="@Url.Action("Options", "Issue", new { user = user.Value })">@user.Text</a></li>
+                                <li><a href="@Url.Action("Options", "Issues", new { user = user.Value })">@user.Text</a></li>
                             }
                         </ul>
                     </li>
@@ -46,11 +46,11 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Date <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Options", "Issue", new { date = "-" })">< All ></a></li>
-                            <li><a href="@Url.Action("Options", "Issue", new { date = 7 })">Last week</a></li>
-                            <li><a href="@Url.Action("Options", "Issue", new { date = 30 })">Last month</a></li>
-                            <li><a href="@Url.Action("Options", "Issue", new { date = 120 })">Last quarter</a></li>
-                            <li><a href="@Url.Action("Options", "Issue", new { date = 365 })">Last year</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = "-" })">< All ></a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 7 })">Last week</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 30 })">Last month</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 120 })">Last quarter</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 365 })">Last year</a></li>
                         </ul>
                     </li>
                 </ul>

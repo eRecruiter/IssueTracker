@@ -1,69 +1,115 @@
 ﻿@using System.Globalization
 @model IssueTracker.Web.ViewModels.Issue.IndexViewModel
-@section Content {
-    @if (Model.Total > 0)
-    { 
-        <text>
 
-        @using (Html.BeginForm("Update", "Issue", FormMethod.Post, new { @class = "form-inline" }))
+<div class="navbar navbar-inverse navbar-fixed-bottom" id="editIssue">
+    <div class="container">
+        @using (Html.BeginForm("Delete", "Issue", new { id = Model.Id }))
         {
             <text>
-
-            @if (Model.CurrentUser != null)
-            {
-                <div style="text-align: right; margin: 3px 5px 3px 0;">
-
-                    @Html.DropDownList("status", Model.AvailableStati)
-                    @Html.DropDownList("assignedTo", Model.AvailableUsers)
-                    <button type="submit" name="Save" value="Save" class="btn btn-success">Save</button>
-                    <button type="submit" name="Delete" value="Delete" class="btn btn-danger">Delete</button>
-                    <input type="checkbox" id="checkAll" />
-                </div>
-            }
-            <table class="table table-condensed">
-                <tr>
-                    <th>Time</th>
-                    <th>#</th>
-                    <th>Status</th>
-                    <th>Assigned&nbsp;to</th>
-                    <th>Creator</th>
-                    <th>Subject</th>
-                    <th></th>
-                </tr>
-
-                @foreach (var issue in Model.Issues)
-                { 
-                    <tr id="@("issue" + issue.Id)">
-                        @Html.Partial("Issue", issue)
-                    </tr>
-                }
-            </table>
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger navbar-btn pull-right" style="margin-left: 8px;">Delete issue</button>
             </text>
         }
 
-        <span class="label label-warning">@(Model.Start.ToString("N0") + " - " + Model.End.ToString("N0") + " of " + Model.Total.ToString("N0"))</span>
+        <button type="submit" name="Save" class="btn btn-primary navbar-btn pull-right" data-toggle="modal" data-target="#textModal">Add a comment / send notification</button>
 
-        <ul class="pagination">
-            @for (var i = 1; i < Model.MaxPage; i++)
-            {          
-                <li class="@( (Model.Page == i ? "active" : ""))">@Html.ActionLink(i.ToString(CultureInfo.CurrentCulture), "Index", "Issue", new { page = i }, null)</li>
-            }
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="newStatus">Set new status</span> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    @foreach (var status in Model.AvailableStati)
+                    {
+                        <li><a href="@Url.Action("Update", new { id = Model.Id, status = status.Value })">@status.Text</a></li>
+                    }
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="newUser">Set new assignee</span> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    @foreach (var user in Model.AvailableUsers)
+                    {
+                        <li><a href="@Url.Action("Update", new { id = Model.Id, user = @user.Value })">@user.Text</a></li>
+                    }
+                </ul>
+            </li>
         </ul>
+    </div>
+</div>
+
+<p>
+    Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
+    @if (Model.ParentIssueId.HasValue)
+    {
+        <text>
+            This issue has a @Html.ActionLink("parent", "Index", new { id = Model.ParentIssueId.Value }).
         </text>
     }
-    else
-    {
-        <div class="alert">No matching issues found.</div>
-    }
-}
+</p>
 
+<fieldset>
+    <legend>Text</legend>
+    <pre>@Model.Text</pre>
+</fieldset>
+<fieldset>
+    <legend>Stack trace</legend>
+    <pre>@Model.StackTrace.Trim()</pre>
+</fieldset>
+<fieldset>
+    <legend>Server variables</legend>
+    <pre>@Model.ServerVariables.Trim()</pre>
+</fieldset>
+<fieldset>
+    <legend>Comments & Activities</legend>
+    <p>
+        Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
+    </p>
+    <table class="table table-condensed">
+        @foreach (var comment in Model.Comments)
+        {
+            <tr>
+                @Html.Partial("_Comment", comment)
+            </tr>
+        }
+    </table>
+</fieldset>
+
+
+<div class="modal fade" id="textModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Add comment / send notification</h4>
+            </div>
+            @using (Html.BeginForm("Update", "Issue", new { id = Model.Id }))
+            {
+                <text>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="text" class="control-label">Comment text</label>
+                            <textarea name="text" class="form-control" style="height:100px;"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notification" class="control-label">Send notification to</label>
+                            <input type="text" name="notification" class="form-control" />
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </text>
+            }
+        </div>
+    </div>
+</div>
 @section Script {
     <script>
-        $("#checkAll").click(function () {
-            if ($(this).prop("checked"))
-                $(":checkbox").prop("checked", true);
-            else
-                $(":checkbox").prop("checked", false);
+        $("select").change(function () {
+            $("form").submit();
         });
     </script>
 }

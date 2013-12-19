@@ -1,65 +1,73 @@
-﻿using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
+﻿using ePunkt.Utilities;
+using IssueTracker.Web.Code;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.ViewModels.Issue {
-    public class IndexViewModel {
+namespace IssueTracker.Web.ViewModels.Issue
+{
+    public class IndexViewModel : IssuePartialViewModel
+    {
+        public IndexViewModel(Db db, User currentUser, Models.Issue issue, ViewDataDictionary viewData)
+            : base(issue)
+        {
 
-        public IndexViewModel(Db db, User currentUser, ViewDataDictionary viewData) {
             CurrentUser = currentUser;
 
-            var usedStati = new List<SelectListItem>
-            {
-                new SelectListItem
-                {
-                    Text = "< all >",
-                    Value = "",
-                }
-            };
-            usedStati.AddRange(
+            DateOfCreation = issue.DateOfCreation;
+            ParentIssueId = issue.ParentIssueId;
+            StackTrace = issue.StackTrace;
+            ServerVariables = issue.ServerVariables;
+            Comments = (from x in db.Comments
+                        where x.IssueId == issue.Id
+                        orderby x.DateOfCreation
+                        select x).ToList().Select(x => new DetailsCommentPartialViewModel(db, x, viewData));
+
+            var stati = new List<SelectListItem>();
+            stati.AddRange(
                     from x in Utils.GetAllStati(db, viewData)
-                    select new SelectListItem {
+                    select new SelectListItem
+                    {
                         Text = x.Name,
                         Value = x.Name,
+                        Selected = Status.Is(x.Name)
                     }
                 );
-            AvailableStati = usedStati;
+            AvailableStati = stati;
 
-
-            var usedUsers = new List<SelectListItem>
+            var users = new List<SelectListItem>
             {
-                new SelectListItem
-                {
-                    Text = "< all >",
-                    Value = "",
-                },
                 new SelectListItem
                 {
                     Text = "< none >",
                     Value = "-",
+                    Selected = AssignedTo.IsNoE()
                 }
             };
-            usedUsers.AddRange(
+            users.AddRange(
                     from x in Utils.GetAllUsers(db, viewData)
-                    select new SelectListItem {
+                    select new SelectListItem
+                    {
                         Text = x.Name,
                         Value = x.Name,
+                        Selected = AssignedTo.Is(x.Name)
                     }
                 );
-            AvailableUsers = usedUsers;
+            AvailableUsers = users;
         }
 
-        public int Page { get; set; }
-        public int MaxPage { get; set; }
-        public int Start { get; set; }
-        public int End { get; set; }
-        public int Total { get; set; }
-        public IEnumerable<IndexIssuePartialViewModel> Issues { get; set; }
 
-        public IEnumerable<SelectListItem> AvailableStati { get; set; }
-        public IEnumerable<SelectListItem> AvailableUsers { get; set; }
+        public DateTime DateOfCreation { get; set; }
+        public int? ParentIssueId { get; set; }
+        public IEnumerable<DetailsCommentPartialViewModel> Comments { get; set; }
+        public string StackTrace { get; set; }
+        public string ServerVariables { get; set; }
+
+        public IEnumerable<SelectListItem> AvailableStati { get; private set; }
+        public IEnumerable<SelectListItem> AvailableUsers { get; private set; }
         public User CurrentUser { get; set; }
+
     }
 }

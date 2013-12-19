@@ -11,7 +11,7 @@ namespace IssueTracker.Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Issue");
+            return RedirectToAction("Index", "Issues");
         }
 
         public ActionResult Error()
