@@ -13,7 +13,6 @@ namespace IssueTracker.Web.ViewModels.Issue
         public IndexViewModel(Db db, User currentUser, Models.Issue issue, ViewDataDictionary viewData)
             : base(issue)
         {
-
             CurrentUser = currentUser;
 
             DateOfCreation = issue.DateOfCreation;
@@ -56,6 +55,8 @@ namespace IssueTracker.Web.ViewModels.Issue
                     }
                 );
             AvailableUsers = users;
+
+            AvailableEmailAddresses = Utils.GetAllUsers(db, viewData).Select(x => x.Email);
         }
 
 
@@ -67,6 +68,7 @@ namespace IssueTracker.Web.ViewModels.Issue
 
         public IEnumerable<SelectListItem> AvailableStati { get; private set; }
         public IEnumerable<SelectListItem> AvailableUsers { get; private set; }
+        public IEnumerable<string> AvailableEmailAddresses { get; private set; }
         public User CurrentUser { get; set; }
 
     }

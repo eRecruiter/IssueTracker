@@ -244,6 +244,7 @@
     <Content Include="Views\Issues\Index.cshtml" />
     <Content Include="Views\Issue\Index.cshtml" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
+    <Content Include="Views\Issue\_AddComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />

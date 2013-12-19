@@ -15,7 +15,6 @@
     @if (Model.AssignedTo.HasValue())
     {
         <span class="@(Model.CurrentUser != null && (Model.AssignedTo.Is(Model.CurrentUser.Name) || Model.AssignedTo.Is(Model.CurrentUser.Username)) ? "label label-success" : "label label-info")">
->
             @Model.AssignedTo
         </span>
     }
