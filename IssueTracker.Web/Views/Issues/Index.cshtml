@@ -47,7 +47,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Issue</th>
+                        <th>Issue (@Model.Total.ToString("N0") total)</th>
                         <th><input type="checkbox" id="checkAll" /></th>
                     </tr>
 
@@ -61,8 +61,6 @@
 
             </text>
         }
-
-        <span class="label label-warning">@(Model.Start.ToString("N0") + " - " + Model.End.ToString("N0") + " of " + Model.Total.ToString("N0"))</span>
 
         <ul class="pagination">
             @for (var i = 1; i < Model.MaxPage; i++)
