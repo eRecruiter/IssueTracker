@@ -1,9 +1,6 @@
 ﻿@using System.Globalization
-@model IssueTracker.Web.Models.ViewModels.Issue.IndexViewModel
+@model IssueTracker.Web.ViewModels.Issue.IndexViewModel
 @section Content {
-
-    @Html.Partial("Filter")
-
     @if (Model.Total > 0)
     { 
         <text>

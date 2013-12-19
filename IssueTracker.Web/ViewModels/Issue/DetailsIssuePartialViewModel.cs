@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.Models.ViewModels.Issue {
+namespace IssueTracker.Web.ViewModels.Issue {
     public class DetailsIssuePartialViewModel : IssuePartialViewModel {
 
         public DetailsIssuePartialViewModel(Db db, User currentUser, Models.Issue issue, ViewDataDictionary viewData)

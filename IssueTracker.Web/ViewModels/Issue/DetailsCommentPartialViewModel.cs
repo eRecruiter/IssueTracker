@@ -3,8 +3,9 @@ using IssueTracker.Web.Code;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.Models.ViewModels.Issue {
+namespace IssueTracker.Web.ViewModels.Issue {
     public class DetailsCommentPartialViewModel {
 
         public DetailsCommentPartialViewModel(Db db, Comment comment, ViewDataDictionary viewData) {

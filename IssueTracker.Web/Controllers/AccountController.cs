@@ -1,5 +1,5 @@
 ﻿using IssueTracker.Web.Models;
-using IssueTracker.Web.Models.ViewModels.Account;
+using IssueTracker.Web.ViewModels.Account;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;

@@ -8,10 +8,10 @@ namespace IssueTracker.Web.Controllers
     {
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            using (var context = new Db())
+            /*using (var context = new Db())
             {
                 ViewData["availableStati"] = context.Status.Select(x => x.Name).OrderBy(x => x).ToList();
-            }
+            }*/
         }
     }
 }

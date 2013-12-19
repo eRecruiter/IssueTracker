@@ -1,15 +1,13 @@
 ﻿using ePunkt.Utilities;
 using IssueTracker.Web.Code;
 using IssueTracker.Web.Models;
-using IssueTracker.Web.Models.ViewModels.Issue;
+using IssueTracker.Web.ViewModels.Issue;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Linq.SqlClient;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Settings = IssueTracker.Web.Models.Settings;
 
@@ -26,91 +24,50 @@ namespace IssueTracker.Web.Controllers
             var viewModel = new IndexViewModel(_db, this.GetCurrentUser(_db), ViewData);
 
             page = page.HasValue ? page.Value - 1 : 0;
-
             var issues = from x in _db.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
 
-            viewModel.StatusFilter = Request.Cookies["status"] != null ? Request.Cookies["status"].Value : "";
-            if (viewModel.StatusFilter.HasValue())
-                issues = issues.Where(x => x.Status.ToLower() == viewModel.StatusFilter.ToLower());
+            var userOptions = new UserOptions(Request.Cookies, Response.Cookies);
+            issues = issues.Filter(userOptions).Sort(userOptions);
 
-            viewModel.TimeFilter = Request.Cookies["time"] != null ? Convert.ToInt32(Request.Cookies["time"].Value) : 0;
-            if (viewModel.TimeFilter > 0)
-                issues = issues.Where(x => x.DateOfUpdate >= DateTime.Now.AddDays(-viewModel.TimeFilter));
-
-            viewModel.TextFilter = Request.Cookies["search"] != null ? Request.Cookies["search"].Value : "";
-            if (viewModel.TextFilter.HasValue())
-                issues = issues.Where(x => SqlMethods.Like(x.Text, "%" + viewModel.TextFilter + "%") || SqlMethods.Like(x.StackTrace, "%" + viewModel.TextFilter + "%") || SqlMethods.Like(x.ServerVariables, "%" + viewModel.TextFilter + "%"));
-
-            viewModel.AssignedToFilter = Request.Cookies["assignedTo"] != null ? Request.Cookies["assignedTo"].Value : "";
-            if (viewModel.AssignedToFilter.HasValue() && viewModel.AssignedToFilter.Is("-"))
-                issues = issues.Where(x => x.AssignedTo == null);
-            else if (viewModel.AssignedToFilter.HasValue())
-                issues = issues.Where(x => x.AssignedTo.ToLower() == viewModel.AssignedToFilter.ToLower());
-
-            viewModel.Order = Request.Cookies["order"] != null ? Request.Cookies["order"].Value : "date";
-
-            var duplicateId = (int?)ViewData["duplicateId"];
-            if (duplicateId.HasValue)
-                issues = issues.Where(x => x.Id != duplicateId.Value);
-
-            var sortedIssues = issues.OrderByDescending(x => x.Comments.Count <= 0 ? x.DateOfCreation : x.Comments.Max(y => y.DateOfCreation));
-            if (viewModel.Order.Is("status"))
-                sortedIssues = issues.OrderBy(x => x.Status);
-            else if (viewModel.Order.Is("comments"))
-                sortedIssues = issues.OrderByDescending(x => x.Comments.Count);
-
-            viewModel.Issues = sortedIssues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x)).ToList();
-
-            viewModel.Total = sortedIssues.Count();
+            viewModel.Issues = issues.Skip(page.Value * Settings.IssuesPerPage).Take(Settings.IssuesPerPage).Include(y => y.Comments).ToList().Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x)).ToList();
+            viewModel.Total = issues.Count();
             viewModel.Start = page.Value * Settings.IssuesPerPage;
             viewModel.End = viewModel.Start + viewModel.Issues.Count();
             viewModel.Page = page.Value + 1;
+
             // ReSharper disable once PossibleLossOfFraction
             viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / Settings.IssuesPerPage)) + 1;
 
-            return View(viewModel);
+            return View("Index", viewModel);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        [AllowAnonymous]
-        public ActionResult Index(string order, int? timeFilter, string assignedToFilter, string statusFilter, string textFilter)
+
+        public ActionResult Options(string order, string date, string user, string status, string text)
         {
-            Response.Cookies.Remove("time");
-            Response.Cookies.Remove("status");
-            Response.Cookies.Remove("order");
-            Response.Cookies.Remove("assignedTo");
-            Response.Cookies.Remove("search");
+            var userOptions = new UserOptions(Request.Cookies, Response.Cookies);
 
-            Response.Cookies.Add(new HttpCookie("time")
-            {
-                Value = (timeFilter ?? 0).ToString(CultureInfo.CurrentCulture),
-                Expires = DateTime.MaxValue
-            });
-            Response.Cookies.Add(new HttpCookie("status")
-            {
-                Value = statusFilter ?? "",
-                Expires = DateTime.MaxValue
-            });
-            Response.Cookies.Add(new HttpCookie("order")
-            {
-                Value = order ?? "",
-                Expires = DateTime.MaxValue
-            });
-            Response.Cookies.Add(new HttpCookie("assignedTo")
-            {
-                Value = assignedToFilter ?? "",
-                Expires = DateTime.MaxValue
-            });
-            Response.Cookies.Add(new HttpCookie("search")
-            {
-                Value = textFilter ?? "",
-                Expires = DateTime.MaxValue
-            });
+            // make sure we only update the settings if we get a new value from the request
 
-            return RedirectToAction("Index", "Issue");
+            if (order.HasValue())
+                userOptions.Sorting = order;
+
+            if (user.HasValue())
+                userOptions.UserFilter = user;
+
+            if (status.HasValue())
+                userOptions.StatusFilter = status;
+
+            if (text.HasValue())
+                userOptions.TextFilter = text;
+
+            if (date.HasValue())
+                userOptions.DateFilter = date.GetIntOrNull();
+
+            return RedirectToAction("Index");
         }
+
         #endregion
 
         #region Details

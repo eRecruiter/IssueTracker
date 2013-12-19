@@ -1,5 +1,5 @@
 ﻿
-namespace IssueTracker.Web.Models.ViewModels.Account {
+namespace IssueTracker.Web.ViewModels.Account {
     public class LoginViewModel {
 
         public string Message { get; set; }
