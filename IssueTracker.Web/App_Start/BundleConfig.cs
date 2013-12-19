@@ -10,7 +10,7 @@ namespace IssueTracker.Web.App_Start
                 "~/Scripts/jquery-{version}.js", "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/css/css").Include(
-                "~/Content/bootstrap/bootstrap.css", "~/Content/bootstrap/bootstrap-theme.css", "~/Content/site.css"));
+                "~/Content/bootstrap.css", "~/Content/site.css"));
         }
     }
 }
