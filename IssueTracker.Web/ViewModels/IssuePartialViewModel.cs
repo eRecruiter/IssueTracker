@@ -1,5 +1,5 @@
 ﻿
-namespace IssueTracker.Web.ViewModels {
+namespace ePunkt.IssueTracker.Web.ViewModels {
     public abstract class IssuePartialViewModel {
 
         protected IssuePartialViewModel(Models.Issue issue) {

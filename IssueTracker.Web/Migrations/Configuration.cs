@@ -1,6 +1,6 @@
-using IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.Migrations
+namespace ePunkt.IssueTracker.Web.Migrations
 {
     using System.Data.Entity.Migrations;
 

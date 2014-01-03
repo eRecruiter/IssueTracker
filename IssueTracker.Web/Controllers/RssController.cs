@@ -1,6 +1,6 @@
-﻿using ePunkt.Utilities;
-using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
+﻿using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
+using ePunkt.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Web.Mvc;
 
-namespace IssueTracker.Web.Controllers
+namespace ePunkt.IssueTracker.Web.Controllers
 {
     public class RssController : Controller
     {

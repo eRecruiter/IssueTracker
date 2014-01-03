@@ -1,5 +1,5 @@
 ﻿
-namespace IssueTracker.Web.Models
+namespace ePunkt.IssueTracker.Web.Models
 {
     public static class Settings
     {

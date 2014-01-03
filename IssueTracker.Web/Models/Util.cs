@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 
-namespace IssueTracker.Web.Models
+namespace ePunkt.IssueTracker.Web.Models
 {
     public static class Util
     {

@@ -44,9 +44,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IssueTracker.Client\IssueTracker.Client.csproj">
+    <ProjectReference Include="..\IssueTracker.Client\ePunkt.IssueTracker.Client.csproj">
       <Project>{897F09EE-5CAB-4D19-9A02-855E0A7922BD}</Project>
-      <Name>IssueTracker.Client</Name>
+      <Name>ePunkt.IssueTracker.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

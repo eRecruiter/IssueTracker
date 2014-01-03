@@ -1,9 +1,9 @@
-﻿using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
-using IssueTracker.Web.ViewModels.Shared;
+﻿using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.ViewModels.Shared;
 using System.Web.Mvc;
 
-namespace IssueTracker.Web.Controllers
+namespace ePunkt.IssueTracker.Web.Controllers
 {
     public class SharedController : Controller
     {

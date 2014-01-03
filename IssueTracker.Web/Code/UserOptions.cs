@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.Web;
 
-namespace IssueTracker.Web.Code
+namespace ePunkt.IssueTracker.Web.Code
 {
     public class UserOptions
     {

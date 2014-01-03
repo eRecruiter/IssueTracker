@@ -1,7 +1,6 @@
 ﻿using System;
 
-
-namespace IssueTracker.Client {
+namespace ePunkt.IssueTracker.Client {
     public class Issue {
 
         public Issue() {}

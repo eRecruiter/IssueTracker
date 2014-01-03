@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Xml;
 
-namespace IssueTracker.Web.Code {
+namespace ePunkt.IssueTracker.Web.Code {
     public class RssActionResult : ActionResult {
 
         public SyndicationFeed Feed {

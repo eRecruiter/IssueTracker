@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Data.Linq.SqlClient;
+using ePunkt.IssueTracker.Web.Models;
 using ePunkt.Utilities;
-using IssueTracker.Web.Models;
 using System.Linq;
 
-namespace IssueTracker.Web.Code
+namespace ePunkt.IssueTracker.Web.Code
 {
     public static class QueryableExtensionMethods
     {

@@ -1,10 +1,10 @@
-﻿using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
+﻿using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace IssueTracker.Web.ViewModels.Issues
+namespace ePunkt.IssueTracker.Web.ViewModels.Issues
 {
     public class IndexViewModel
     {

@@ -1,12 +1,12 @@
-﻿using ePunkt.Utilities;
-using IssueTracker.Web.Code;
+﻿using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
+using ePunkt.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.ViewModels.Issue
+namespace ePunkt.IssueTracker.Web.ViewModels.Issue
 {
     public class IndexViewModel : IssuePartialViewModel
     {

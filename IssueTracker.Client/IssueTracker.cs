@@ -3,12 +3,10 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 
-
-namespace IssueTracker.Client {
+namespace ePunkt.IssueTracker.Client {
     public class IssueTracker {
 
         public Configuration Configuration { get; private set; }
-
 
         #region Constructor
         public IssueTracker() : this(new Configuration()) {}
@@ -19,11 +17,9 @@ namespace IssueTracker.Client {
         }
         #endregion
 
-
         public void Post(Issue issue) {
             Post(null, issue);
         }
-
 
         public void Post(int? parentId, Issue issue) {
             var webClient = new WebClient();
@@ -40,6 +36,5 @@ namespace IssueTracker.Client {
             var response = webClient.UploadValues(Configuration.IssueTrackerUrl, values);
             issue.Id = int.Parse(Encoding.ASCII.GetString(response));
         }
-
     }
 }

@@ -1,7 +1,7 @@
-﻿using IssueTracker.Web.Models;
+﻿using ePunkt.IssueTracker.Web.Models;
 using System.Linq;
 
-namespace IssueTracker.Web.Code
+namespace ePunkt.IssueTracker.Web.Code
 {
     public class DeleteIssueService
     {

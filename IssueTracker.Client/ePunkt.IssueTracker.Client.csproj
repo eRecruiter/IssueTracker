@@ -8,8 +8,8 @@
     <ProjectGuid>{897F09EE-5CAB-4D19-9A02-855E0A7922BD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IssueTracker.Client</RootNamespace>
-    <AssemblyName>IssueTracker.Client</AssemblyName>
+    <RootNamespace>ePunkt.IssueTracker.Client</RootNamespace>
+    <AssemblyName>ePunkt.IssueTracker.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

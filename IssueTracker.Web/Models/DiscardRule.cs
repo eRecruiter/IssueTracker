@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IssueTracker.Web.Models {
+namespace ePunkt.IssueTracker.Web.Models {
     public class DiscardRule {
 
         [Required, Key, DatabaseGenerated(DatabaseGeneratedOption.None)]

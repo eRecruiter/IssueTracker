@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Client", "IssueTracker.Client\IssueTracker.Client.csproj", "{897F09EE-5CAB-4D19-9A02-855E0A7922BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePunkt.IssueTracker.Client", "IssueTracker.Client\ePunkt.IssueTracker.Client.csproj", "{897F09EE-5CAB-4D19-9A02-855E0A7922BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.DemoClient", "IssueTracker.DemoClient\IssueTracker.DemoClient.csproj", "{0EF64D56-9E17-47DC-BF8A-3060230A1833}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Web", "IssueTracker.Web\IssueTracker.Web.csproj", "{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{241305C9-D3D7-45E1-8E17-C3F1D420A290}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

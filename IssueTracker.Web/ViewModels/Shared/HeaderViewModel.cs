@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
-using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
 
-namespace IssueTracker.Web.ViewModels.Shared
+namespace ePunkt.IssueTracker.Web.ViewModels.Shared
 {
     public class HeaderViewModel
     {

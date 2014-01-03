@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace IssueTracker.Web.Models {
+namespace ePunkt.IssueTracker.Web.Models {
     public class Db : DbContext {
 
         public Db() : base("Db") { }

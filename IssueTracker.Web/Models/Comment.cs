@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IssueTracker.Web.Models {
+namespace ePunkt.IssueTracker.Web.Models {
     public class Comment {
         public int Id { get; set; }
         public int IssueId { get; set; }

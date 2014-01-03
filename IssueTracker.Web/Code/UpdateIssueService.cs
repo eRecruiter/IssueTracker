@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Security.Principal;
 using System.Web.Mvc;
+using ePunkt.IssueTracker.Web.Models;
 using ePunkt.Utilities;
-using IssueTracker.Web.Models;
 using System.Linq;
 
-namespace IssueTracker.Web.Code
+namespace ePunkt.IssueTracker.Web.Code
 {
     public class UpdateIssueService
     {

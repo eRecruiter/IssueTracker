@@ -1,11 +1,11 @@
-﻿using ePunkt.Utilities;
-using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
-using IssueTracker.Web.ViewModels.Issue;
+﻿using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.ViewModels.Issue;
+using ePunkt.Utilities;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace IssueTracker.Web.Controllers
+namespace ePunkt.IssueTracker.Web.Controllers
 {
     [Authorize]
     public class IssueController : Controller

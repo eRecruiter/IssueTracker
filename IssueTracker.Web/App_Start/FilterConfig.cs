@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace IssueTracker.Web.App_Start
+namespace ePunkt.IssueTracker.Web.App_Start
 {
     public class FilterConfig
     {

@@ -1,15 +1,15 @@
-﻿using ePunkt.Utilities;
-using IssueTracker.Web.Code;
-using IssueTracker.Web.Models;
-using IssueTracker.Web.ViewModels.Issues;
+﻿using ePunkt.IssueTracker.Web.Code;
+using ePunkt.IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.ViewModels.Issues;
+using ePunkt.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using Settings = IssueTracker.Web.Models.Settings;
+using Settings = ePunkt.IssueTracker.Web.Models.Settings;
 
-namespace IssueTracker.Web.Controllers
+namespace ePunkt.IssueTracker.Web.Controllers
 {
     [Authorize]
     public class IssuesController : Controller
@@ -29,19 +29,19 @@ namespace IssueTracker.Web.Controllers
             issues = issues.Filter(userOptions).Sort(userOptions);
 
             viewModel.Issues =
-                issues.Skip(page.Value * Settings.IssuesPerPage)
-                    .Take(Settings.IssuesPerPage)
+                issues.Skip(page.Value * Utilities.Settings.IssuesPerPage)
+                    .Take(Utilities.Settings.IssuesPerPage)
                     .Include(y => y.Comments)
                     .ToList()
                     .Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x))
                     .ToList();
             viewModel.Total = issues.Count();
-            viewModel.Start = page.Value * Settings.IssuesPerPage;
+            viewModel.Start = page.Value * Utilities.Settings.IssuesPerPage;
             viewModel.End = viewModel.Start + viewModel.Issues.Count();
             viewModel.Page = page.Value + 1;
 
             // ReSharper disable once PossibleLossOfFraction
-            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / Settings.IssuesPerPage)) + 1;
+            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / Utilities.Settings.IssuesPerPage)) + 1;
 
             return View("Index", viewModel);
         }

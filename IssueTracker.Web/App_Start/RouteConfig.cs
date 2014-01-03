@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace IssueTracker.Web.App_Start
+namespace ePunkt.IssueTracker.Web.App_Start
 {
     public class RouteConfig
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace IssueTracker.Web.Models
+namespace ePunkt.IssueTracker.Web.Models
 {
     public class Issue
     {

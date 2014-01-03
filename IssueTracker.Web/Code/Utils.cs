@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Security.Principal;
 using System.Web.Mvc;
-using IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.Models;
 
-namespace IssueTracker.Web.Code
+namespace ePunkt.IssueTracker.Web.Code
 {
     public static class Utils
     {

@@ -1,10 +1,10 @@
-﻿using IssueTracker.Web.Models;
+﻿using ePunkt.IssueTracker.Web.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
 using ApplicationException = System.ApplicationException;
 
-namespace IssueTracker.Web.Controllers
+namespace ePunkt.IssueTracker.Web.Controllers
 {
     public class HomeController : Controller
     {

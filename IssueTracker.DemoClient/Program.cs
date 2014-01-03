@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IssueTracker.DemoClient {
+namespace ePunkt.IssueTracker.DemoClient {
     internal class Program {
         private static void Main() {
 

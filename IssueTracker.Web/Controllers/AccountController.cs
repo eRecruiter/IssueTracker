@@ -1,10 +1,10 @@
-﻿using IssueTracker.Web.Models;
-using IssueTracker.Web.ViewModels.Account;
+﻿using ePunkt.IssueTracker.Web.Models;
+using ePunkt.IssueTracker.Web.ViewModels.Account;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace IssueTracker.Web.Controllers
+namespace ePunkt.IssueTracker.Web.Controllers
 {
     public class AccountController : Controller
     {

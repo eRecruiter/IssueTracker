@@ -1,0 +1,1 @@
+.\packages\NuGet.CommandLine.2.7.3\tools\NuGet.exe pack IssueTracker.Client\ePunkt.IssueTracker.Client.csproj -Build -Properties Configuration=Release

@@ -1,4 +1,4 @@
-namespace IssueTracker.Web.Migrations
+namespace ePunkt.IssueTracker.Web.Migrations
 {
     using System.Data.Entity.Migrations;
     
