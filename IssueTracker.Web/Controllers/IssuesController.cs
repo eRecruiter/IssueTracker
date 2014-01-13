@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using Settings = ePunkt.IssueTracker.Web.Models.Settings;
 
 namespace ePunkt.IssueTracker.Web.Controllers
 {
@@ -29,19 +28,19 @@ namespace ePunkt.IssueTracker.Web.Controllers
             issues = issues.Filter(userOptions).Sort(userOptions);
 
             viewModel.Issues =
-                issues.Skip(page.Value * Utilities.Settings.IssuesPerPage)
-                    .Take(Utilities.Settings.IssuesPerPage)
+                issues.Skip(page.Value * IssueTrackerSettings.IssuesPerPage)
+                    .Take(IssueTrackerSettings.IssuesPerPage)
                     .Include(y => y.Comments)
                     .ToList()
                     .Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x))
                     .ToList();
             viewModel.Total = issues.Count();
-            viewModel.Start = page.Value * Utilities.Settings.IssuesPerPage;
+            viewModel.Start = page.Value * IssueTrackerSettings.IssuesPerPage;
             viewModel.End = viewModel.Start + viewModel.Issues.Count();
             viewModel.Page = page.Value + 1;
 
             // ReSharper disable once PossibleLossOfFraction
-            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / Utilities.Settings.IssuesPerPage)) + 1;
+            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / IssueTrackerSettings.IssuesPerPage)) + 1;
 
             return View("Index", viewModel);
         }

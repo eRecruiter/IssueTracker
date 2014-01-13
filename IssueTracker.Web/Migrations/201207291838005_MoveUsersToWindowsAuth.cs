@@ -1,4 +1,5 @@
-namespace ePunkt.IssueTracker.Web.Migrations
+// ReSharper disable once CheckNamespace
+namespace IssueTracker.Web.Migrations
 {
     using System.Data.Entity.Migrations;
     

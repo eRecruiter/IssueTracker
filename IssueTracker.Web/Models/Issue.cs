@@ -97,7 +97,7 @@ namespace ePunkt.IssueTracker.Web.Models
                     Text = Util.MaxLength(text, 4000),
                     StackTrace = Util.MaxLength(stackTrace, 8000),
                     ServerVariables = Util.MaxLength(serverVariables, 8000),
-                    Status = Util.MaxLength(Settings.StatusForNewIssues, 4000),
+                    Status = Util.MaxLength(IssueTrackerSettings.StatusForNewIssues, 4000),
                     AssignedTo = null
                 };
                 context.Issues.Add(newIssue);
@@ -119,7 +119,7 @@ namespace ePunkt.IssueTracker.Web.Models
 
                     var status = context.Status.FirstOrDefault(x => x.Name.ToLower() == parentIssue.Status);
                     if (status != null && status.Reactivate)
-                        parentIssue.Status = Util.MaxLength(Settings.StatusForNewIssues, 4000);
+                        parentIssue.Status = Util.MaxLength(IssueTrackerSettings.StatusForNewIssues, 4000);
                     else
                         newIssue.Status = parentIssue.Status;
                 }
@@ -147,7 +147,7 @@ namespace ePunkt.IssueTracker.Web.Models
         public void AddAttachment(string creator, string niceName, string base64, HttpServerUtility server)
         {
             var extension = Path.GetExtension(niceName);
-            var path = Path.Combine(server.MapPath(Settings.AttachmentsPath), Guid.NewGuid().ToString() + extension);
+            var path = Path.Combine(server.MapPath(IssueTrackerSettings.AttachmentsPath), Guid.NewGuid().ToString() + extension);
 
             var bytes = Convert.FromBase64String(base64);
             File.WriteAllBytes(path, bytes);

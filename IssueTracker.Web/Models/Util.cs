@@ -51,10 +51,10 @@ namespace ePunkt.IssueTracker.Web.Models
             mail.Subject = subject;
             mail.IsBodyHtml = true;
 
-            var server = new SmtpClient(ePunkt.Utilities.Settings.Get("SmtpHost", "localhost"), ePunkt.Utilities.Settings.Get("SmtpPort", 25));
-            if (!string.IsNullOrEmpty(ePunkt.Utilities.Settings.Get("SmtpUserName", "")))
-                server.Credentials = new NetworkCredential(ePunkt.Utilities.Settings.Get("SmtpUserName", ""), ePunkt.Utilities.Settings.Get("SmtpPassword", ""));
-            server.EnableSsl = ePunkt.Utilities.Settings.Get("SmtpUseSsl", false);
+            var server = new SmtpClient(Utilities.Settings.Get("SmtpHost", "localhost"), Utilities.Settings.Get("SmtpPort", 25));
+            if (!string.IsNullOrEmpty(Utilities.Settings.Get("SmtpUserName", "")))
+                server.Credentials = new NetworkCredential(Utilities.Settings.Get("SmtpUserName", ""), Utilities.Settings.Get("SmtpPassword", ""));
+            server.EnableSsl = Utilities.Settings.Get("SmtpUseSsl", false);
             server.Send(mail);
         }
     }

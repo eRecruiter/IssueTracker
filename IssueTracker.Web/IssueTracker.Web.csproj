@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IssueTracker.Web</RootNamespace>
-    <AssemblyName>IssueTracker.Web</AssemblyName>
+    <RootNamespace>ePunkt.IssueTracker.Web</RootNamespace>
+    <AssemblyName>ePunkt.IssueTracker.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -181,13 +181,17 @@
     <Compile Include="Migrations\201310161048018_UserPassword.Designer.cs">
       <DependentUpon>201310161048018_UserPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401130920291_NamespacesUpdate.cs" />
+    <Compile Include="Migrations\201401130920291_NamespacesUpdate.Designer.cs">
+      <DependentUpon>201401130920291_NamespacesUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Issue.cs" />
     <Compile Include="Models\DiscardRule.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Db.cs" />
-    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\IssueTrackerSettings.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Util.cs" />
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
@@ -206,6 +210,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201310161048018_UserPassword.resx">
       <DependentUpon>201310161048018_UserPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401130920291_NamespacesUpdate.resx">
+      <DependentUpon>201401130920291_NamespacesUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

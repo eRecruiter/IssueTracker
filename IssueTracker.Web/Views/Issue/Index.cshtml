@@ -38,47 +38,49 @@
 
 <p>
     Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
+    @if (Model.SimilarIssuesCount > 0)
+    {
+        <p>There are <code>@Model.SimilarIssuesCount.ToString("N0")</code> similar issues.</p>
+    }
     @if (Model.ParentIssueId.HasValue)
     {
-        <text>
-            This issue has a @Html.ActionLink("parent", "Index", new { id = Model.ParentIssueId.Value }).
-        </text>
+        <p>This issue has a @Html.ActionLink("parent", "Index", new { id = Model.ParentIssueId.Value }).</p>
     }
 </p>
 
-<fieldset>
-    <legend>Text</legend>
-    <pre>@Model.Text</pre>
-</fieldset>
-<fieldset>
-    <legend>Stack trace</legend>
-    <pre>@Model.StackTrace.Trim()</pre>
-</fieldset>
-<fieldset>
-    <legend>Server variables</legend>
-    <pre>@Model.ServerVariables.Trim()</pre>
-</fieldset>
-<fieldset>
-    <legend>Comments & Activities</legend>
-    <p>
-        Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
-    </p>
-    <table class="table table-condensed">
-        @foreach (var comment in Model.Comments)
-        {
-            <tr>
-                @Html.Partial("_Comment", comment)
-            </tr>
-        }
-    </table>
-</fieldset>
+    <fieldset>
+        <legend>Text</legend>
+        <pre>@Model.Text</pre>
+    </fieldset>
+    <fieldset>
+        <legend>Stack trace</legend>
+        <pre>@Model.StackTrace.Trim()</pre>
+    </fieldset>
+    <fieldset>
+        <legend>Server variables</legend>
+        <pre>@Model.ServerVariables.Trim()</pre>
+    </fieldset>
+    <fieldset>
+        <legend>Comments & Activities</legend>
+        <p>
+            Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
+        </p>
+        <table class="table table-condensed">
+            @foreach (var comment in Model.Comments)
+            {
+                <tr>
+                    @Html.Partial("_Comment", comment)
+                </tr>
+            }
+        </table>
+    </fieldset>
 
-@Html.Partial("_AddComment")
+    @Html.Partial("_AddComment")
 
-@section Script {
-    <script>
-        $("select").change(function () {
-            $("form").submit();
-        });
-    </script>
-}
+    @section Script {
+        <script>
+            $("select").change(function () {
+                $("form").submit();
+            });
+        </script>
+    }

@@ -24,6 +24,8 @@ namespace ePunkt.IssueTracker.Web.ViewModels.Issue
                         orderby x.DateOfCreation
                         select x).ToList().Select(x => new DetailsCommentPartialViewModel(db, x, viewData));
 
+           SimilarIssuesCount = db.Issues.Count(x => x.ParentIssueId == issue.Id || (issue.ParentIssueId.HasValue && x.ParentIssueId == issue.ParentIssueId));
+
             var stati = new List<SelectListItem>();
             stati.AddRange(
                     from x in Utils.GetAllStati(db, viewData)
@@ -65,6 +67,7 @@ namespace ePunkt.IssueTracker.Web.ViewModels.Issue
         public IEnumerable<DetailsCommentPartialViewModel> Comments { get; set; }
         public string StackTrace { get; set; }
         public string ServerVariables { get; set; }
+        public int SimilarIssuesCount { get; set; }
 
         public IEnumerable<SelectListItem> AvailableStati { get; private set; }
         public IEnumerable<SelectListItem> AvailableUsers { get; private set; }

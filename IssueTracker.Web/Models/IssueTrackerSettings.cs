@@ -1,14 +1,14 @@
 ﻿
 namespace ePunkt.IssueTracker.Web.Models
 {
-    public static class Settings
+    public static class IssueTrackerSettings
     {
 
         public static string AttachmentsPath
         {
             get
             {
-                return ePunkt.Utilities.Settings.Get("AttachmentsPath", "~/App_Data/Attachments");
+                return Utilities.Settings.Get("AttachmentsPath", "~/App_Data/Attachments");
             }
         }
 
@@ -16,7 +16,7 @@ namespace ePunkt.IssueTracker.Web.Models
         {
             get
             {
-                return ePunkt.Utilities.Settings.Get("StatusForNewIssues", "New");
+                return Utilities.Settings.Get("StatusForNewIssues", "New");
             }
         }
 
@@ -24,7 +24,7 @@ namespace ePunkt.IssueTracker.Web.Models
         {
             get
             {
-                return ePunkt.Utilities.Settings.Get("IssuesPerPage", 50);
+                return Utilities.Settings.Get("IssuesPerPage", 50);
             }
         }
 
