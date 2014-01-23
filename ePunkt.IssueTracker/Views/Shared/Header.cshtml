@@ -1,0 +1,96 @@
+﻿@using ePunkt.Utilities
+@model ePunkt.IssueTracker.ViewModels.Shared.HeaderViewModel
+
+@{
+    var currentDateFilterText = "";
+    if (Model.CurrentDateFilter.HasValue())
+    {
+        if (Model.CurrentDateFilter.Is(7))
+        {
+            currentDateFilterText = "(This week) ";
+        }
+        else if (Model.CurrentDateFilter.Is(30))
+        {
+            currentDateFilterText = "(This month) ";
+        }
+        else if (Model.CurrentDateFilter.Is(120))
+        {
+            currentDateFilterText = "(This quarter) ";
+        }
+        else if (Model.CurrentDateFilter.Is(360))
+        {
+            currentDateFilterText = "(This year) ";
+        }
+    }
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="~/">IssueTracker</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sort (@(Model.CurrentSorting.Is("-") ? "by Date" : "by " + Model.CurrentSorting)) <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Options", "Issues", new { order = "comments" })">Comments</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { order = "-" })">Date</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { order = "status" })">Status</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Status @(Model.CurrentStatusFilter.Is("-") ? "" : "(" + Model.CurrentStatusFilter + ") ")<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            @foreach (var status in Model.AvailableStati)
+                            {
+                                <li><a href="@Url.Action("Options", "Issues", new { status = status.Value })">@status.Text</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Assignee @(Model.CurrentUserFilter.Is("-") ? "" : "(" + (Model.CurrentUserFilter.Is("--") ? "None" : Model.CurrentUserFilter) + ") ")<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            @foreach (var user in Model.AvailableUsers)
+                            {
+                                <li><a href="@Url.Action("Options", "Issues", new { user = user.Value })">@user.Text</a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Date @currentDateFilterText<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Options", "Issues", new { date = "-" })">< All ></a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 7 })">This week</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 30 })">This month</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 120 })">This quarter</a></li>
+                            <li><a href="@Url.Action("Options", "Issues", new { date = 365 })">This year</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Logoff", "Account")">Log off</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+
+

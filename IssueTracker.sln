@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePunkt.IssueTracker.Client", "IssueTracker.Client\ePunkt.IssueTracker.Client.csproj", "{897F09EE-5CAB-4D19-9A02-855E0A7922BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePunkt.IssueTracker.Client", "ePunkt.IssueTracker.Client\ePunkt.IssueTracker.Client.csproj", "{897F09EE-5CAB-4D19-9A02-855E0A7922BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.DemoClient", "IssueTracker.DemoClient\IssueTracker.DemoClient.csproj", "{0EF64D56-9E17-47DC-BF8A-3060230A1833}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePunkt.IssueTracker.DemoClient", "ePunkt.IssueTracker.DemoClient\ePunkt.IssueTracker.DemoClient.csproj", "{0EF64D56-9E17-47DC-BF8A-3060230A1833}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Web", "IssueTracker.Web\IssueTracker.Web.csproj", "{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePunkt.IssueTracker", "ePunkt.IssueTracker\ePunkt.IssueTracker.csproj", "{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Pop3Fetcher", "IssueTracker.Pop3Fetcher\IssueTracker.Pop3Fetcher.csproj", "{F89FC008-5084-41F0-8173-B26613A9B960}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ePunkt.IssueTracker.Pop3Fetcher", "ePunkt.IssueTracker.Pop3Fetcher\ePunkt.IssueTracker.Pop3Fetcher.csproj", "{F89FC008-5084-41F0-8173-B26613A9B960}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
