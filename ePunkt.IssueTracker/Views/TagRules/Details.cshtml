@@ -1,0 +1,48 @@
+﻿@model ePunkt.IssueTracker.Models.TagRule
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details for tagging rule '@Model.Tag'</h2>
+
+<div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.TextRegex)
+        </dt>
+
+        <dd class="regex">
+            @Html.DisplayFor(model => model.TextRegex)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatorRegex)
+        </dt>
+
+        <dd class="regex">
+            @Html.DisplayFor(model => model.CreatorRegex)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServerVariablesRegex)
+        </dt>
+
+        <dd class="regex">
+            @Html.DisplayFor(model => model.ServerVariablesRegex)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StackTraceRegex)
+        </dt>
+
+        <dd class="regex">
+            @Html.DisplayFor(model => model.StackTraceRegex)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+</p>

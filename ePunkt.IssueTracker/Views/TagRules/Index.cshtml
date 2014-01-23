@@ -1,0 +1,69 @@
+﻿@using ePunkt.Utilities
+@model IEnumerable<ePunkt.IssueTracker.Models.TagRule>
+
+<h2>Manage tagging rules</h2>
+
+<p>
+    Tagging rules are used to automatically tag incoming issues. This is achieved by matching simple Regular Expressions with the different parts of an issue - if one of these match, the tag is applied to the issue.
+</p>
+
+<p>
+    @Html.ActionLink("Create new tagging rule", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tag)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TextRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatorRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StackTraceRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServerVariablesRegex)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tag)
+            </td>
+            <td>
+                @Html.Raw(item.TextRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @Html.Raw(item.CreatorRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @Html.Raw(item.StackTraceRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @Html.Raw(item.ServerVariablesRegex.HasValue() ? "&#10003;" : "")
+            </td>
+
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                
+                <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-default">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </a>
+                
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-default">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+            </td>
+        </tr>
+    }
+
+</table>

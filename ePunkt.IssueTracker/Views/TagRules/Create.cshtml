@@ -1,0 +1,61 @@
+﻿@model ePunkt.IssueTracker.Models.TagRule
+
+<h2>Create a new tagging rule</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Tag, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Tag, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Tag)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TextRegex, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.TextRegex, new { @class = "form-control regex" })
+                @Html.ValidationMessageFor(model => model.TextRegex)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreatorRegex, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.CreatorRegex, new { @class = "form-control regex" })
+                @Html.ValidationMessageFor(model => model.CreatorRegex)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServerVariablesRegex, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.ServerVariablesRegex, new { @class = "form-control regex" })
+                @Html.ValidationMessageFor(model => model.ServerVariablesRegex)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StackTraceRegex, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.StackTraceRegex, new { @class = "form-control regex" })
+                @Html.ValidationMessageFor(model => model.StackTraceRegex)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" }) 
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

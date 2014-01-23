@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -162,6 +162,7 @@
     <Compile Include="Controllers\IssueController.cs" />
     <Compile Include="Controllers\RssController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\TagRulesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -185,13 +186,22 @@
     <Compile Include="Migrations\201401130920291_NamespacesUpdate.Designer.cs">
       <DependentUpon>201401130920291_NamespacesUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401231523126_TagRules.cs" />
+    <Compile Include="Migrations\201401231523126_TagRules.Designer.cs">
+      <DependentUpon>201401231523126_TagRules.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201401231546006_TagNamesAreRequired.cs" />
+    <Compile Include="Migrations\201401231546006_TagNamesAreRequired.Designer.cs">
+      <DependentUpon>201401231546006_TagNamesAreRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Issue.cs" />
-    <Compile Include="Models\DiscardRule.cs" />
+    <Compile Include="Models\IssueTag.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Db.cs" />
     <Compile Include="Models\IssueTrackerSettings.cs" />
+    <Compile Include="Models\TagRule.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Util.cs" />
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
@@ -214,6 +224,12 @@
     <EmbeddedResource Include="Migrations\201401130920291_NamespacesUpdate.resx">
       <DependentUpon>201401130920291_NamespacesUpdate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401231523126_TagRules.resx">
+      <DependentUpon>201401231523126_TagRules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401231546006_TagNamesAreRequired.resx">
+      <DependentUpon>201401231546006_TagNamesAreRequired.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\jobs\continuous\ePunkt.IssueTracker.Pop3Fetcher\ePunkt.IssueTracker.Client.dll" />
@@ -226,7 +242,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -235,6 +256,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Data\jobs\continuous\ePunkt.IssueTracker.Pop3Fetcher\ePunkt.IssueTracker.Pop3Fetcher.exe.config" />
+    <Content Include="Content\Site.less" />
     <None Include="Properties\PublishProfiles\ePunkt-IssueTracker-Website - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ePunkt-IssueTracker-Website - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
@@ -259,6 +281,11 @@
     <Content Include="Views\Issue\Index.cshtml" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
     <Content Include="Views\Issue\_AddComment.cshtml" />
+    <Content Include="Views\TagRules\Create.cshtml" />
+    <Content Include="Views\TagRules\Delete.cshtml" />
+    <Content Include="Views\TagRules\Details.cshtml" />
+    <Content Include="Views\TagRules\Edit.cshtml" />
+    <Content Include="Views\TagRules\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />

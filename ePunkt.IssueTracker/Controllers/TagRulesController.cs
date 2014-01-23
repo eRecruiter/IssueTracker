@@ -1,0 +1,98 @@
+﻿using ePunkt.IssueTracker.Models;
+using System.Data.Entity;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+
+namespace ePunkt.IssueTracker.Controllers
+{
+    [Authorize]
+    public class TagRulesController : Controller
+    {
+        private readonly Db _db = new Db();
+
+        public async Task<ActionResult> Index()
+        {
+            return View(await _db.TagRules.ToListAsync());
+        }
+
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
+            if (tagrule == null)
+                return HttpNotFound();
+            return View(tagrule);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "Id,Tag,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.TagRules.Add(tagrule);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            return View(tagrule);
+        }
+
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
+            if (tagrule == null)
+                return HttpNotFound();
+            return View(tagrule);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Tag,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Entry(tagrule).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(tagrule);
+        }
+
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
+            if (tagrule == null)
+                return HttpNotFound();
+            return View(tagrule);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
+            _db.TagRules.Remove(tagrule);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                _db.Dispose();
+            base.Dispose(disposing);
+        }
+    }
+}

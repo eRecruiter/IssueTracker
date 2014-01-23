@@ -22,6 +22,7 @@ namespace ePunkt.IssueTracker.Models
         public ICollection<Comment> Comments { get; set; }
         public Issue ParentIssue { get; set; }
         public ICollection<Issue> ChildIssues { get; set; }
+        public ICollection<IssueTag> Tags { get; set; }
 
         public int NumberOfComments
         {
@@ -46,7 +47,6 @@ namespace ePunkt.IssueTracker.Models
         {
             using (var context = new Db())
             {
-
                 //log the clients IP and Host
                 //this is especially useful when we don't have any serverVariables and therefore can't identify the caller
                 const string serverVariablesIpKey = "REMOTE_ADDR";
@@ -55,22 +55,6 @@ namespace ePunkt.IssueTracker.Models
                 const string serverVariablesHostKey = "REMOTE_HOST";
                 if (HttpContext.Current != null && HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] != null)
                     serverVariables = "IssueTracker Client Remote Host: " + HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] + Environment.NewLine + (serverVariables ?? "");
-
-                foreach (var discardRule in context.DiscardRules)
-                {
-                    var discard =
-                        !(string.IsNullOrEmpty(discardRule.Creator) && string.IsNullOrEmpty(discardRule.Text) && string.IsNullOrEmpty(discardRule.StackTrace) &&
-                          string.IsNullOrEmpty(discardRule.ServerVariables));
-
-                    discard = discard && (string.IsNullOrEmpty(discardRule.Creator) || Regex.IsMatch(creator, discardRule.Creator, RegexOptions.IgnoreCase));
-                    discard = discard && (string.IsNullOrEmpty(discardRule.Text) || Regex.IsMatch(text, discardRule.Text, RegexOptions.IgnoreCase));
-                    discard = discard && (string.IsNullOrEmpty(discardRule.StackTrace) || Regex.IsMatch(stackTrace, discardRule.StackTrace, RegexOptions.IgnoreCase));
-                    discard = discard && (string.IsNullOrEmpty(discardRule.ServerVariables) || Regex.IsMatch(serverVariables, discardRule.ServerVariables, RegexOptions.IgnoreCase));
-
-                    if (discard)
-                        return null;
-                }
-
 
                 //get the nice text from the stacktrace for generic asp.net errors
                 var uglyTexts = new[] {
@@ -137,7 +121,7 @@ namespace ePunkt.IssueTracker.Models
 
             using (var context = new Db())
             {
-                var comment = new Comment {Creator = creator, DateOfCreation = DateTime.Now, Text = text, IssueId = Id};
+                var comment = new Comment { Creator = creator, DateOfCreation = DateTime.Now, Text = text, IssueId = Id };
 
                 context.Comments.Add(comment);
                 context.SaveChanges();
@@ -154,7 +138,7 @@ namespace ePunkt.IssueTracker.Models
 
             using (var context = new Db())
             {
-                var comment = new Comment {Creator = creator, DateOfCreation = DateTime.Now, IssueId = Id, Text = "", AttachmentFileName = Path.GetFileName(path), AttachmentNiceName = niceName};
+                var comment = new Comment { Creator = creator, DateOfCreation = DateTime.Now, IssueId = Id, Text = "", AttachmentFileName = Path.GetFileName(path), AttachmentNiceName = niceName };
                 context.Comments.Add(comment);
                 context.SaveChanges();
             }
