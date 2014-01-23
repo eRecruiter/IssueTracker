@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("IssueTracker")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ePunkt.IssueTracker")]
+[assembly: AssemblyDescription("Tool to automatically track issues (=exceptions) for all ePunkt-related products.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("IssueTracker")]
-[assembly: AssemblyCopyright("Copyright ©  2008 - 2010")]
+[assembly: AssemblyCopyright("Copyright © 2008 - 2014 Hannes Sachsenhofer")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
