@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+  </startup>
+  <connectionStrings>
+    <add name="Db" connectionString="Local_ConnectionString"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="Pop3Host" value="pod51016.outlook.com" />
+    <add key="Pop3Port" value="995" />
+    <add key="Pop3UseSsl" value="true" />
+    <add key="Pop3Username" value="support@epunkt.net" />
+    <add key="Pop3Password" value="z0^eq\Ssi*Rk2*Z'" />
+  </appSettings>
+</configuration>

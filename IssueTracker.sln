@@ -9,10 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.DemoClient", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Web", "IssueTracker.Web\IssueTracker.Web.csproj", "{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{241305C9-D3D7-45E1-8E17-C3F1D420A290}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Pop3Fetcher", "IssueTracker.Pop3Fetcher\IssueTracker.Pop3Fetcher.csproj", "{F89FC008-5084-41F0-8173-B26613A9B960}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +51,16 @@ Global
 		{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B5ADB8A5-6013-440A-BEA8-31E9D9124FFC}.Release|x86.ActiveCfg = Release|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F89FC008-5084-41F0-8173-B26613A9B960}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
