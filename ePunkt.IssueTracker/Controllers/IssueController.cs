@@ -1,4 +1,5 @@
-﻿using ePunkt.IssueTracker.Code;
+﻿using System.Data.Entity;
+using ePunkt.IssueTracker.Code;
 using ePunkt.IssueTracker.Models;
 using ePunkt.IssueTracker.ViewModels.Issue;
 using ePunkt.Utilities;
@@ -14,7 +15,7 @@ namespace ePunkt.IssueTracker.Controllers
 
         public ActionResult Index(int id)
         {
-            var issue = _db.Issues.SingleOrDefault(x => x.Id == id);
+            var issue = _db.Issues.Include(x => x.Tags).Include(x => x.Comments).SingleOrDefault(x => x.Id == id);
             if (issue == null)
                 return RedirectToAction("Index", "Issues");
             return View(new IndexViewModel(_db, this.GetCurrentUser(_db), issue, ViewData));

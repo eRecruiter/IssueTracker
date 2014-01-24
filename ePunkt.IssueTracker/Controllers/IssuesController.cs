@@ -15,7 +15,7 @@ namespace ePunkt.IssueTracker.Controllers
     {
         private readonly Db _db = new Db();
 
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string tags)
         {
             var viewModel = new IndexViewModel(_db, ViewData);
 
@@ -23,30 +23,38 @@ namespace ePunkt.IssueTracker.Controllers
             var issues = from x in _db.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
+            viewModel.TotalCount = issues.Count();
 
+            SaveUserOptions(null, null, null, null, null, tags);
             var userOptions = new UserOptions(Request.Cookies, Response.Cookies);
             issues = issues.Filter(userOptions).Sort(userOptions);
 
             viewModel.Issues =
                 issues.Skip(page.Value * IssueTrackerSettings.IssuesPerPage)
                     .Take(IssueTrackerSettings.IssuesPerPage)
-                    .Include(y => y.Comments)
+                    .Include(y => y.Comments).Include(y => y.Tags)
                     .ToList()
                     .Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x))
                     .ToList();
-            viewModel.Total = issues.Count();
+            viewModel.FilteredCount = issues.Count();
             viewModel.Start = page.Value * IssueTrackerSettings.IssuesPerPage;
             viewModel.End = viewModel.Start + viewModel.Issues.Count();
             viewModel.Page = page.Value + 1;
 
             // ReSharper disable once PossibleLossOfFraction
-            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.Total / IssueTrackerSettings.IssuesPerPage)) + 1;
+            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.FilteredCount / IssueTrackerSettings.IssuesPerPage)) + 1;
 
             return View("Index", viewModel);
         }
 
 
-        public ActionResult Options(string order, string date, string user, string status, string text)
+        public ActionResult Options(string order, string date, string user, string status, string text, string tags)
+        {
+            SaveUserOptions(order, date, user, status, text, tags);
+            return RedirectToAction("Index");
+        }
+
+        private void SaveUserOptions(string order, string date, string user, string status, string text, string tags)
         {
             var userOptions = new UserOptions(Request.Cookies, Response.Cookies);
 
@@ -67,7 +75,8 @@ namespace ePunkt.IssueTracker.Controllers
             if (date.HasValue())
                 userOptions.DateFilter = date.GetIntOrNull();
 
-            return RedirectToAction("Index");
+            if (tags.HasValue())
+                userOptions.TagsFilter = tags.Split(',').Select(x => x.Trim(' ', ',')).Where(x => x.HasValue());
         }
 
         [HttpPost]

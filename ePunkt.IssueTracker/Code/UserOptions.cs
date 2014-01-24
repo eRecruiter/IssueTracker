@@ -1,4 +1,6 @@
-﻿using ePunkt.Utilities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ePunkt.Utilities;
 using System;
 using System.Globalization;
 using System.Web;
@@ -63,6 +65,12 @@ namespace ePunkt.IssueTracker.Code
         {
             get { return GetValue("textFilter"); }
             set { SetValue("textFilter", value); }
+        }
+
+        public IEnumerable<string> TagsFilter
+        {
+            get { return (GetValue("tagsFilter") ?? "").Split(',').Select(x => x.Trim(' ', ',')).Where(x => x.HasValue()); }
+            set { SetValue("tagsFilter", value.Aggregate("", (s, s1) => s += "," + s1).Trim(' ', ',')); }
         }
     }
 }

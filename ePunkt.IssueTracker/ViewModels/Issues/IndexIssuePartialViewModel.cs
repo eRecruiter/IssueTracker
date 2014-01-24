@@ -11,15 +11,10 @@ namespace ePunkt.IssueTracker.ViewModels.Issues {
 
             Comments = issue.NumberOfComments;
 
-            Time = "just now";
-            if (issue.DateOfUpdate < DateTime.Now.AddMonths(-1))
-                Time = issue.DateOfUpdate.ToString("dd.MM.yyyy");
-            else if (issue.DateOfUpdate < DateTime.Now.AddDays(-1))
-                Time = (int)Math.Ceiling(((DateTime.Now - issue.DateOfUpdate)).TotalDays) + " days ago";
-            else if (issue.DateOfUpdate < DateTime.Now.AddHours(-1))
-                Time = (int)Math.Ceiling(((DateTime.Now - issue.DateOfUpdate)).TotalHours) + " hours ago";
-            else if (issue.DateOfUpdate < DateTime.Now.AddMinutes(-10))
-                Time = (int)Math.Ceiling((DateTime.Now - issue.DateOfUpdate).TotalMinutes) + " min. ago";
+            if (issue.DateOfUpdate.Date == DateTime.Now.Date)
+                Time = issue.DateOfUpdate.ToString("HH:mm");
+            else
+                Time = issue.DateOfUpdate.ToString("d.M.");
         }
 
 
@@ -27,6 +22,5 @@ namespace ePunkt.IssueTracker.ViewModels.Issues {
         public int Comments { get; set; }
 
         public User CurrentUser { get; set; }
-
     }
 }

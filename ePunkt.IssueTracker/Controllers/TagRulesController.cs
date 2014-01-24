@@ -1,4 +1,6 @@
-﻿using ePunkt.IssueTracker.Models;
+﻿using System.Linq;
+using ePunkt.IssueTracker.Code;
+using ePunkt.IssueTracker.Models;
 using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ namespace ePunkt.IssueTracker.Controllers
 
         public async Task<ActionResult> Index()
         {
-            return View(await _db.TagRules.ToListAsync());
+            return View(await _db.TagRules.OrderBy(x => x.Tag).ToListAsync());
         }
 
         public async Task<ActionResult> Details(int? id)
@@ -85,6 +87,15 @@ namespace ePunkt.IssueTracker.Controllers
             var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
             _db.TagRules.Remove(tagrule);
             await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Reset()
+        {
+            await new DeleteTagsService(_db).DeleteAllTags();
+            await new AddTagsService(_db).AddTagsForAllIssues();
             return RedirectToAction("Index");
         }
 

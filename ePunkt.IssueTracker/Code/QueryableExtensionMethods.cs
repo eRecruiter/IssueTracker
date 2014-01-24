@@ -37,6 +37,9 @@ namespace ePunkt.IssueTracker.Code
             if (userOptions.DateFilter.HasValue)
                 issues = issues.Where(x => DbFunctions.DiffDays(x.DateOfCreation, DateTime.Now) <= userOptions.DateFilter || x.Comments.Any(y => DbFunctions.DiffDays(y.DateOfCreation, DateTime.Now) <= userOptions.DateFilter));
 
+            if (userOptions.TagsFilter.Any())
+                issues = issues.Where(x => x.Tags.Any(y => userOptions.TagsFilter.Any(z=>y.Tag.EndsWith(z))));
+
             return issues;
         }
     }

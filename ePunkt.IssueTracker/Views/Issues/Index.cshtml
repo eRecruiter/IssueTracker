@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @model ePunkt.IssueTracker.ViewModels.Issues.IndexViewModel
 
-@if (Model.Total > 0)
+@if (Model.FilteredCount > 0)
 {
     <text>
         @using (Html.BeginForm("Update", "Issues", FormMethod.Post))
@@ -47,7 +47,8 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Issue (@Model.Total.ToString("N0") total)</th>
+                        <th>Issue (filtered down from @Model.TotalCount.ToString() to @Model.FilteredCount.ToString("N0"))</th>
+                        <th></th>
                         <th><input type="checkbox" id="checkAll" /></th>
                     </tr>
 
