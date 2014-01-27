@@ -1,4 +1,5 @@
-﻿using ePunkt.IssueTracker.Models;
+﻿using ePunkt.IssueTracker.Code;
+using ePunkt.IssueTracker.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
@@ -8,6 +9,8 @@ namespace ePunkt.IssueTracker.Controllers
 {
     public class HomeController : Controller
     {
+        readonly Db _db = new Db();
+
         [Authorize]
         public ActionResult Index()
         {
@@ -28,8 +31,7 @@ namespace ePunkt.IssueTracker.Controllers
 
             Issue parentIssue = null;
             if (parentId.HasValue)
-                using (var context = new Db())
-                    parentIssue = context.Issues.FirstOrDefault(x => x.Id == parentId.Value);
+                parentIssue = _db.Issues.FirstOrDefault(x => x.Id == parentId.Value);
 
             if (parentIssue != null)
             {
@@ -40,11 +42,18 @@ namespace ePunkt.IssueTracker.Controllers
                 };
             }
 
-            var issue = Issue.Create(source, text, stackTrace, serverVariables);
+            var issue = new CreateIssueService(_db).Create(source, text, stackTrace, serverVariables);
             return new JsonResult
             {
                 Data = issue == null ? 0 : issue.Id
             };
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                _db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

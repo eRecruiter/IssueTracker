@@ -6,6 +6,9 @@ namespace ePunkt.IssueTracker.Models
     public class TagRule
     {
         public int Id { get; set; }
+        [DisplayName("Group")]
+        [Required]
+        public string Group { get; set; }
         [DisplayName("Tag")]
         [Required]
         public string Tag { get; set; }

@@ -45,19 +45,19 @@ namespace ePunkt.IssueTracker.Code
 
         public string Sorting
         {
-            get { return GetValue("sorting"); }
+            get { return GetValue("sorting") ?? "-"; }
             set { SetValue("sorting", value); }
         }
 
         public string StatusFilter
         {
-            get { return GetValue("statusFilter"); }
+            get { return GetValue("statusFilter") ?? "-"; }
             set { SetValue("statusFilter", value); }
         }
 
         public string UserFilter
         {
-            get { return GetValue("userFilter"); }
+            get { return GetValue("userFilter") ?? "-"; }
             set { SetValue("userFilter", value); }
         }
 

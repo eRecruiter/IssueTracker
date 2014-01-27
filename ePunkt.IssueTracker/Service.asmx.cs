@@ -1,22 +1,28 @@
 ﻿using System.Linq;
 using System.Web.Services;
+using ePunkt.IssueTracker.Code;
 using ePunkt.IssueTracker.Models;
 
-namespace ePunkt.IssueTracker {
+namespace ePunkt.IssueTracker
+{
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
-    public class IssueTrackerService : WebService {
+    public class IssueTrackerService : WebService
+    {
 
         [WebMethod]
-        public int CreateIssue(string creator, string text, string stackTrace, string serverVariables) {
-            var issue = Issue.Create(creator, text, stackTrace, serverVariables);
+        public int CreateIssue(string creator, string text, string stackTrace, string serverVariables)
+        {
+            var issue = new CreateIssueService(new Db()).Create(creator, text, stackTrace, serverVariables);
             return issue == null ? 0 : issue.Id;
         }
 
         [WebMethod]
-        public void AddComment(int issueId, string creator, string text) {
-            using (var context = new Db()) {
+        public void AddComment(int issueId, string creator, string text)
+        {
+            using (var context = new Db())
+            {
                 var issue = context.Issues.FirstOrDefault(x => x.Id == issueId);
                 if (issue != null)
                     issue.AddComment(creator, text);
@@ -24,8 +30,10 @@ namespace ePunkt.IssueTracker {
         }
 
         [WebMethod]
-        public void AddAttachment(int issueId, string creator, string attachmentFileName, string attachmentBase64) {
-            using (var context = new Db()) {
+        public void AddAttachment(int issueId, string creator, string attachmentFileName, string attachmentBase64)
+        {
+            using (var context = new Db())
+            {
                 var issue = context.Issues.FirstOrDefault(x => x.Id == issueId);
                 if (issue != null)
                     issue.AddAttachment(creator, attachmentFileName, attachmentBase64, Server);

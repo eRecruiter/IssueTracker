@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using EntityFramework.Extensions;
 using ePunkt.IssueTracker.Code;
 using ePunkt.IssueTracker.Models;
 using System.Data.Entity;
@@ -15,7 +16,7 @@ namespace ePunkt.IssueTracker.Controllers
 
         public async Task<ActionResult> Index()
         {
-            return View(await _db.TagRules.OrderBy(x => x.Tag).ToListAsync());
+            return View(await _db.TagRules.OrderBy(x => x.Group).ThenBy(x => x.Tag).ToListAsync());
         }
 
         public async Task<ActionResult> Details(int? id)
@@ -35,7 +36,7 @@ namespace ePunkt.IssueTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Tag,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Tag,Group,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +60,7 @@ namespace ePunkt.IssueTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Tag,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Tag,Group,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
         {
             if (ModelState.IsValid)
             {
@@ -85,6 +86,7 @@ namespace ePunkt.IssueTracker.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
+            _db.IssueTags.Delete(x => x.Tag.ToLower() == tagrule.Tag.ToLower());
             _db.TagRules.Remove(tagrule);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -95,7 +97,7 @@ namespace ePunkt.IssueTracker.Controllers
         public async Task<ActionResult> Reset()
         {
             await new DeleteTagsService(_db).DeleteAllTags();
-            await new AddTagsService(_db).AddTagsForAllIssues();
+            new AddTagsService(_db).AddTagsForAllIssues();
             return RedirectToAction("Index");
         }
 

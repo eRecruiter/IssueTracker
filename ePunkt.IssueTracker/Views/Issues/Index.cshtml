@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @model ePunkt.IssueTracker.ViewModels.Issues.IndexViewModel
 
-@if (Model.FilteredCount > 0)
+@if (Model.Issues.Any())
 {
     <text>
         @using (Html.BeginForm("Update", "Issues", FormMethod.Post))
@@ -47,7 +47,24 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Issue (filtered down from @Model.TotalCount.ToString() to @Model.FilteredCount.ToString("N0"))</th>
+                        <th>
+                            Issue
+                            @if (Model.CountTotal != Model.CountFiltered)
+                            {
+                                <text>
+                                    (Filtered: <span style="text-decoration: line-through;">@Model.CountTotal</span> |
+                                    @if (@Model.CountFiltered != @Model.CountFilteredIncludingTags)
+                                    {<text><span style="text-decoration: line-through;">@Model.CountFiltered</span> | @Model.CountFilteredIncludingTags</text>}
+                                    else
+                                    {<text>@Model.CountFiltered</text>})
+                                </text>
+                            }
+                            else if (Model.CountTotal != Model.CountFilteredIncludingTags)
+                            {<text>(Filtered: <span style="text-decoration: line-through;">@Model.CountTotal</span> | @Model.CountFilteredIncludingTags)</text>   
+                            }
+                            else
+                            {<text>(Model.CountTotal)</text>}
+                        </th>
                         <th></th>
                         <th><input type="checkbox" id="checkAll" /></th>
                     </tr>
@@ -76,6 +93,8 @@ else
     <p class="alert">No matching issues found.</p>
 }
 
+@Html.Action("TagFilter", "Shared")
+
 @section Script {
     <script>
         $(document).ready(function () {
@@ -91,6 +110,30 @@ else
                     $("#editIssue").show();
                 else
                     $("#editIssue").hide();
+            });
+
+            $(".tag").click(function () {
+                $(this).toggleClass("tag-filtered");
+                $(".submitTagFilterButton").show();
+
+                var tags = "";
+                $.each($(".tag"), function (i, elem) {
+                    if (!$(elem).hasClass("tag-filtered"))
+                        tags += "," + $(elem).data("tag");
+                });
+
+                if (tags == "" || $(".tag-filtered").length <= 0)
+                    tags = "-";
+                $("#tags").val(tags);
+            });
+
+            $(".submitTagFilterButton").click(function () {
+                $(this).closest("form").submit();
+            });
+
+            $(".clearTagFilterButton").click(function () {
+                $("#tags").val("-");
+                $(this).closest("form").submit();
             });
         });
 

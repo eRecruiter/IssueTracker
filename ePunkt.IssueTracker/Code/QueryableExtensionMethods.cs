@@ -27,7 +27,11 @@ namespace ePunkt.IssueTracker.Code
                 issues = issues.Where(x => x.Status.ToLower() == userOptions.StatusFilter.ToLower());
 
             if (userOptions.TextFilter.HasValue() && !userOptions.TextFilter.Is("-"))
-                issues = issues.Where(x => SqlMethods.Like(x.Text, "%" + userOptions.TextFilter + "%") || SqlMethods.Like(x.StackTrace, "%" + userOptions.TextFilter + "%") || SqlMethods.Like(x.ServerVariables, "%" + userOptions.TextFilter + "%"));
+                issues =
+                    issues.Where(
+                        x =>
+                            SqlMethods.Like(x.Text, "%" + userOptions.TextFilter + "%") || SqlMethods.Like(x.StackTrace, "%" + userOptions.TextFilter + "%") ||
+                            SqlMethods.Like(x.ServerVariables, "%" + userOptions.TextFilter + "%"));
 
             if (userOptions.UserFilter.HasValue() && userOptions.UserFilter.Is("--"))
                 issues = issues.Where(x => x.AssignedTo == null);
@@ -35,10 +39,23 @@ namespace ePunkt.IssueTracker.Code
                 issues = issues.Where(x => x.AssignedTo.ToLower() == userOptions.UserFilter.ToLower());
 
             if (userOptions.DateFilter.HasValue)
-                issues = issues.Where(x => DbFunctions.DiffDays(x.DateOfCreation, DateTime.Now) <= userOptions.DateFilter || x.Comments.Any(y => DbFunctions.DiffDays(y.DateOfCreation, DateTime.Now) <= userOptions.DateFilter));
+                issues =
+                    issues.Where(
+                        x =>
+                            DbFunctions.DiffDays(x.DateOfCreation, DateTime.Now) <= userOptions.DateFilter ||
+                            x.Comments.Any(y => DbFunctions.DiffDays(y.DateOfCreation, DateTime.Now) <= userOptions.DateFilter));
 
+            return issues;
+        }
+
+        public static IQueryable<Issue> FilterByTags(this IQueryable<Issue> issues, UserOptions userOptions)
+        {
             if (userOptions.TagsFilter.Any())
-                issues = issues.Where(x => x.Tags.Any(y => userOptions.TagsFilter.Any(z=>y.Tag.EndsWith(z))));
+            {
+                var includesUntagged = userOptions.TagsFilter.Any(x => x.Is("untagged"));
+                var lowercaseTags = userOptions.TagsFilter.Select(x => x.ToLower()).Where(x => !x.Is("untagged")).ToArray();
+                issues = issues.Where(x => (includesUntagged || x.Tags.Any()) && x.Tags.All(y => lowercaseTags.Contains(y.Tag.ToLower())));
+            }
 
             return issues;
         }

@@ -67,6 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ePunkt.Utilities.1.0.1\lib\net40-Client\ePunkt.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\packages\JetBrains.Annotations.7.0\lib\net45\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -152,6 +155,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Code\CreateIssueService.cs" />
     <Compile Include="Code\AddTagsService.cs" />
     <Compile Include="Code\ControllerExtensionMethods.cs" />
     <Compile Include="Code\DeleteTagsService.cs" />
@@ -199,6 +203,10 @@
     <Compile Include="Migrations\201401231546006_TagNamesAreRequired.Designer.cs">
       <DependentUpon>201401231546006_TagNamesAreRequired.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401270547400_TagGroups.cs" />
+    <Compile Include="Migrations\201401270547400_TagGroups.Designer.cs">
+      <DependentUpon>201401270547400_TagGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Issue.cs" />
@@ -221,6 +229,7 @@
       <DependentUpon>Service.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ViewModels\Shared\TagFilterViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201310161048018_UserPassword.resx">
@@ -234,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201401231546006_TagNamesAreRequired.resx">
       <DependentUpon>201401231546006_TagNamesAreRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401270547400_TagGroups.resx">
+      <DependentUpon>201401270547400_TagGroups.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +303,7 @@
     <Content Include="Views\TagRules\Details.cshtml" />
     <Content Include="Views\TagRules\Edit.cshtml" />
     <Content Include="Views\TagRules\Index.cshtml" />
+    <Content Include="Views\Shared\TagFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="apple-touch-icon.png" />

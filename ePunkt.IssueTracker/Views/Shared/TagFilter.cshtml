@@ -1,0 +1,41 @@
+﻿@model ePunkt.IssueTracker.ViewModels.Shared.TagFilterViewModel
+
+<div class="tagFilter">
+    @using (Html.BeginForm("Options", "Issues"))
+    {
+        <text>
+            <div style="margin-bottom: 10px;" class="@(Model.FilterUntagged ? "tag tag-filtered" : "tag")" data-tag="untagged">
+                Untagged (@Model.CountUntagged)
+            </div>
+
+            <ul>
+                @foreach (var group in Model.Groups)
+                {
+                    <li>
+                        @group.Name
+                        <ul>
+                            @foreach (var tag in group.Tags.Where(x => x.Count > 0))
+                            {
+                                <li class="@(tag.IsFiltered ? "tag tag-filtered" : "tag")" data-tag="@tag.Name">
+                                    @tag.Name (@tag.Count)
+                                </li>
+                            }
+                        </ul>
+
+                    </li>
+                }
+            </ul>
+
+            <input type="hidden" name="tags" id="tags" />
+
+            <div class="buttons">
+                <div class="submitTagFilterButton">Apply tag filter</div>
+                @if (Model.Groups.Any(x => x.Tags.Any(y => y.IsFiltered)))
+                {
+                    <div class="clearTagFilterButton">Clear tag filter</div>
+                }
+            </div>
+
+        </text>
+    }
+</div>

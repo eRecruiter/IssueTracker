@@ -2,7 +2,6 @@
 using ePunkt.Utilities;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ePunkt.IssueTracker.Code
 {
@@ -15,14 +14,14 @@ namespace ePunkt.IssueTracker.Code
             _db = db;
         }
 
-        public async Task AddTagsForAllIssues()
+        public void AddTagsForAllIssues()
         {
             var issues = _db.Issues.Where(x => !x.ParentIssueId.HasValue).ToList();
             foreach (var issue in issues)
-                await AddTags(issue);
+                AddTags(issue);
         }
 
-        public async Task AddTags(Issue issue)
+        public void AddTags(Issue issue)
         {
             var allTagsRules = _db.TagRules.ToList();
 
@@ -31,7 +30,7 @@ namespace ePunkt.IssueTracker.Code
                     || IsMatch(tagRule.TextRegex, issue.Text)
                     || IsMatch(tagRule.ServerVariablesRegex, issue.ServerVariables)
                     || IsMatch(tagRule.StackTraceRegex, issue.StackTrace))
-                    await AddTag(issue.Id, tagRule.Tag);
+                    AddTag(issue.Id, tagRule.Tag);
         }
 
         private bool IsMatch(string pattern, string text)
@@ -48,14 +47,14 @@ namespace ePunkt.IssueTracker.Code
             return false;
         }
 
-        private async Task AddTag(int issueId, string tag)
+        private void AddTag(int issueId, string tag)
         {
             _db.IssueTags.Add(new IssueTag
             {
                 IssueId = issueId,
                 Tag = tag
             });
-            await _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
     }
 }

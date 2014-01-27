@@ -13,3 +13,43 @@ body {
     .label;
     .label-danger;
 }
+
+.tagFilter {
+    .navbar-inverse;
+    position: fixed;
+    left: 0px;
+    top: 51px;
+    color: #999;
+    padding: 5px;
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        ul {
+            padding-left: 20px;
+        }
+    }
+
+    .buttons {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    .tag, .clearTagFilterButton, .submitTagFilterButton {
+        cursor: pointer;
+    }
+
+        .tag:hover, .clearTagFilterButton:hover, .submitTagFilterButton:hover {
+            color: white;
+        }
+
+    .submitTagFilterButton {
+        display: none;
+    }
+
+    .tag-filtered {
+        text-decoration: line-through;
+    }
+}

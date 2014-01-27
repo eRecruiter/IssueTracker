@@ -1,7 +1,8 @@
 ﻿@model ePunkt.IssueTracker.Models.TagRule
 
-<h2>Delete tagging rule '@Model.Tag'</h2>
+<h2>Delete tagging rule '[@Model.Group] @Model.Tag'</h2>
 
+<p>This will also remove all matching tags from existing issues.</p>
 
 <div>
     @using (Html.BeginForm())

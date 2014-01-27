@@ -14,5 +14,20 @@ namespace ePunkt.IssueTracker.Controllers
         {
             return PartialView(new HeaderViewModel(_db, ViewData).Fill(User, new UserOptions(Request.Cookies, Response.Cookies)));
         }
+
+        [ChildActionOnly]
+        public ActionResult TagFilter()
+        {
+            var userOptions = new UserOptions(Request.Cookies, Response.Cookies);
+            var viewModel = new TagFilterViewModel(_db, userOptions);
+            return PartialView(viewModel);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                _db.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

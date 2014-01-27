@@ -6070,3 +6070,40 @@ body {
   border-radius: .25em;
   background-color: #d9534f;
 }
+.tagFilter {
+  background-color: #222222;
+  border-color: #080808;
+  position: fixed;
+  left: 0px;
+  top: 51px;
+  color: #999;
+  padding: 5px;
+}
+.tagFilter ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.tagFilter ul ul {
+  padding-left: 20px;
+}
+.tagFilter .buttons {
+  margin-top: 10px;
+  text-align: right;
+}
+.tagFilter .tag,
+.tagFilter .clearTagFilterButton,
+.tagFilter .submitTagFilterButton {
+  cursor: pointer;
+}
+.tagFilter .tag:hover,
+.tagFilter .clearTagFilterButton:hover,
+.tagFilter .submitTagFilterButton:hover {
+  color: white;
+}
+.tagFilter .submitTagFilterButton {
+  display: none;
+}
+.tagFilter .tag-filtered {
+  text-decoration: line-through;
+}

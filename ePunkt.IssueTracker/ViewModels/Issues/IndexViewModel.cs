@@ -45,8 +45,9 @@ namespace ePunkt.IssueTracker.ViewModels.Issues
         public int MaxPage { get; set; }
         public int Start { get; set; }
         public int End { get; set; }
-        public int TotalCount { get; set; }
-        public int FilteredCount { get; set; }
+        public int CountTotal { get; set; }
+        public int CountFiltered { get; set; }
+        public int CountFilteredIncludingTags { get; set; }
         public IEnumerable<IndexIssuePartialViewModel> Issues { get; set; }
 
         public IEnumerable<SelectListItem> AvailableStati { get; set; }

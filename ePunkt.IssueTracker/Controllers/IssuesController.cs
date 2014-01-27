@@ -23,26 +23,27 @@ namespace ePunkt.IssueTracker.Controllers
             var issues = from x in _db.Issues
                          where !x.ParentIssueId.HasValue
                          select x;
-            viewModel.TotalCount = issues.Count();
+            viewModel.CountTotal = issues.Count();
 
             SaveUserOptions(null, null, null, null, null, tags);
             var userOptions = new UserOptions(Request.Cookies, Response.Cookies);
-            issues = issues.Filter(userOptions).Sort(userOptions);
+            issues = issues.Filter(userOptions);
+            viewModel.CountFiltered = issues.Count();
+            issues = issues.FilterByTags(userOptions);
+            viewModel.CountFilteredIncludingTags = issues.Count();
 
-            viewModel.Issues =
-                issues.Skip(page.Value * IssueTrackerSettings.IssuesPerPage)
+            viewModel.Issues = issues.Sort(userOptions).Skip(page.Value * IssueTrackerSettings.IssuesPerPage)
                     .Take(IssueTrackerSettings.IssuesPerPage)
                     .Include(y => y.Comments).Include(y => y.Tags)
                     .ToList()
                     .Select(x => new IndexIssuePartialViewModel(this.GetCurrentUser(_db), x))
                     .ToList();
-            viewModel.FilteredCount = issues.Count();
             viewModel.Start = page.Value * IssueTrackerSettings.IssuesPerPage;
             viewModel.End = viewModel.Start + viewModel.Issues.Count();
             viewModel.Page = page.Value + 1;
 
             // ReSharper disable once PossibleLossOfFraction
-            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.FilteredCount / IssueTrackerSettings.IssuesPerPage)) + 1;
+            viewModel.MaxPage = (int)Math.Ceiling((double)(viewModel.CountFilteredIncludingTags / IssueTrackerSettings.IssuesPerPage)) + 1;
 
             return View("Index", viewModel);
         }
@@ -76,7 +77,7 @@ namespace ePunkt.IssueTracker.Controllers
                 userOptions.DateFilter = date.GetIntOrNull();
 
             if (tags.HasValue())
-                userOptions.TagsFilter = tags.Split(',').Select(x => x.Trim(' ', ',')).Where(x => x.HasValue());
+                userOptions.TagsFilter = tags == "-" ? new string[0] : tags.Split(',').Select(x => x.Trim(' ', ',')).Where(x => x.HasValue());
         }
 
         [HttpPost]

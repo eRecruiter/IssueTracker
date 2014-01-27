@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ePunkt.IssueTracker.ViewModels
 {
     public abstract class IssuePartialViewModel
     {
-
         protected IssuePartialViewModel(Models.Issue issue)
         {
             Id = issue.Id;
@@ -14,16 +13,7 @@ namespace ePunkt.IssueTracker.ViewModels
             Status = issue.Status;
             AssignedTo = issue.AssignedTo;
             Text = issue.Text;
-
-            var tags = new List<string>();
-            foreach (var tag in issue.Tags)
-            {
-                var tagName = tag.Tag;
-                if (tagName.Contains(":"))
-                    tagName = tagName.Substring(tagName.IndexOf(":", StringComparison.InvariantCultureIgnoreCase) + 1);
-                tags.Add(tagName.Trim());
-            }
-            Tags = tags;
+            Tags = issue.Tags.Select(x => x.Tag).OrderBy(x => x).ToList();
         }
 
         public int Id { get; set; }
