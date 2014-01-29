@@ -8,7 +8,7 @@
         {
             <text>
                 @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger navbar-btn pull-right" style="margin-left: 8px;">Delete issue</button>
+                <button type="submit" id="deleteButton" class="btn btn-danger navbar-btn pull-right" style="margin-left: 8px;">Delete issue</button>
             </text>
         }
 
@@ -102,6 +102,10 @@
     <script>
         $("select").change(function () {
             $("form").submit();
+        });
+
+        Mousetrap.bind("del", function () {
+            $("#deleteButton").click();
         });
     </script>
 }

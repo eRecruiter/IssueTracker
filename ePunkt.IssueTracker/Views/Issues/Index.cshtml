@@ -14,7 +14,7 @@
 
                 <div class="navbar navbar-inverse navbar-fixed-bottom" id="editIssue" style="display: none;">
                     <div class="container">
-                        <button type="submit" name="Delete" class="btn btn-danger navbar-btn pull-right">Delete selected issues</button>
+                        <button type="submit" id="deleteButton" name="Delete" class="btn btn-danger navbar-btn pull-right">Delete selected issues</button>
 
                         <ul class="nav navbar-nav">
                             <li class="dropdown">
@@ -60,7 +60,7 @@
                                 </text>
                             }
                             else if (Model.CountTotal != Model.CountFilteredIncludingTags)
-                            {<text>(Filtered: <span style="text-decoration: line-through;">@Model.CountTotal</span> | @Model.CountFilteredIncludingTags)</text>   
+                            {<text>(Filtered: <span style="text-decoration: line-through;">@Model.CountTotal</span> | @Model.CountFilteredIncludingTags)</text>
                             }
                             else
                             {<text>(Model.CountTotal)</text>}
@@ -136,7 +136,7 @@ else
                 $(this).closest("form").submit();
             });
 
-            $(".tag-group").click(function() {
+            $(".tag-group").click(function () {
                 $(this).parent().find(".tag").click();
             });
         });
@@ -150,5 +150,10 @@ else
             $("#newUser").html(newUserText);
             $("#user").val(newUserValue);
         }
+
+        // we need bindGlobal() here, because we want the keyboard shortcut even when a checkbox is selected (happens after clicking one).
+        Mousetrap.bindGlobal("del", function () {
+            $("#deleteButton").click();
+        });
     </script>
 }
