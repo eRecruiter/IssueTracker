@@ -21,7 +21,7 @@ namespace ePunkt.IssueTracker.Code
 
         private string GetValue(string key)
         {
-            return _requestCookies[key] != null ? _requestCookies[key].Value : null;
+            return _requestCookies[key] != null ? HttpUtility.UrlDecode(_requestCookies[key].Value) : null;
         }
 
         private void SetValue(string key, string value)
@@ -29,7 +29,7 @@ namespace ePunkt.IssueTracker.Code
             if (value.HasValue())
                 _responseCookies.Add(new HttpCookie(key)
                 {
-                    Value = value,
+                    Value = HttpUtility.UrlEncode(value),
                     Expires = DateTime.MaxValue
                 });
             else if (_responseCookies[key] != null)

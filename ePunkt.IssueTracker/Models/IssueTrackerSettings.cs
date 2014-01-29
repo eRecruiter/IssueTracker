@@ -24,7 +24,7 @@ namespace ePunkt.IssueTracker.Models
         {
             get
             {
-                return Utilities.Settings.Get("IssuesPerPage", 50);
+                return Utilities.Settings.Get("IssuesPerPage", 100);
             }
         }
 

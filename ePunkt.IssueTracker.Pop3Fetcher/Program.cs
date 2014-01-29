@@ -1,4 +1,5 @@
-﻿using ePunkt.IssueTracker.Client;
+﻿using System.Web;
+using ePunkt.IssueTracker.Client;
 using ePunkt.Utilities;
 using OpenPop.Mime;
 using OpenPop.Pop3;
@@ -53,7 +54,7 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
 
                     for (var i = 1; i <= messageCount; i++)
                     {
-                        Console.WriteLine("\tFetching message #{0} ...", i);
+                        Console.WriteLine("\tFetching message #{0} / {1} ...", i, messageCount);
                         var message = pop3Client.GetMessage(i);
 
                         if (PushToIssueTracker(message))
@@ -83,9 +84,11 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
 
                 if (text.StartsWith("IssueTracker unreachable - "))
                     text = text.Substring("IssueTracker unreachable - ".Length);
-                text = text.Replace("&gt;", ">");
-                text = text.Replace("&lt;", "<");
-                text = text.Replace("&quot;", "\"");
+
+                creator = HttpUtility.HtmlDecode(creator);
+                text = HttpUtility.HtmlDecode(text);
+                stackTrace = HttpUtility.HtmlDecode(stackTrace);
+                serverVariables = HttpUtility.HtmlDecode(serverVariables);
 
                 if (creator.IsNoE() && text.IsNoE() && stackTrace.IsNoE() && serverVariables.IsNoE())
                     return false;

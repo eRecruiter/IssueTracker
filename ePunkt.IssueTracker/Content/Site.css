@@ -6093,12 +6093,14 @@ body {
 }
 .tagFilter .tag,
 .tagFilter .clearTagFilterButton,
-.tagFilter .submitTagFilterButton {
+.tagFilter .submitTagFilterButton,
+.tagFilter .tag-group {
   cursor: pointer;
 }
 .tagFilter .tag:hover,
 .tagFilter .clearTagFilterButton:hover,
-.tagFilter .submitTagFilterButton:hover {
+.tagFilter .submitTagFilterButton:hover,
+.tagFilter .tag-group:hover {
   color: white;
 }
 .tagFilter .submitTagFilterButton {

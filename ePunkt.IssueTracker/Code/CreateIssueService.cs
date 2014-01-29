@@ -46,7 +46,7 @@ namespace ePunkt.IssueTracker.Code
             var parentIssue = _db.Issues.FirstOrDefault(x => x.Text == text && x.StackTrace == stackTrace); //find an identical issue
 
             // only log the issue if there's not an parent issue that was just posted (prevent overposting)
-            if (parentIssue != null && parentIssue.DateOfCreation >= DateTime.Now.AddMinutes(10))
+            if (parentIssue != null && parentIssue.DateOfCreation >= DateTime.Now.AddMinutes(-30))
                 return null;
 
             var newIssue = new Issue

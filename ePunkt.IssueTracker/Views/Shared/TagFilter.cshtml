@@ -9,10 +9,10 @@
             </div>
 
             <ul>
-                @foreach (var group in Model.Groups)
+                @foreach (var group in Model.Groups.Where(x => x.Tags.Any(y => y.Count > 0)))
                 {
                     <li>
-                        @group.Name
+                        <span class="tag-group">@group.Name</span>
                         <ul>
                             @foreach (var tag in group.Tags.Where(x => x.Count > 0))
                             {

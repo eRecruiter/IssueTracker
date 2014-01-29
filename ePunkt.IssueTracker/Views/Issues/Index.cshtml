@@ -135,6 +135,10 @@ else
                 $("#tags").val("-");
                 $(this).closest("form").submit();
             });
+
+            $(".tag-group").click(function() {
+                $(this).parent().find(".tag").click();
+            });
         });
 
         function selectStatus(newStatusText, newStatusValue) {
