@@ -84,6 +84,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="@Url.Action("Index", "TagRules")">Manage tagging rules</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#shortcutsModal">View keyboard shortcuts</a></li>
+                            <li class="divider"></li>
                             <li><a href="@Url.Action("Logoff", "Account")">Log off</a></li>
                         </ul>
                     </li>
@@ -93,5 +95,19 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="shortcutsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">IssueTracker Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <code>DELETE</code> - Delete the current issues or the selected issues <span class="text-muted">(the same as clicking a "Delete" button)</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
