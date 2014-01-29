@@ -1,82 +1,91 @@
 ﻿@using ePunkt.Utilities
 @model IEnumerable<ePunkt.IssueTracker.Models.TagRule>
 
-    <h2>Manage tagging rules</h2>
+<h2>Manage tagging rules</h2>
 
-    <p>
-        Tagging rules are used to automatically tag incoming issues. This is achieved by matching simple Regular Expressions with the different parts of an issue - if one of these match, the tag is applied to the issue.
-    </p>
+<p>
+    Tagging rules are used to automatically tag incoming issues. This is achieved by matching simple Regular Expressions with the different parts of an issue - if one of these match, the tag is applied to the issue.
+</p>
 
-    <p>
-        @Html.ActionLink("Create new tagging rule", "Create", null, new { @class = "btn btn-primary" })
-    </p>
-    <table class="table table-striped">
+<p>
+    @Html.ActionLink("Create new tagging rule", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Group)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tag)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TextRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatorRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StackTraceRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServerVariablesRegex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IssueStatus)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Group)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tag)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TextRegex)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatorRegex)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StackTraceRegex)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServerVariablesRegex)
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Group)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tag)
+            </td>
+            <td>
+                @Html.Raw(item.TextRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @Html.Raw(item.CreatorRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @Html.Raw(item.StackTraceRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @Html.Raw(item.ServerVariablesRegex.HasValue() ? "&#10003;" : "")
+            </td>
+            <td>
+                @if (item.IssueStatus.HasValue())
+                {
+                    <code>@item.IssueStatus</code>
+                }
+            </td>
 
-            <th></th>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+
+                <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-default">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </a>
+
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-default">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+            </td>
         </tr>
+    }
+</table>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Group)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tag)
-                </td>
-                <td>
-                    @Html.Raw(item.TextRegex.HasValue() ? "&#10003;" : "")
-                </td>
-                <td>
-                    @Html.Raw(item.CreatorRegex.HasValue() ? "&#10003;" : "")
-                </td>
-                <td>
-                    @Html.Raw(item.StackTraceRegex.HasValue() ? "&#10003;" : "")
-                </td>
-                <td>
-                    @Html.Raw(item.ServerVariablesRegex.HasValue() ? "&#10003;" : "")
-                </td>
-
-                <td>
-                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-default">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </a>
-
-                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-default">
-                        <span class="glyphicon glyphicon-eye-open"></span>
-                    </a>
-
-                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-default">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                </td>
-            </tr>
-        }
-    </table>
-
-    <p>
-        <form method="POST" action="@Url.Action("Reset")">
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-warning">Delete all existing tags and re-run tag rules for all existing issues</button>
-        </form>
-        Warning: This may take very, very, very long. The algorithm here is not very optimized.
-    </p>
+<p>
+    <form method="POST" action="@Url.Action("Reset")">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-warning">Delete all existing tags and re-run tag rules for all existing issues</button>
+    </form>
+    Warning: This may take very, very, very long. The algorithm here is not very optimized.
+</p>

@@ -7,6 +7,7 @@ namespace ePunkt.IssueTracker.DemoClient {
             try {
                 Console.WriteLine("Posting issue ...");
                 var issueTracker = new Client.IssueTracker();
+                issueTracker.Configuration.IssueTrackerUrl = "http://localhost:59416";
 
                 var issue = new Client.Issue {
                     ServerVariables = "Server Variables" + Environment.NewLine + "Server Variables",

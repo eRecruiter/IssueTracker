@@ -11,7 +11,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.TextRegex)
         </dt>
-
         <dd class="regex">
             @Html.DisplayFor(model => model.TextRegex)
         </dd>
@@ -19,7 +18,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.CreatorRegex)
         </dt>
-
         <dd class="regex">
             @Html.DisplayFor(model => model.CreatorRegex)
         </dd>
@@ -27,7 +25,6 @@
         <dt>
             @Html.DisplayNameFor(model => model.ServerVariablesRegex)
         </dt>
-
         <dd class="regex">
             @Html.DisplayFor(model => model.ServerVariablesRegex)
         </dd>
@@ -35,9 +32,17 @@
         <dt>
             @Html.DisplayNameFor(model => model.StackTraceRegex)
         </dt>
-
         <dd class="regex">
             @Html.DisplayFor(model => model.StackTraceRegex)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IssueStatus)
+        </dt>
+        <dd>
+            <code>
+                @Html.DisplayFor(model => model.IssueStatus)
+            </code>
         </dd>
 
     </dl>

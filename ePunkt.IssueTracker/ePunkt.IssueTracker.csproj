@@ -215,6 +215,10 @@
     <Compile Include="Migrations\201401291501533_RemoteHostForIssues.Designer.cs">
       <DependentUpon>201401291501533_RemoteHostForIssues.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401291525559_StatusForTagRules.cs" />
+    <Compile Include="Migrations\201401291525559_StatusForTagRules.Designer.cs">
+      <DependentUpon>201401291525559_StatusForTagRules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Issue.cs" />
@@ -259,6 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201401291501533_RemoteHostForIssues.resx">
       <DependentUpon>201401291501533_RemoteHostForIssues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401291525559_StatusForTagRules.resx">
+      <DependentUpon>201401291525559_StatusForTagRules.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

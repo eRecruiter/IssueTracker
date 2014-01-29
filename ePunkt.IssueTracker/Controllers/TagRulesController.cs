@@ -31,12 +31,13 @@ namespace ePunkt.IssueTracker.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Stati = Utils.GetAllStati(_db, ViewData).Select(x => x.Name);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Tag,Group,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Tag,Group,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex,IssueStatus")] TagRule tagrule)
         {
             if (ModelState.IsValid)
             {
@@ -45,6 +46,7 @@ namespace ePunkt.IssueTracker.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Stati = Utils.GetAllStati(_db, ViewData).Select(x => x.Name);
             return View(tagrule);
         }
 
@@ -55,12 +57,14 @@ namespace ePunkt.IssueTracker.Controllers
             var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
             if (tagrule == null)
                 return HttpNotFound();
+
+            ViewBag.Stati = Utils.GetAllStati(_db, ViewData).Select(x => x.Name);
             return View(tagrule);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Tag,Group,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex")] TagRule tagrule)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Tag,Group,TextRegex,CreatorRegex,ServerVariablesRegex,StackTraceRegex,IssueStatus")] TagRule tagrule)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +72,7 @@ namespace ePunkt.IssueTracker.Controllers
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewBag.Stati = Utils.GetAllStati(_db, ViewData).Select(x => x.Name);
             return View(tagrule);
         }
 

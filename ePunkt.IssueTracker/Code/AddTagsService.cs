@@ -30,7 +30,7 @@ namespace ePunkt.IssueTracker.Code
                     || IsMatch(tagRule.TextRegex, issue.Text)
                     || IsMatch(tagRule.ServerVariablesRegex, issue.ServerVariables)
                     || IsMatch(tagRule.StackTraceRegex, issue.StackTrace))
-                    AddTag(issue.Id, tagRule.Tag);
+                    AddTag(issue, tagRule);
         }
 
         private bool IsMatch(string pattern, string text)
@@ -47,13 +47,17 @@ namespace ePunkt.IssueTracker.Code
             return false;
         }
 
-        private void AddTag(int issueId, string tag)
+        private void AddTag(Issue issue, TagRule tagRule)
         {
             _db.IssueTags.Add(new IssueTag
             {
-                IssueId = issueId,
-                Tag = tag
+                IssueId = issue.Id,
+                Tag = tagRule.Tag
             });
+
+            if (tagRule.IssueStatus.HasValue() && _db.Status.Any(x => x.Name == tagRule.IssueStatus))
+                issue.Status = tagRule.IssueStatus;
+
             _db.SaveChanges();
         }
     }
