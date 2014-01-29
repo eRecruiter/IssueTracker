@@ -220,7 +220,6 @@
     <Compile Include="Models\IssueTrackerSettings.cs" />
     <Compile Include="Models\TagRule.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\Util.cs" />
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
     <Compile Include="ViewModels\IssuePartialViewModel.cs" />
     <Compile Include="ViewModels\Issue\DetailsCommentPartialViewModel.cs" />

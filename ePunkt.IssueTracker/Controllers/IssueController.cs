@@ -47,7 +47,7 @@ namespace ePunkt.IssueTracker.Controllers
             if (string.IsNullOrEmpty(fromEmail))
                 fromEmail = "somebody@somewhere.com";
 
-            Util.SendMail(currentUser.Name, fromEmail, email, email, "Info from " + currentUser.Name + " about issue #" + issueId, body);
+            Utils.SendMail(currentUser.Name, fromEmail, email, email, "Info from " + currentUser.Name + " about issue #" + issueId, body);
         }
 
         [Authorize]
