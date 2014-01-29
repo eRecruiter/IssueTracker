@@ -18,15 +18,6 @@ namespace ePunkt.IssueTracker.Code
         [CanBeNull]
         public Issue Create([CanBeNull]string creator, [CanBeNull]string text, [CanBeNull]string stackTrace, [CanBeNull] string serverVariables, [CanBeNull] string version)
         {
-            //log the clients IP and Host
-            //this is especially useful when we don't have any serverVariables and therefore can't identify the caller
-            const string serverVariablesIpKey = "REMOTE_ADDR";
-            if (HttpContext.Current != null && HttpContext.Current.Request.ServerVariables[serverVariablesIpKey] != null)
-                serverVariables = "IssueTracker Client Remote Address: " + HttpContext.Current.Request.ServerVariables[serverVariablesIpKey] + Environment.NewLine + (serverVariables ?? "");
-            const string serverVariablesHostKey = "REMOTE_HOST";
-            if (HttpContext.Current != null && HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] != null)
-                serverVariables = "IssueTracker Client Remote Host: " + HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] + Environment.NewLine + (serverVariables ?? "");
-
             //get the nice text from the stacktrace for generic asp.net errors
             var uglyTexts = new[] {
                     "Exception of type 'System.Web.HttpUnhandledException' was thrown.",
@@ -49,6 +40,11 @@ namespace ePunkt.IssueTracker.Code
             if (parentIssue != null && parentIssue.DateOfCreation >= DateTime.Now.AddMinutes(-30))
                 return null;
 
+            string remoteHost = null;
+            const string serverVariablesHostKey = "REMOTE_HOST";
+            if (HttpContext.Current != null && HttpContext.Current.Request.ServerVariables[serverVariablesHostKey] != null)
+                remoteHost = HttpContext.Current.Request.ServerVariables[serverVariablesHostKey];
+
             var newIssue = new Issue
             {
                 DateOfCreation = DateTime.Now,
@@ -58,6 +54,7 @@ namespace ePunkt.IssueTracker.Code
                 ServerVariables = serverVariables,
                 Status = IssueTrackerSettings.StatusForNewIssues,
                 Version = version,
+                RemoteHost = remoteHost,
                 AssignedTo = null
             };
             _db.Issues.Add(newIssue);

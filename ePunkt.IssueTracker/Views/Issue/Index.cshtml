@@ -38,63 +38,70 @@
 </div>
 
 <p>
-    This Issue was created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
-    @if (Model.SimilarIssuesCount > 0)
-    {
+    This Issue was created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code>
+    @if (Model.Creator.HasValue())
+    {<text> by <code>@Model.Creator</code></text>}
+    @if (Model.RemoteHost.HasValue())
+    {<text> at <code>@Model.RemoteHost</code></text>}.
+</p>
+
+@if (Model.SimilarIssuesCount > 0)
+{
     <p>There are <code>@Model.SimilarIssuesCount.ToString("N0")</code> similar issues.</p>
-    }
-    @if (Model.ParentIssueId.HasValue)
-    {
-        <p>This issue has a @Html.ActionLink("parent", "Index", new { id = Model.ParentIssueId.Value }).</p>
-    }
-    @if (Model.MinVersion.HasValue())
-    {
-        <text>
-            @if (Model.MaxVersion.IsNoE())
-            {
-                <p>This issue happened in <code>v@(Model.MinVersion)</code>.</p>
-            }
-            else
-            {
-                <p>This issue happend from <code>v@(Model.MinVersion)</code> to <code>v@(Model.MaxVersion)</code></p>
-            }
-        </text>
-    }
+}
+
+@if (Model.ParentIssueId.HasValue)
+{
+    <p>This issue has a @Html.ActionLink("parent", "Index", new { id = Model.ParentIssueId.Value }).</p>
+}
+
+@if (Model.MinVersion.HasValue())
+{
+    <text>
+        @if (Model.MaxVersion.IsNoE())
+        {
+            <p>This issue happened in <code>v@(Model.MinVersion)</code>.</p>
+        }
+        else
+        {
+            <p>This issue happend from <code>v@(Model.MinVersion)</code> to <code>v@(Model.MaxVersion)</code></p>
+        }
+    </text>
+}
+
+<fieldset>
+    <legend>Text</legend>
+    <pre>@Model.Text</pre>
+</fieldset>
+<fieldset>
+    <legend>Stack trace</legend>
+    <pre>@Model.StackTrace.Trim()</pre>
+</fieldset>
+<fieldset>
+    <legend>Server variables</legend>
+    <pre>@Model.ServerVariables.Trim()</pre>
+</fieldset>
+<fieldset>
+    <legend>Comments & Activities</legend>
+    <p>
+        Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
     </p>
+    <table class="table table-condensed">
+        @foreach (var comment in Model.Comments)
+        {
+            <tr>
+                @Html.Partial("_Comment", comment)
+            </tr>
+        }
+    </table>
+</fieldset>
 
-    <fieldset>
-        <legend>Text</legend>
-        <pre>@Model.Text</pre>
-    </fieldset>
-    <fieldset>
-        <legend>Stack trace</legend>
-        <pre>@Model.StackTrace.Trim()</pre>
-    </fieldset>
-    <fieldset>
-        <legend>Server variables</legend>
-        <pre>@Model.ServerVariables.Trim()</pre>
-    </fieldset>
-    <fieldset>
-        <legend>Comments & Activities</legend>
-        <p>
-            Issue created on <code>@Model.DateOfCreation.ToString(CultureInfo.CurrentCulture)</code> by <code>@Model.Creator</code>.
-        </p>
-        <table class="table table-condensed">
-            @foreach (var comment in Model.Comments)
-            {
-                <tr>
-                    @Html.Partial("_Comment", comment)
-                </tr>
-            }
-        </table>
-    </fieldset>
+@Html.Partial("_AddComment")
 
-    @Html.Partial("_AddComment")
-
-    @section Script {
-        <script>
-            $("select").change(function () {
-                $("form").submit();
-            });
-        </script>
-    }
+@section Script {
+    <script>
+        $("select").change(function () {
+            $("form").submit();
+        });
+    </script>
+}

@@ -18,6 +18,7 @@ namespace ePunkt.IssueTracker.Models
         public int? ParentIssueId { get; set; }
         public string AssignedTo { get; set; }
         public string Version { get; set; }
+        public string RemoteHost { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
         public Issue ParentIssue { get; set; }

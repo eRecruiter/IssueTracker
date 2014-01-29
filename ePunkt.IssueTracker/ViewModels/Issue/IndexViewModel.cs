@@ -1,4 +1,5 @@
-﻿using ePunkt.IssueTracker.Code;
+﻿using System.Net;
+using ePunkt.IssueTracker.Code;
 using ePunkt.IssueTracker.Models;
 using ePunkt.Utilities;
 using System;
@@ -75,6 +76,20 @@ namespace ePunkt.IssueTracker.ViewModels.Issue
                     MinVersion = sortedVersions.First().ToString();
                     MaxVersion = sortedVersions.Last().ToString();
                 }
+
+            if (issue.RemoteHost.HasValue())
+            {
+                try
+                {
+                    RemoteHost = Dns.GetHostEntry(issue.RemoteHost).HostName;
+                    if (RemoteHost != issue.RemoteHost)
+                        RemoteHost += " - " + issue.RemoteHost;
+                }
+                catch
+                {
+                    RemoteHost = issue.RemoteHost;
+                }
+            }
         }
 
 
@@ -86,6 +101,7 @@ namespace ePunkt.IssueTracker.ViewModels.Issue
         public int SimilarIssuesCount { get; set; }
         public string MinVersion { get; set; }
         public string MaxVersion { get; set; }
+        public string RemoteHost { get; set; }
 
         public IEnumerable<SelectListItem> AvailableStati { get; private set; }
         public IEnumerable<SelectListItem> AvailableUsers { get; private set; }
