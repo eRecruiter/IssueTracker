@@ -26,9 +26,6 @@ namespace ePunkt.IssueTracker.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? parentId, string text, string stackTrace, string serverVariables, string source, string version)
         {
-            if (!string.IsNullOrWhiteSpace(version))
-                serverVariables = "Version: " + version + Environment.NewLine + (serverVariables ?? "");
-
             Issue parentIssue = null;
             if (parentId.HasValue)
                 parentIssue = _db.Issues.FirstOrDefault(x => x.Id == parentId.Value);
@@ -42,7 +39,7 @@ namespace ePunkt.IssueTracker.Controllers
                 };
             }
 
-            var issue = new CreateIssueService(_db).Create(source, text, stackTrace, serverVariables);
+            var issue = new CreateIssueService(_db).Create(source, text, stackTrace, serverVariables, version);
             return new JsonResult
             {
                 Data = issue == null ? 0 : issue.Id

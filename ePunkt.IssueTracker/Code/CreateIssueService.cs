@@ -16,7 +16,7 @@ namespace ePunkt.IssueTracker.Code
         }
 
         [CanBeNull]
-        public Issue Create([CanBeNull]string creator, [CanBeNull]string text, [CanBeNull]string stackTrace, [CanBeNull] string serverVariables)
+        public Issue Create([CanBeNull]string creator, [CanBeNull]string text, [CanBeNull]string stackTrace, [CanBeNull] string serverVariables, [CanBeNull] string version)
         {
             //log the clients IP and Host
             //this is especially useful when we don't have any serverVariables and therefore can't identify the caller
@@ -52,11 +52,12 @@ namespace ePunkt.IssueTracker.Code
             var newIssue = new Issue
             {
                 DateOfCreation = DateTime.Now,
-                Creator = Util.MaxLength(creator, 4000),
-                Text = Util.MaxLength(text, 4000),
-                StackTrace = Util.MaxLength(stackTrace, 8000),
-                ServerVariables = Util.MaxLength(serverVariables, 8000),
-                Status = Util.MaxLength(IssueTrackerSettings.StatusForNewIssues, 4000),
+                Creator = creator,
+                Text = text,
+                StackTrace = stackTrace,
+                ServerVariables = serverVariables,
+                Status = IssueTrackerSettings.StatusForNewIssues,
+                Version = version,
                 AssignedTo = null
             };
             _db.Issues.Add(newIssue);
@@ -70,7 +71,7 @@ namespace ePunkt.IssueTracker.Code
 
                 var comment = new Comment
                 {
-                    Creator = Util.MaxLength(creator, 4000),
+                    Creator = creator,
                     DateOfCreation = DateTime.Now,
                     DuplicateIssueId = newIssue.Id,
                     IssueId = parentIssue.Id,
@@ -80,7 +81,7 @@ namespace ePunkt.IssueTracker.Code
 
                 var status = _db.Status.FirstOrDefault(x => x.Name.ToLower() == parentIssue.Status);
                 if (status != null && status.Reactivate)
-                    parentIssue.Status = Util.MaxLength(IssueTrackerSettings.StatusForNewIssues, 4000);
+                    parentIssue.Status = IssueTrackerSettings.StatusForNewIssues;
                 else
                     newIssue.Status = parentIssue.Status;
             }

@@ -31,15 +31,6 @@ namespace ePunkt.IssueTracker.Models
 
         }
 
-        public static string MaxLength(string s, int maxLength)
-        {
-            if (string.IsNullOrEmpty(s))
-                return "";
-            if (s.Length > maxLength)
-                return s.Substring(0, maxLength);
-            return s;
-        }
-
         public static void SendMail(string fromName, string fromEmail, string toName, string toEmail, string subject, string body)
         {
             var mail = new MailMessage();

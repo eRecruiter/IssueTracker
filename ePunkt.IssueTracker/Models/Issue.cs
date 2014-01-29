@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web;
-using JetBrains.Annotations;
 
 namespace ePunkt.IssueTracker.Models
 {
@@ -19,6 +17,7 @@ namespace ePunkt.IssueTracker.Models
         public string ServerVariables { get; set; }
         public int? ParentIssueId { get; set; }
         public string AssignedTo { get; set; }
+        public string Version { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
         public Issue ParentIssue { get; set; }

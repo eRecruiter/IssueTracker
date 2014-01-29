@@ -14,7 +14,7 @@ namespace ePunkt.IssueTracker
         [WebMethod]
         public int CreateIssue(string creator, string text, string stackTrace, string serverVariables)
         {
-            var issue = new CreateIssueService(new Db()).Create(creator, text, stackTrace, serverVariables);
+            var issue = new CreateIssueService(new Db()).Create(creator, text, stackTrace, serverVariables, null);
             return issue == null ? 0 : issue.Id;
         }
 

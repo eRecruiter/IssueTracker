@@ -207,6 +207,10 @@
     <Compile Include="Migrations\201401270547400_TagGroups.Designer.cs">
       <DependentUpon>201401270547400_TagGroups.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401291440120_VersionForIssues.cs" />
+    <Compile Include="Migrations\201401291440120_VersionForIssues.Designer.cs">
+      <DependentUpon>201401291440120_VersionForIssues.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Issue.cs" />
@@ -246,6 +250,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201401270547400_TagGroups.resx">
       <DependentUpon>201401270547400_TagGroups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401291440120_VersionForIssues.resx">
+      <DependentUpon>201401291440120_VersionForIssues.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
