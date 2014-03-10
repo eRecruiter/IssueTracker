@@ -22,7 +22,7 @@
                                 <ul class="dropdown-menu">
                                     @foreach (var status in Model.AvailableStati)
                                     {
-                                        <li><a href="javascript:selectStatus('@status.Text', '@status.Value');">@status.Text</a></li>
+                                        <li><a href="javascript:selectStatus('@status.Text.Replace("'","\\'")', '@status.Value.Replace("'", "\\'")');">@status.Text</a></li>
                                     }
                                 </ul>
                             </li>
@@ -31,7 +31,7 @@
                                 <ul class="dropdown-menu">
                                     @foreach (var user in Model.AvailableUsers)
                                     {
-                                        <li><a href="javascript:selectUser('@user.Text', '@user.Value');">@user.Text</a></li>
+                                        <li><a href="javascript:selectUser('@user.Text.Replace("'", "\\'")', '@user.Value.Replace("'", "\\'")');">@user.Text</a></li>
                                     }
                                 </ul>
                             </li>
