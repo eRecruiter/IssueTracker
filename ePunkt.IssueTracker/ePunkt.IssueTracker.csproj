@@ -304,8 +304,8 @@
     <Content Include="newrelic\extensions\extension.xsd">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Properties\PublishProfiles\ePunkt-IssueTracker-Website - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\ePunkt-IssueTracker-Website - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\epunkt-issuetracker - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\epunkt-issuetracker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
