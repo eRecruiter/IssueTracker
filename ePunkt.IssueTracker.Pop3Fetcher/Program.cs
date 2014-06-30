@@ -1,11 +1,11 @@
-﻿using System.Web;
-using ePunkt.IssueTracker.Client;
+﻿using ePunkt.IssueTracker.Client;
 using ePunkt.Utilities;
 using OpenPop.Mime;
 using OpenPop.Pop3;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Web;
 
 namespace ePunkt.IssueTracker.Pop3Fetcher
 {
@@ -36,12 +36,13 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
             if (host.IsNoE())
             {
                 Console.WriteLine("\tNo Pop3Host specified.");
+                LogOwnError(new ApplicationException("No Pop3Host specified."));
                 return;
             }
 
             try
             {
-                Console.WriteLine("\tConnecting to POP3 server ...");
+                Console.WriteLine("\tConnecting to POP3 server {0}:{1} ({4}) using {2} / {3} ...", host, port, username, password, useSsl ? "SSL" : "no SSL");
 
                 using (var pop3Client = new Pop3Client())
                 {
@@ -54,11 +55,19 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
 
                     for (var i = 1; i <= messageCount; i++)
                     {
-                        Console.WriteLine("\tFetching message #{0} / {1} ...", i, messageCount);
-                        var message = pop3Client.GetMessage(i);
+                        try
+                        {
+                            Console.WriteLine("\tFetching message {0} / {1} ...", i, messageCount);
+                            var message = pop3Client.GetMessage(i);
 
-                        if (PushToIssueTracker(message))
-                            pop3Client.DeleteMessage(i);
+                            if (PushToIssueTracker(message))
+                                pop3Client.DeleteMessage(i);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("\tUnable to fetch or push message: " + ex);
+                            LogOwnError(new ApplicationException("Unable to fetch or push message: " + ex.Message, ex));
+                        }
                     }
 
                     pop3Client.Disconnect();
@@ -66,7 +75,8 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to download mails: " + ex);
+                Console.WriteLine("\tUnable to download mails: " + ex);
+                LogOwnError(new ApplicationException("Unable to download mails: " + ex.Message, ex));
             }
         }
 
@@ -98,16 +108,24 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
                 else if (message.Headers.ReplyTo != null && message.Headers.ReplyTo.Address.HasValue())
                     creator += " (" + message.Headers.ReplyTo.Address + ")";
 
-                var issueTracker = new Client.IssueTracker();
-                issueTracker.Post(new Issue
+                try
                 {
-                    Text = text,
-                    ServerVariables = serverVariables,
-                    Source = creator,
-                    StackTrace = stackTrace,
-                    Version = ""
-                });
-                Console.WriteLine("\t\tMessage pushed.");
+                    var issueTracker = new Client.IssueTracker();
+                    issueTracker.Post(new Issue
+                    {
+                        Text = text,
+                        ServerVariables = serverVariables,
+                        Source = creator,
+                        StackTrace = stackTrace,
+                        Version = ""
+                    });
+                    Console.WriteLine("\t\tMessage pushed.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\t\tUnable to push message: " + ex);
+                    LogOwnError(new ApplicationException("Unable to push message: " + ex.Message, ex));
+                }
                 return true;
             }
             catch
@@ -123,6 +141,26 @@ namespace ePunkt.IssueTracker.Pop3Fetcher
             if (match.Groups.Count >= 1)
                 return match.Groups[1].Value;
             return "";
+        }
+
+        private static void LogOwnError(Exception ex)
+        {
+            try
+            {
+                var issueTracker = new Client.IssueTracker();
+                issueTracker.Post(new Issue
+                {
+                    Text = ex.Message,
+                    ServerVariables = null,
+                    Source = "IssueTracker.Pop3Fetcher",
+                    StackTrace = ex.ToString(),
+                    Version = typeof(Program).Assembly.GetName().Version.ToString()
+                });
+            }
+            catch (Exception innerException)
+            {
+                Console.WriteLine("Unable to log own error: " + innerException);
+            }
         }
     }
 }

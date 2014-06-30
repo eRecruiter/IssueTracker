@@ -1,4 +1,5 @@
 ﻿using ePunkt.IssueTracker.Models;
+using ePunkt.Utilities;
 using JetBrains.Annotations;
 using System;
 using System.Linq;
@@ -18,26 +19,26 @@ namespace ePunkt.IssueTracker.Code
         [CanBeNull]
         public Issue Create([CanBeNull]string creator, [CanBeNull]string text, [CanBeNull]string stackTrace, [CanBeNull] string serverVariables, [CanBeNull] string version)
         {
-            //get the nice text from the stacktrace for generic asp.net errors
+            // get a nicer error message from the stacktrace for generic asp.net errors
             var uglyTexts = new[] {
                     "Exception of type 'System.Web.HttpUnhandledException' was thrown.",
                     "Error executing child request for handler 'System.Web.Mvc.HttpHandlerUtil+ServerExecuteHttpHandlerWrapper'."
                 };
-            if (string.IsNullOrWhiteSpace(text) || uglyTexts.Any(x => x.Equals(text, StringComparison.InvariantCultureIgnoreCase)))
+            if (text.IsNoW() || uglyTexts.Any(x => x.Is(text)))
             {
-                if (!string.IsNullOrWhiteSpace(stackTrace))
+                if (stackTrace.HasValue())
                 {
-                    text = stackTrace.Split('\n')[0].Trim();
+                    text = (stackTrace ?? "").Split('\n')[0].Trim();
 
                     if (text.Contains("---> "))
                         text = text.Substring(text.LastIndexOf("---> ", StringComparison.InvariantCultureIgnoreCase) + 5);
                 }
             }
 
-            var parentIssue = _db.Issues.FirstOrDefault(x => x.Text == text && x.StackTrace == stackTrace); //find an identical issue
+            var parentIssue = _db.Issues.FirstOrDefault(x => x.Text == text && x.StackTrace == stackTrace); // find an identical issue
 
             // only log the issue if there's not an parent issue that was just posted (prevent overposting)
-            if (parentIssue != null && parentIssue.DateOfCreation >= DateTime.Now.AddMinutes(-30))
+            if (parentIssue != null && parentIssue.DateOfCreation >= DateTime.Now.AddHours(-1))
                 return null;
 
             string remoteHost = null;
