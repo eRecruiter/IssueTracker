@@ -30,7 +30,7 @@ namespace ePunkt.IssueTracker.Controllers
             {
                 BaseUri = new Uri("http://issuetracker.epunkt.net"),
                 Generator = "IssueTracker",
-                LastUpdatedTime = DateTime.Now,
+                LastUpdatedTime = DateTime.Now.ToUniversalTime(),
                 Title = new TextSyndicationContent("Issues" + filterText)
             };
 

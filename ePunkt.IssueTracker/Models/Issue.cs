@@ -50,7 +50,13 @@ namespace ePunkt.IssueTracker.Models
 
             using (var context = new Db())
             {
-                var comment = new Comment { Creator = creator, DateOfCreation = DateTime.Now, Text = text, IssueId = Id };
+                var comment = new Comment
+                {
+                    Creator = creator,
+                    DateOfCreation = DateTime.Now.ToUniversalTime(),
+                    Text = text,
+                    IssueId = Id
+                };
 
                 context.Comments.Add(comment);
                 context.SaveChanges();
@@ -67,7 +73,15 @@ namespace ePunkt.IssueTracker.Models
 
             using (var context = new Db())
             {
-                var comment = new Comment { Creator = creator, DateOfCreation = DateTime.Now, IssueId = Id, Text = "", AttachmentFileName = Path.GetFileName(path), AttachmentNiceName = niceName };
+                var comment = new Comment
+                {
+                    Creator = creator,
+                    DateOfCreation = DateTime.Now.ToUniversalTime(),
+                    IssueId = Id,
+                    Text = "",
+                    AttachmentFileName = Path.GetFileName(path),
+                    AttachmentNiceName = niceName
+                };
                 context.Comments.Add(comment);
                 context.SaveChanges();
             }

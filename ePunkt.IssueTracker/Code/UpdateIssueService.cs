@@ -28,7 +28,7 @@ namespace ePunkt.IssueTracker.Code
                 var comment = new Comment
                 {
                     IssueId = issue.Id,
-                    DateOfCreation = DateTime.Now,
+                    DateOfCreation = DateTime.Now.ToUniversalTime(),
                     Creator = Utils.GetCurrentUser(_db, _viewData, user).Username
                 };
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using JetBrains.Annotations;
 
 namespace ePunkt.IssueTracker.ViewModels.Issue
 {
@@ -16,10 +17,10 @@ namespace ePunkt.IssueTracker.ViewModels.Issue
         {
             CurrentUser = currentUser;
 
-            DateOfCreation = issue.DateOfCreation;
+            DateOfCreation = issue.DateOfCreation.ToCentralEuropeanTime();
             ParentIssueId = issue.ParentIssueId;
-            StackTrace = issue.StackTrace;
-            ServerVariables = issue.ServerVariables;
+            StackTrace = issue.StackTrace ?? "";
+            ServerVariables = issue.ServerVariables ?? "";
             Comments = (from x in db.Comments
                         where x.IssueId == issue.Id
                         orderby x.DateOfCreation
@@ -96,7 +97,9 @@ namespace ePunkt.IssueTracker.ViewModels.Issue
         public DateTime DateOfCreation { get; set; }
         public int? ParentIssueId { get; set; }
         public IEnumerable<DetailsCommentPartialViewModel> Comments { get; set; }
+        [NotNull]
         public string StackTrace { get; set; }
+        [NotNull]
         public string ServerVariables { get; set; }
         public int SimilarIssuesCount { get; set; }
         public string MinVersion { get; set; }

@@ -35,7 +35,7 @@ namespace ePunkt.IssueTracker.Code
 
         private bool IsMatch(string pattern, string text)
         {
-            if (pattern.IsNoE())
+            if (pattern.IsNoE() || text.IsNoE())
                 return false;
 
             foreach (var patternLine in pattern.Split('\n').Select(x => x.Trim()).Where(x => x.HasValue()))

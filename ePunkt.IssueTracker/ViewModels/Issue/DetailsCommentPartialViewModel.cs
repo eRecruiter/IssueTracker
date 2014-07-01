@@ -11,7 +11,7 @@ namespace ePunkt.IssueTracker.ViewModels.Issue {
         public DetailsCommentPartialViewModel(Db db, Comment comment, ViewDataDictionary viewData) {
             var creatorUser = Utils.GetAllUsers(db, viewData).FirstOrDefault(x => x.Username.Is(comment.Creator));
             Creator = creatorUser == null ? comment.Creator : creatorUser.Name;
-            DateOfCreation = comment.DateOfCreation;
+            DateOfCreation = comment.DateOfCreation.ToCentralEuropeanTime();
             Text = comment.Text;
 
             StatusText = "";

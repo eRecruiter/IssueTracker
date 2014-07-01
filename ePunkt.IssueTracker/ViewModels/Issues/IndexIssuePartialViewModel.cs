@@ -1,4 +1,5 @@
 ﻿using System;
+using ePunkt.IssueTracker.Code;
 using ePunkt.IssueTracker.Models;
 
 namespace ePunkt.IssueTracker.ViewModels.Issues {
@@ -11,10 +12,10 @@ namespace ePunkt.IssueTracker.ViewModels.Issues {
 
             Comments = issue.NumberOfComments;
 
-            if (issue.DateOfUpdate.Date == DateTime.Now.Date)
-                Time = issue.DateOfUpdate.ToString("HH:mm");
+            if (issue.DateOfUpdate.Date == DateTime.Now.ToUniversalTime().Date)
+                Time = issue.DateOfUpdate.ToCentralEuropeanTime().ToString("HH:mm");
             else
-                Time = issue.DateOfUpdate.ToString("d.M.");
+                Time = issue.DateOfUpdate.ToCentralEuropeanTime().ToString("d.M.");
         }
 
 

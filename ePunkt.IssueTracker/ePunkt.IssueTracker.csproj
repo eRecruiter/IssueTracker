@@ -161,6 +161,7 @@
     <Compile Include="Code\CreateIssueService.cs" />
     <Compile Include="Code\AddTagsService.cs" />
     <Compile Include="Code\ControllerExtensionMethods.cs" />
+    <Compile Include="Code\DateTimeExtensions.cs" />
     <Compile Include="Code\DeleteTagsService.cs" />
     <Compile Include="Code\UpdateIssueService.cs" />
     <Compile Include="Code\DeleteIssueService.cs" />

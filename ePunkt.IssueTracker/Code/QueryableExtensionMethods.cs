@@ -38,12 +38,13 @@ namespace ePunkt.IssueTracker.Code
             else if (userOptions.UserFilter.HasValue() && !userOptions.UserFilter.Is("-"))
                 issues = issues.Where(x => x.AssignedTo.ToLower() == userOptions.UserFilter.ToLower());
 
+            var now = DateTime.Now.ToUniversalTime();
             if (userOptions.DateFilter.HasValue)
                 issues =
                     issues.Where(
                         x =>
-                            DbFunctions.DiffDays(x.DateOfCreation, DateTime.Now) <= userOptions.DateFilter ||
-                            x.Comments.Any(y => DbFunctions.DiffDays(y.DateOfCreation, DateTime.Now) <= userOptions.DateFilter));
+                            DbFunctions.DiffDays(x.DateOfCreation, now) <= userOptions.DateFilter ||
+                            x.Comments.Any(y => DbFunctions.DiffDays(y.DateOfCreation, now) <= userOptions.DateFilter));
 
             return issues;
         }
