@@ -227,6 +227,10 @@
     <Compile Include="Migrations\201401291525559_StatusForTagRules.Designer.cs">
       <DependentUpon>201401291525559_StatusForTagRules.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409091744577_MissingIndex.cs" />
+    <Compile Include="Migrations\201409091744577_MissingIndex.Designer.cs">
+      <DependentUpon>201409091744577_MissingIndex.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Issue.cs" />
@@ -274,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201401291525559_StatusForTagRules.resx">
       <DependentUpon>201401291525559_StatusForTagRules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409091744577_MissingIndex.resx">
+      <DependentUpon>201409091744577_MissingIndex.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
