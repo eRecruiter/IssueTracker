@@ -48,13 +48,18 @@ namespace ePunkt.IssueTracker.Code
                     text = text.Replace("System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> ", "");
                 }
 
-                var parentIssue = _db.Issues.OrderBy(x => x.DateOfCreation).FirstOrDefault(x =>
-                    (x.Text == text || (text == "" && x.Text == null)) &&
-                    (x.StackTrace == stackTrace || (stackTrace == "" && x.StackTrace == null))); // find an identical issue
+                // find an identical issue
+                var parentIssue = _db.Issues
+                    .Where(x => x.Text == text || (text == "" && x.Text == null))
+                    .Where(x => x.StackTrace == stackTrace || (stackTrace == "" && x.StackTrace == null))
+                    .OrderByDescending(x => x.DateOfCreation)
+                    .FirstOrDefault();
 
                 // only log the issue if there's not an parent issue that was just posted (prevent overposting)
                 if (parentIssue != null && parentIssue.DateOfCreation >= DateTime.Now.ToUniversalTime().AddHours(-1))
+                {
                     return null;
+                }
 
                 string remoteHost = null;
                 const string serverVariablesHostKey = "REMOTE_HOST";
@@ -78,6 +83,7 @@ namespace ePunkt.IssueTracker.Code
 
                 if (parentIssue != null)
                 {
+                    parentIssue = parentIssue.ParentIssueId.HasValue ? _db.Issues.Single(x => x.Id == parentIssue.ParentIssueId.Value) : parentIssue;
                     newIssue.ParentIssueId = parentIssue.Id;
 
                     var comment = new Comment
