@@ -39,8 +39,9 @@
     <Reference Include="ePunkt.Utilities">
       <HintPath>..\packages\ePunkt.Utilities.1.0.1\lib\net40-Client\ePunkt.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="OpenPop">
-      <HintPath>..\packages\OpenPop.NET.2.0.4.369\lib\net20\OpenPop.dll</HintPath>
+    <Reference Include="OpenPop, Version=2.0.6.1076, Culture=neutral, PublicKeyToken=6bdb97f144b7efc8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenPop.NET.2.0.6.1076\lib\net40\OpenPop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

@@ -1,6 +1,7 @@
 ﻿using EntityFramework.Extensions;
 using ePunkt.IssueTracker.Models;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ePunkt.IssueTracker.Code
 {
@@ -24,7 +25,7 @@ namespace ePunkt.IssueTracker.Code
             /*foreach (var tag in _db.IssueTags.Where(x => x.IssueId == issueId))
                 _db.IssueTags.Remove(tag);
             await _db.SaveChangesAsync();*/
-            _db.IssueTags.Delete(x => x.IssueId == issueId);
+            _db.IssueTags.Where(x => x.IssueId == issueId).Delete();
             await _db.SaveChangesAsync();
         }
     }

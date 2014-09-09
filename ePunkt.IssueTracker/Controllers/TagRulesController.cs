@@ -91,7 +91,7 @@ namespace ePunkt.IssueTracker.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             var tagrule = await _db.TagRules.FirstOrDefaultAsync(x => x.Id == id);
-            _db.IssueTags.Delete(x => x.Tag.ToLower() == tagrule.Tag.ToLower());
+            _db.IssueTags.Where(x => x.Tag.ToLower() == tagrule.Tag.ToLower()).Delete();
             _db.TagRules.Remove(tagrule);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
