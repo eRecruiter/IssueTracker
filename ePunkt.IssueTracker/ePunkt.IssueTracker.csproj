@@ -375,7 +375,12 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ePunkt.IssueTracker.Pop3Fetcher\ePunkt.IssueTracker.Pop3Fetcher.csproj">
+      <Project>{f89fc008-5084-41f0-8173-b26613a9b960}</Project>
+      <Name>ePunkt.IssueTracker.Pop3Fetcher</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
