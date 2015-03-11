@@ -17,7 +17,13 @@ namespace ePunkt.IssueTracker.Code
         }
 
         [CanBeNull]
-        public Issue Create([CanBeNull] string creator, [CanBeNull] string text, [CanBeNull] string stackTrace, [CanBeNull] string serverVariables, [CanBeNull] string version)
+        public Issue Create(
+            [CanBeNull] string creator, 
+            [CanBeNull] string text,
+            [CanBeNull] string stackTrace, 
+            [CanBeNull] string serverVariables, 
+            [CanBeNull] string version,
+            bool logOwnExceptions = true)
         {
             try
             {
@@ -109,19 +115,11 @@ namespace ePunkt.IssueTracker.Code
             }
             catch (Exception ex)
             {
-                _db.Issues.Add(new Issue
+                if (logOwnExceptions)
                 {
-                    DateOfCreation = DateTime.Now.ToUniversalTime(),
-                    Creator = "IssueTracker",
-                    Text = ex.Message,
-                    StackTrace = ex.ToString(),
-                    ServerVariables = null,
-                    Status = IssueTrackerSettings.StatusForNewIssues,
-                    Version = GetType().Assembly.GetName().Version.ToString(),
-                    RemoteHost = null,
-                    AssignedTo = null
-                });
-                _db.SaveChanges();
+                    // make sure we don't log own exceptions if we're logging an own exception already - because this would create a logging loop
+                    Create("IssueTracker", ex.Message, ex.ToString(), null, GetType().Assembly.GetName().Version.ToString(), false);
+                }
             }
             return null;
         }
