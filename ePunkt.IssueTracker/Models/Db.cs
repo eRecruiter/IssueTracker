@@ -1,11 +1,14 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.Entity.SqlServer;
 
 namespace ePunkt.IssueTracker.Models
 {
     public class Db : DbContext
     {
-        public Db() : base("Db") { }
+        public Db() : base("Db")
+        {
+        }
 
         public IDbSet<User> Users { get; set; }
         public IDbSet<Status> Status { get; set; }
@@ -35,6 +38,14 @@ namespace ePunkt.IssueTracker.Models
                 .WithRequired(x => x.Issue)
                 .HasForeignKey(x => x.IssueId)
                 .WillCascadeOnDelete(true);
+        }
+    }
+
+    class DbConfiguration : System.Data.Entity.DbConfiguration
+    {
+        public DbConfiguration()
+        {
+            SetExecutionStrategy("System.Data.SqlClient", () => new SqlAzureExecutionStrategy());
         }
     }
 }
